@@ -7,7 +7,7 @@
 		"start": "node ./src/javascript/index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "",
+	"author": "Philip Weaver",
 	"license": "MIT",
 	"dependencies": {
 		"fs-jetpack": "^2.2.2",

@@ -39,4 +39,6 @@ npm start
 ### Roadmap
 
 - allow relative paths for modules
+- create macro for function pointers (tables)
 - create binary search tree instead of hashtable
+- create the distinct data structures: array, linked list, and hybrid (vector)
