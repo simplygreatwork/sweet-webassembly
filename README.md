@@ -30,8 +30,8 @@ Get started with WebAssembly text format syntax and macros.
 Requires Node.js. Tested with Node.js 10.15.0
 
 ```
-git clone https://github.com/simplygreatwork/sweet.git
-cd sweet
+git clone https://github.com/simplygreatwork/sweet-webassembly.git
+cd sweet-webassembly/runner
 npm install
 npm start
 ```
