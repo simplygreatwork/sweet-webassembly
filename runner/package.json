@@ -1,0 +1,19 @@
+{
+	"name": "runner",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node ./src/javascript/index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"fs-jetpack": "^2.2.2",
+		"remark": "^10.0.1",
+		"remark-parse": "^6.0.3",
+		"unist-util-visit": "^1.4.0",
+		"wabt": "^1.0.11"
+	}
+}

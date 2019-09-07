@@ -1,0 +1,21 @@
+(module
+	(import "utility.watm")
+	(import "memory.watm")
+	(import "string.watm")
+	(import "host" "table" (table 2 anyfunc))
+	(memory (import "host" "memory") 1)
+	
+	(function $main
+		(call $test_string_macro)
+	)
+	
+	(func $test_string_macro
+		
+		(local $string i32)
+		(set_local $string (string "Hello from a string macro!"))
+		(call $print_string (i32.const 50))
+		(call $print_string (get_local $string))
+	)
+	
+	(export "main" (func $main))
+)

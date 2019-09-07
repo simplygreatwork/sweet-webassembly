@@ -1,0 +1,91 @@
+(module
+	(import "utility.watm")
+	(memory (import "host" "memory") 1)
+	(data (i32.const 2000) "\01\06before")
+	(data (i32.const 2100) "\01\05after")
+	
+	(func $memory_allocate (param $size i32) (result i32)
+		
+		(local $result i32)
+		(set_local $result
+			(i32.load
+				(i32.const 0)
+			)
+		)
+		(i32.store
+			(i32.const 0)
+			(i32.add
+				(get_local $result)
+				(get_local $size)
+			)
+		)
+		(get_local $result)
+	)
+
+	(func $memory_allocate_handle (param $size i32) (result i32)
+		
+		(i32.load
+			(i32.const 0)
+		)
+	)
+
+	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)
+		
+		(i32.const 0)
+	)
+	
+	(func $memory_copy (param $a i32) (param $b i32) (param $length i32)
+		
+		(local $i i32)
+		(set_local $i (i32.const 0))
+		(block
+			(loop
+				(i32.store
+					(i32.add
+						(get_local $b)
+						(get_local $i)
+					)
+					(i32.load8_u
+						(i32.add
+							(get_local $a)
+							(get_local $i)
+						)
+					)
+				)
+				(set_local $i
+					(i32.add
+						(get_local $i)
+						(i32.const 1)
+					)
+				)
+				(br_if 1 (i32.eq (get_local $i) (get_local $length)))
+				(br 0)
+			)
+		)
+	)
+
+	(func $pointer_get (result i32)
+		
+		(i32.load
+			(i32.const 0)
+		)
+	)
+	
+	(func $pointer_reserve (param $size i32)
+		
+		(i32.store
+			(i32.const 0)
+			(i32.add
+				(i32.load
+					(i32.const 0)
+				)
+				(get_local $size)
+			)
+		)
+	)
+	
+	(export "memory_allocate" (func $memory_allocate))
+	(export "memory_copy" (func $memory_copy))
+	(export "pointer_get" (func $pointer_get))
+	(export "pointer_reserve" (func $pointer_reserve))
+)

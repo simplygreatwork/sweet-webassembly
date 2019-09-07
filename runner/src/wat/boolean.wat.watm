@@ -1,0 +1,53 @@
+(module
+	(import "utility.watm")
+	(import "memory.watm")
+	(memory (import "host" "memory") 1)
+	
+	(func $boolean_new (param $value i32) (result i32)
+		
+		(local $number i32)
+		(set_local $number (call $memory_allocate (i32.const 8)))
+		(i32.store (get_local $number) (i32.const 2))
+		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
+		(get_local $number)
+	)
+	
+	(func $boolean_clone (param $boolean i32) (result i32)
+		
+		(call $boolean_new (call $boolean_value (get_local $boolean))))
+	)
+
+	(func $boolean_value (param $number_a i32) (result i32)
+		
+		(i32.load (i32.add (get_local $number_a) (i32.const 4)))
+	)
+
+	(func $boolean_and (param $number_a i32) (param $number_b i32) (result i32)
+		(i32.const 0)
+	)
+
+	(func $boolean_or (param $number_a i32) (param $number_b i32) (result i32)
+		(i32.const 0)
+	)
+	
+	(func $boolean_xor (param $number_a i32) (param $number_b i32) (result i32)
+		(i32.const 0)
+	)
+	
+	(func $boolean_equals (param $number_a i32) (result i32)
+		(i32.const 0)
+	)
+
+	(func $boolean_to_string (param $number i32) (result i32)
+		(i32.const 0)
+	)
+	
+	(export "boolean_new" (func $boolean_new))
+	(export "boolean_clone" (func $boolean_clone))
+	(export "boolean_value" (func $boolean_value))
+	(export "boolean_and" (func $boolean_and))
+	(export "boolean_or" (func $boolean_or))
+	(export "boolean_xor" (func $boolean_xor))
+	(export "boolean_equals" (func $number_equals))
+	(export "boolean_to_string" (func $number_to_string))
+)
