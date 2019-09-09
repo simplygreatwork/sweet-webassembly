@@ -49,7 +49,7 @@ function test_three() {
 			(set_local $string (string "Hello from a string macro!"))
 		)	
 	)`
-	let root = path.join(process.cwd(), '/src/wat/index.wat')
+	let root = path.join(process.cwd(), '/src/wat/examples/index')
 	code = fs.readFileSync(root) + ''
 	let ast = parse(code)
 	code = require('./transform')(ast)

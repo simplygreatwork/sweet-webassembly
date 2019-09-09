@@ -1,10 +1,6 @@
 (module
-	(import "utility.watm")
-	(import "memory.watm")
-	(import "utility" "print_string" (func $print_string (param i32)))
-	(import "memory" "pointer_get" (func $pointer_get (result i32)))
-	(import "memory" "pointer_reserve" (func $pointer_reserve (param i32)))
-	(import "memory" "memory_copy" (func $memory_copy (param i32) (param i32) (param i32)))
+	(import "./utility.watm")
+	(import "./memory.watm")
 	(memory (import "host" "memory") 1)
 	
 	(func $list_new (param $length i32) (result i32)

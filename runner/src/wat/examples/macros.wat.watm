@@ -1,7 +1,7 @@
 (module
-	(import "utility.watm")
-	(import "memory.watm")
-	(import "string.watm")
+	(import "../lib/utility.watm")
+	(import "../lib/memory.watm")
+	(import "../lib/string.watm")
 	(import "host" "table" (table 2 anyfunc))
 	(memory (import "host" "memory") 1)
 	

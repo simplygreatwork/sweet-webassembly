@@ -9,7 +9,7 @@ module.exports = function() {
 			return value.str
 		}),
 		p.rep(
-			p.char('-+\\\\=$!_.a-zA-Z0-9 \t', function(value) {
+			p.char('-+\/\\\\=$!_.a-zA-Z0-9 \t', function(value) {
 				return value.char;
 			}),
 			0,

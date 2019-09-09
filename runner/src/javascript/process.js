@@ -1,11 +1,12 @@
 
 const path = require('path')
+const jetpack = require('fs-jetpack')
+const remark = require('remark')
+const visit = require('unist-util-visit')
 const parse = require('./parse')
 const walk = require('./walk')
 const query = require('./query')
 const transform = require('./transform')
-const remark = require('remark')
-const visit = require('unist-util-visit')
 
 function process_md(document) {
 	
@@ -93,7 +94,7 @@ function find_module_imports(document) {
 		if (query.is_expression_length(node, 2)) {
 			if (query.is_type_value(node.value[0], 'symbol', 'import')) {
 				if (query.is_type(node.value[1], 'string')) {
-					result.push(path.join(process.cwd(), '/src/wat/', node.value[1].value))
+					result.push(jetpack.path(document.path, '..', node.value[1].value))
 				}
 			}
 		}

@@ -10,9 +10,8 @@ class Runner {
 	
 	run() {
 		
-		let root = path.join(process.cwd(), '/src/wat/index')
-		if (false) root = path.join(process.cwd(), '/src/wat/macros')
-		if (false) root = path.join(process.cwd(), '/src/wat/macros-string')
+		let root = path.join(process.cwd(), '/src/wat/examples/index')
+		if (false) root = path.join(process.cwd(), '/src/wat/examples/macros')
 		logger('index').log('root module: ' + root)
 		let loader = new Loader({
 			imports: {

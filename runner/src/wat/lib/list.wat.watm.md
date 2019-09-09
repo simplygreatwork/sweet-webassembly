@@ -2,15 +2,10 @@
 ```wat
 
 (module
-	(import "utility.watm")
-	(import "memory.watm")
-	(import "number.watm")
+	(import "./utility.watm")
+	(import "./memory.watm")
+	(import "./number.watm")
 	(import "host" "table" (table 1 anyfunc))
-	(import "utility" "print_string" (func $print_string (param i32)))
-	(import "utility" "print_integer" (func $print_integer (param i32)))
-	(import "memory" "memory_allocate" (func $memory_allocate (param i32) (result i32)))
-	(import "memory" "memory_copy" (func $memory_copy (param i32) (param i32) (param i32)))
-	(import "number" "number_new" (func $number_new (param i32) (result i32)))
 	(memory (import "host" "memory") 1)
 	(type $i32_i32_to_void (func (param i32) (param i32)))
 	

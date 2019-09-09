@@ -1,7 +1,7 @@
 (module
-	(import "utility.watm")
-	(import "memory.watm")
-	(import "string.watm")
+	(import "./utility.watm")
+	(import "./memory.watm")
+	(import "./string.watm")
 	(memory (import "host" "memory") 1)
 	
 	;; use f32 float instead

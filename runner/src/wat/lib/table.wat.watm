@@ -1,6 +1,6 @@
 (module
-	(import "utility.watm")
-	(import "memory.watm")
+	(import "./utility.watm")
+	(import "./memory.watm")
 	(memory (import "host" "memory") 1)
 	(table 3 anyfunc)
 	(type $void_to_i32 (func (result i32)))

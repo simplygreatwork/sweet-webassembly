@@ -1,5 +1,5 @@
 (module
-	(import "utility.watm")
+	(import "./utility.watm")
 	(memory (import "host" "memory") 1)
 	(data (i32.const 2000) "\01\06before")
 	(data (i32.const 2100) "\01\05after")
