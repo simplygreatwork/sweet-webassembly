@@ -31,7 +31,7 @@ function process_watm(document) {
 		process.exit(-1)
 		return false
 	} else {
-		document.ast = result
+		document.tree = result
 		document.functions = find_functions(document)
 		document.function_exports = find_function_exports(document)
 		render_function_exports(document)
@@ -64,7 +64,7 @@ function noop() {
 
 function instantiate(document, imports) {
 	
-	let code = transform(document.ast)
+	let code = transform(document.tree)
 	let module_ = require('wabt')().parseWat(document.path, code, this.flags = {
 		exceptions : false,
 		mutable_globals : true,
@@ -89,7 +89,7 @@ function instantiate(document, imports) {
 function find_module_imports(document) {
 	
 	let result = []
-	walk({ root: document.ast[0], visit: function(node, index, parents) {
+	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		if (query.is_expression_length(node, 2)) {
 			if (query.is_type_value(node.value[0], 'symbol', 'import')) {
 				if (query.is_type(node.value[1], 'string')) {
@@ -104,7 +104,7 @@ function find_module_imports(document) {
 function find_function_imports(document) {
 	
 	let result = {}
-	walk({ root: document.ast[0], visit: function(node, index, parents) {
+	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		if (query.is_depth(parents, 1)) {
 			if (query.is_type(node, 'expression')) {
 				if (node.value.length > 2) {
@@ -124,7 +124,7 @@ function find_function_imports(document) {
 function find_functions(document) {
 	
 	let result = []
-	walk({ root: document.ast[0], visit: function(node, index, parents) {
+	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		if (query.is_depth(parents, 1)) {
 			if (query.is_type(node, 'expression')) {
 				if (query.is_type_value(node.value[0], 'symbol', 'func')) {
@@ -139,7 +139,7 @@ function find_functions(document) {
 function find_function_exports(document) {
 	
 	let result = {}
-	walk({ root: document.ast[0], visit: function(node, index, parents) {
+	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		if (query.is_depth(parents, 1)) {
 			if (query.is_type(node, 'expression')) {
 				if (query.is_type_value(node.value[0], 'symbol', 'export')) {
@@ -155,10 +155,10 @@ function render_function_exports(document) {
 	
 	document.functions.forEach(function(each) {
 		let name = each.value[1].value
-		let code = `\n\t(export "${name.substring(1)}" (func ${name}))`
 		if (! document.function_exports[name]) {
-			let ast = parse(code)
-			query.append(document.ast[0], ast[0])
+			let code = `\n\t(export "${name.substring(1)}" (func ${name}))`
+			let tree = parse(code)
+			query.append(document.tree[0], tree[0])
 		}
 	}.bind(this))
 }
@@ -170,12 +170,12 @@ function render_function_imports(document) {
 			let name = func.value[1].value
 			if (! has_function_import(document, document_.id, name.substring(1))) {
 				let code = `\n\t(import "${document_.id}" "${name.substring(1)}" (func ${name}))`
-				let ast = parse(code)
+				let tree = parse(code)
 				let signature = find_function_signature(func)
 				signature.forEach(function(node) {
-					ast[0].value[3].value.push(node)
+					tree[0].value[3].value.push(node)
 				})
-				query.insert(document.ast[0], ast[0], 1)
+				query.insert(document.tree[0], tree[0], 1)
 			}
 		}.bind(this))
 	}.bind(this))

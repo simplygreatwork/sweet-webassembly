@@ -13,13 +13,13 @@ class Document {
 	
 	constructor(path_) {
 		
-		this.path = this.check_path(path_)
+		this.path = this.trim_path(path_)
 		this.name = path.basename(this.path)
 		this.id = this.name.split('.')[0]
 		this.define_stages()
 	}
 	
-	check_path(path_) {
+	trim_path(path_) {
 
 		let array = path_.split('.')
 		if (array.length > 0) {
