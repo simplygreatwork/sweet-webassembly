@@ -47,7 +47,6 @@
 	(func $test_string_alphanum
 		
 		(local $string i32)
-
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Alphanumeric string"))
 		(call $print_string (string "------------------------------"))
