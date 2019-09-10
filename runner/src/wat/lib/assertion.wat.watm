@@ -10,8 +10,8 @@
 		
 		(if
 			(i32.eq (i32.load (get_local $string)) (i32.const 1))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
 	)
 	
@@ -21,8 +21,8 @@
 		(call $print_string (get_local $string_b))
 		(if
 			(call $string_equals (get_local $string_a) (get_local $string_b))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
 	)
 
@@ -30,8 +30,8 @@
 		
 		(if
 			(i32.eq (i32.load (get_local $number)) (i32.const 2))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
 	)
 
@@ -39,8 +39,8 @@
 		
 		(if
 			(call $number_equals (get_local $number_a) (get_local $number_b))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
 	)
 
@@ -48,24 +48,17 @@
 		
 		(if
 			(i32.eq (i32.load (get_local $list)) (i32.const 10))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
 	)
-
+	
 	(func $assert_list_length (param $list i32) (param $length i32)
 		
 		(if
 			(call $number_equals (call $list_length (get_local $list)) (get_local $length))
-			(then (call $print_string (i32.const 100)))
-			(else (call $print_string (i32.const 200)))
+			(then (call $print_string (string "PASS")))
+			(else (call $print_string (string "FAIL")))
 		)
-	)
-	
-	(export "assert_string_type" (func $assert_string_type))
-	(export "assert_string_equals" (func $assert_string_equals))
-	(export "assert_number_type" (func $assert_number_type))
-	(export "assert_number_equals" (func $assert_number_equals))
-	(export "assert_list_type" (func $assert_list_type))
-	(export "assert_list_length" (func $assert_list_length))
+	)	
 )

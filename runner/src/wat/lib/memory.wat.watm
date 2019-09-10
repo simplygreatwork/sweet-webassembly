@@ -1,8 +1,6 @@
 (module
 	(import "./utility.watm")
 	(memory (import "host" "memory") 1)
-	(data (i32.const 2000) "\01\06before")
-	(data (i32.const 2100) "\01\05after")
 	
 	(func $memory_allocate (param $size i32) (result i32)
 		
@@ -63,29 +61,4 @@
 			)
 		)
 	)
-
-	(func $pointer_get (result i32)
-		
-		(i32.load
-			(i32.const 0)
-		)
-	)
-	
-	(func $pointer_reserve (param $size i32)
-		
-		(i32.store
-			(i32.const 0)
-			(i32.add
-				(i32.load
-					(i32.const 0)
-				)
-				(get_local $size)
-			)
-		)
-	)
-	
-	(export "memory_allocate" (func $memory_allocate))
-	(export "memory_copy" (func $memory_copy))
-	(export "pointer_get" (func $pointer_get))
-	(export "pointer_reserve" (func $pointer_reserve))
 )
