@@ -42,3 +42,4 @@ npm start
 - create macro for function pointers (tables)
 - create binary search tree instead of hashtable
 - create the distinct data structures: array, linked list, and hybrid (vector)
+- fill in blank function stubs: e.g. $boolean_xor

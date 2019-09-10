@@ -12,10 +12,9 @@ function Host() {
 		}),
 		print_string: function(offset) {
 			var array = new Uint8Array(this.memory.buffer)
-			offset++
+			let type = array[offset++]
+			let length = array[offset++]
 			var string = ''
-			let length = array[offset]
-			offset++
 			for (var i = 0; i < length; i++) {
 				string += String.fromCharCode(array[offset + i])
 			}
