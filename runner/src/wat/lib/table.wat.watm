@@ -44,6 +44,4 @@
 			(get_local $value)
 		)
 	)
-
-	(export "test_table" (func $test_table))
 )

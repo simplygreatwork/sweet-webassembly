@@ -97,13 +97,4 @@
 	(func $Number_max (param $number_a i32) (param $number_b i32) (result i32)
 		(i32.const 0)
 	)
-	
-	(export "number_new" (func $number_new))
-	(export "number_clone" (func $number_clone))
-	(export "number_value" (func $number_value))
-	(export "number_add" (func $number_add))
-	(export "number_equals" (func $number_equals))
-	(export "number_iterate" (func $number_iterate))
-	(export "number_to_string" (func $number_to_string))
-	(export "Number_max" (func $Number_max))
 )

@@ -162,17 +162,4 @@
 	(func $list_sort
 		
 	)
-
-	(export "list_new" (func $list_new))
-	(export "list_length" (func $list_length))
-	(export "list_first" (func $list_first))
-	(export "list_last" (func $list_last))
-	(export "list_push" (func $list_push))
-	(export "list_pop" (func $list_pop))
-	(export "list_loop" (func $list_loop))
-	(export "list_split" (func $list_split))
-	(export "list_join" (func $list_join))
-	(export "list_concat" (func $list_concat))
-	(export "list_reverse" (func $list_reverse))
-	(export "list_sort" (func $list_sort))
 )

@@ -40,14 +40,5 @@
 
 	(func $boolean_to_string (param $number i32) (result i32)
 		(i32.const 0)
-	)
-	
-	(export "boolean_new" (func $boolean_new))
-	(export "boolean_clone" (func $boolean_clone))
-	(export "boolean_value" (func $boolean_value))
-	(export "boolean_and" (func $boolean_and))
-	(export "boolean_or" (func $boolean_or))
-	(export "boolean_xor" (func $boolean_xor))
-	(export "boolean_equals" (func $number_equals))
-	(export "boolean_to_string" (func $number_to_string))
+	)	
 )
