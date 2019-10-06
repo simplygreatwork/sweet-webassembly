@@ -14,6 +14,7 @@
 	(memory (import "host" "memory") 1)
 	(elem (i32.const 0) $test_list_iterate_each)
 	(elem (i32.const 3) $test_map_iterate_each)
+	(elem (i32.const 4) $test_tree_iterate_each)
 
 	(function $main
 		
@@ -95,7 +96,7 @@
 		(set_local $string_expected (string "abcdefghi"))
 		(call $assert_string_equals (get_local $string_expected) (get_local $string_result))
 	)
-
+	
 	(func $test_string_compare
 		
 		(call $print_string (string "------------------------------"))
@@ -190,11 +191,9 @@
 		(call $list_append (get_local $list) (string "b"))
 		(call $list_append (get_local $list) (string "c"))
 		(call $list_iterate (get_local $list) (get_local $test_list_iterate_each) (i32.const 0))
-		(call $print_string (call $number_to_string (call $list_length (get_local $list))))
 		(call $assert_list_type (get_local $list))
 		(call $assert_list_length (get_local $list) (call $number_new (i32.const 3)))
-		(set_local $index (call $list_index_of (get_local $list) (string "c")))
-		(call $print_integer (get_local $index))
+		(call $assert_number_equals (call $number_new (call $list_index_of (get_local $list) (string "c"))) (call $number_new (i32.const 2)))
 	)
 	
 	(func $test_list_iterate_each (param $item i32) (param $index i32) (param $context i32)
@@ -226,18 +225,28 @@
 	(func $test_tree
 		
 		(local $tree i32)
-		(local $root i32)
+		(local $test_tree_iterate_each i32)
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Testing a binary search tree"))
 		(call $print_string (string "------------------------------"))
+		(set_local $test_tree_iterate_each (i32.const 4))
 		(set_local $tree (call $tree_new))
-		(set_local $root (i32.const 0))
-		(set_local $root (call $tree_insert (call $node_new (string "2") (i32.const 2)) (get_local $root)))
-		(set_local $root (call $tree_insert (call $node_new (string "1") (i32.const 1)) (get_local $root)))
-		(set_local $root (call $tree_insert (call $node_new (string "3") (i32.const 3)) (get_local $root)))
-		(call $tree_walk (get_local $root))
+		(call $tree_set (get_local $tree) (string "b") (call $number_new (i32.const 2)))
+		(call $tree_set (get_local $tree) (string "a") (call $number_new (i32.const 1)))
+		(call $tree_set (get_local $tree) (string "c") (call $number_new (i32.const 3)))
+		(call $tree_set (get_local $tree) (string "e") (call $number_new (i32.const 5)))
+		(call $tree_set (get_local $tree) (string "d") (call $number_new (i32.const 4)))
+		;;(call $tree_walk (call $tree_root_get (get_local $tree)))
+		(call $tree_iterate (get_local $tree) (get_local $test_tree_iterate_each))
 	)
 	
+	(func $test_tree_iterate_each (param $key i32) (param $value i32) (param $index i32)
+		
+		(call $print_string (get_local $key))
+		(call $print_string (call $number_to_string (get_local $value)))
+		(call $print_integer (get_local $index))
+	)
+
 	(func $test_tree_map
 		
 		(local $map i32)

@@ -85,7 +85,7 @@
 		(set_local $find (call $item_value (call $item_next (get_local $context))))
 		(if
 			(call $string_equals (get_local $find) (call $item_value (get_local $item)))
-			(then (call $number_set 
+			(then (call $number_value_set
 				(call $item_value (call $item_next (call $item_next (get_local $context))))
 				(get_local $index)
 			))
@@ -145,7 +145,7 @@
 	(func $item_previous (param $item i32) (result i32)		
 		(i32.load (i32.add (get_local $item) (i32.const 8)))
 	)
-
+	
 	(func $item_value (param $item i32) (result i32)		
 		(i32.load (i32.add (get_local $item) (i32.const 12)))
 	)

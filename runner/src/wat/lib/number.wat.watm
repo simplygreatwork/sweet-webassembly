@@ -12,23 +12,23 @@
 		(local $number i32)
 		(set_local $number (call $memory_allocate (i32.const 8)))
 		(i32.store (get_local $number) (i32.const 2))
-		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
+		(call $number_value_set (get_local $number) (get_local $value))
 		(get_local $number)
 	)
-
+	
 	(func $number_clone (param $number i32) (result i32)
 		
 		(call $number_new (call $number_value (get_local $number)))
-	)
-
-	(func $number_set (param $number i32) (param $value i32)
-		
-		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
 	)
 	
 	(func $number_value (param $number i32) (result i32)
 		
 		(i32.load (i32.add (get_local $number) (i32.const 4)))
+	)
+
+	(func $number_value_set (param $number i32) (param $value i32)
+		
+		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
 	)
 
 	(func $number_add (param $number_a i32) (param $number_b i32) (result i32)
