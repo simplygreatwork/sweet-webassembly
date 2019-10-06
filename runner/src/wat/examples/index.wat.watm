@@ -222,7 +222,7 @@
 		(call $print_string (get_local $key))
 		(call $print_string (call $number_to_string (get_local $value)))
 	)
-	
+
 	(func $test_tree
 		
 		(local $tree i32)
@@ -232,9 +232,6 @@
 		(call $print_string (string "------------------------------"))
 		(set_local $tree (call $tree_new))
 		(set_local $root (i32.const 0))
-		;;(set_local $root (call $tree_insert (call $node_new (call $number_new (i32.const 2)) (i32.const 2)) (get_local $root)))
-		;;(set_local $root (call $tree_insert (call $node_new (call $number_new (i32.const 1)) (i32.const 1)) (get_local $root)))
-		;;(set_local $root (call $tree_insert (call $node_new (call $number_new (i32.const 3)) (i32.const 3)) (get_local $root)))
 		(set_local $root (call $tree_insert (call $node_new (string "2") (i32.const 2)) (get_local $root)))
 		(set_local $root (call $tree_insert (call $node_new (string "1") (i32.const 1)) (get_local $root)))
 		(set_local $root (call $tree_insert (call $node_new (string "3") (i32.const 3)) (get_local $root)))
