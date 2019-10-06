@@ -1,21 +1,21 @@
 
-array join: for easy string creation
-flesh out list and map
-binary search tree
-streams
-more methods for number/boolean/list/string
-run without compiling
-vector is a list of arrays
-create array module
-how to disallow null/undefined
-implement message passing but without inheritance
-compare two strings
-sorting algorithm
-sort a list, array, or vector
-use a map to create a type id map
-ensure to use property access helper functions e.g. see string and string_length
-potential issue: string equals loop may assume minimum length of 1
-implement string_equals in terms of string_compare
-integrate string_compare into tree nodes
-implement comparators into tree insertion
-integrate tree into map
+- array join: for easy string creation
+- flesh out list and map
+- binary search tree
+- streams
+- more methods for number/boolean/list/string
+- run without compiling
+- vector is a list of arrays
+- create array module
+- how to disallow null/undefined
+- implement message passing but without inheritance
+- compare two strings
+- sorting algorithm
+- sort a list, array, or vector
+- use a map to create a type id map
+- ensure to use property access helper functions e.g. see string and string_length
+- potential issue: string equals loop may assume minimum length of 1
+- implement string_equals in terms of string_compare
+- integrate string_compare into tree nodes
+- implement comparators into tree insertion
+- integrate tree into map
