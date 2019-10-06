@@ -1,4 +1,5 @@
 (module
+	
 	(import "host" "print_string" (func $host_print_string (param i32)))
 	(import "host" "print_integer" (func $host_print_integer (param i32)))
 	(memory (import "host" "memory") 1)

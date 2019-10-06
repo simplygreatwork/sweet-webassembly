@@ -25,7 +25,7 @@ function process_watm(document) {
 	
 	let result = parse(document.source)
 	if (result.error) {
-		let line_result = find_line(result.position)
+		let line_result = find_line(document, result.position)
 		console.error('Error parsing line ' + line_result.line + ' at character ' + line_result.char + ':')
 		console.error('--> ' + line_result.text)
 		console.error('')
@@ -42,13 +42,13 @@ function process_watm(document) {
 	}
 }
 
-function find_line(position) {
+function find_line(document, position) {
 	
 	let result = {}
-	let a = this.source.indexOf('\n', position)
-	let b = this.source.lastIndexOf('\n', a - 1)
-	result.text = this.source.substring(b + 1, a)
-	result.line = this.source.substring(0, b).split('\n').length
+	let a = document.source.indexOf('\n', position)
+	let b = document.source.lastIndexOf('\n', a - 1)
+	result.text = document.source.substring(b + 1, a)
+	result.line = document.source.substring(0, b).split('\n').length
 	result.char = position - b
 	return result
 }

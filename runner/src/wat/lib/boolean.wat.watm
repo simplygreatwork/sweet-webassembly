@@ -1,4 +1,5 @@
 (module
+	
 	(import "./utility.watm")
 	(import "./memory.watm")
 	(memory (import "host" "memory") 1)
@@ -16,7 +17,7 @@
 		
 		(call $boolean_new (call $boolean_value (get_local $boolean))))
 	)
-
+	
 	(func $boolean_value (param $number_a i32) (result i32)
 		
 		(i32.load (i32.add (get_local $number_a) (i32.const 4)))

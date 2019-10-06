@@ -1,0 +1,26 @@
+(module
+
+	(import "./utility.watm")
+	(import "./memory.watm")
+	(import "./number.watm")	
+	(import "host" "table" (table 1 anyfunc))
+	(memory (import "host" "memory") 1)
+	
+	(func $pair_new (param $key i32) (param $value i32)
+		
+		(local $pair i32)
+		(set_local $pair (call $memory_allocate (i32.const 12)))
+		(i32.store (i32.add (get_local $pair) (i32.const 0)) (i32.const 40))			;; type
+		(i32.store (i32.add (get_local $pair) (i32.const 4)) (get_local $key))		;; key
+		(i32.store (i32.add (get_local $pair) (i32.const 8)) (get_local $value))	;; value
+		(get_local $pair)
+	)
+	
+	(func $pair_key (param $pair i32) (result i32)
+		(i32.load (i32.add (get_local $pair) (i32.const 4)))
+	)
+	
+	(func $pair_value (param $pair i32) (result i32)
+		(i32.load (i32.add (get_local $pair) (i32.const 8)))
+	)
+)

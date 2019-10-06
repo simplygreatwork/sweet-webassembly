@@ -52,15 +52,15 @@ function expression() {
 function comment() {
 	
 	let result = [];
-	return p.seq([
-		p.str(';', function(value) {
+	return p.seq ([
+		p.str (';', function(value) {
 			return value.str
 		}),
-		p.str(';', function(value) {
+		p.str (';', function(value) {
 			return value.str
 		}),
-		p.rep(
-			p.char('^\n', function(value) {
+		p.rep (
+			p.char ('^\n', function(value) {
 				return value.char;
 			}),
 			0,

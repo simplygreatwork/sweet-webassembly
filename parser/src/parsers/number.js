@@ -5,6 +5,10 @@ module.exports = function() {
 	
 	let result = [];
 	return p.alt([
+		p.str('-', function(value) {
+			result.push(value.str);
+			return value.str
+		}),
 		p.str('0', function(value) {
 			result.push(value.str);
 			return value.str

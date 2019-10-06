@@ -1,10 +1,14 @@
 (module
+	
 	(import "./utility.watm")
 	(import "./memory.watm")
 	(import "./number.watm")
+	(import "./string.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
-	(type $i32_i32_to_void (func (param i32) (param i32)))
+	(elem (i32.const 1) $list_index_of_iterate_each)
+	(elem (i32.const 2) $list_get_iterate_each)
+	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))
 	
 	(func $list_new (result i32)
 		
@@ -45,7 +49,7 @@
 		(call $number_new (get_local $result))
 	)
 	
-	(func $list_iterate (param $list i32) (param $function i32)
+	(func $list_iterate (param $list i32) (param $function i32) (param $context i32)
 		
 		(local $index i32)
 		(local $item i32)
@@ -54,13 +58,61 @@
 		(block (loop
 			(set_local $item (i32.load (i32.add (get_local $item) (i32.const 4))))
 			(br_if 1 (i32.eq (get_local $item) (get_local $list)))
-			(call_indirect (type $i32_i32_to_void)
-				(get_local $item) (get_local $index)
+			(call_indirect (type $i32_i32_i32_to_void)
+				(get_local $item) (get_local $index) (get_local $context)
 				(get_local $function)
 			)
 			(set_local $index (i32.add (get_local $index) (i32.const 1)))
 			(br 0)
 		))
+	)
+
+	(func $list_index_of (param $list i32) (param $item i32) (result i32)
+		
+		(local $context i32)
+		(local $list_index_of_iterate_each i32)
+		(set_local $list_index_of_iterate_each (i32.const 1))
+		(set_local $context (call $list_new))
+		(call $list_append (get_local $context) (get_local $item))
+		(call $list_append (get_local $context) (call $number_new (i32.const -1)))
+		(call $list_iterate (get_local $list) (get_local $list_index_of_iterate_each) (get_local $context))
+		(call $number_value (call $item_value (call $item_next (call $item_next (get_local $context)))))
+	)
+	
+	(func $list_index_of_iterate_each (param $item i32) (param $index i32) (param $context i32)
+		
+		(local $find i32)
+		(set_local $find (call $item_value (call $item_next (get_local $context))))
+		(if
+			(call $string_equals (get_local $find) (call $item_value (get_local $item)))
+			(then (call $number_set 
+				(call $item_value (call $item_next (call $item_next (get_local $context))))
+				(get_local $index)
+			))
+		)
+	)
+	
+	(func $list_get (param $list i32) (param $index i32) (result i32)
+		
+		(local $context i32)
+		(local $list_get_iterate_each i32)
+		(set_local $list_get_iterate_each (i32.const 2))
+		(set_local $context (call $list_new))
+		(call $list_append (get_local $context) (get_local $index))
+		(call $list_iterate (get_local $list) (get_local $list_get_iterate_each) (get_local $context))
+		(call $item_value (call $item_next (call $item_next (get_local $context))))
+	)
+	
+	(func $list_get_iterate_each (param $item i32) (param $index i32) (param $context i32)
+		
+		(if
+			(i32.eq (get_local $index) (call $item_value (call $item_next (get_local $context))))
+			(then (call $list_append (get_local $context) (call $item_value (get_local $item))))
+		)
+	)
+	
+	(func $list_set (param $list i32) (param $index i32) (param $item i32)
+		
 	)
 
 	(func $list_to_string (param $list i32) (result i32)
@@ -89,7 +141,7 @@
 	(func $item_next (param $item i32) (result i32)
 		(i32.load (i32.add (get_local $item) (i32.const 4)))
 	)
-
+	
 	(func $item_previous (param $item i32) (result i32)		
 		(i32.load (i32.add (get_local $item) (i32.const 8)))
 	)
