@@ -17,17 +17,14 @@
 	)
 	
 	(func $number_clone (param $number i32) (result i32)
-		
 		(call $number_new (call $number_value (get_local $number)))
 	)
 	
 	(func $number_value (param $number i32) (result i32)
-		
 		(i32.load (i32.add (get_local $number) (i32.const 4)))
 	)
-
+	
 	(func $number_value_set (param $number i32) (param $value i32)
-		
 		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
 	)
 
@@ -86,7 +83,6 @@
 	)
 	
 	(func $number_to_string (param $number i32) (result i32)
-
 		(call $digit_to_string (call $number_value (get_local $number)))
 	)
 	

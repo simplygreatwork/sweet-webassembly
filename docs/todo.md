@@ -1,21 +1,30 @@
 
-- array join: for easy string creation
-- flesh out list and map
-- binary search tree
-- streams
-- more methods for number/boolean/list/string
+- tree should become map
+- function type
+- also be able to name functions using a string
+- streams (source, sink)
+- source will push, sink will collect
+- stream will simply pipe
+- reclaim / deallocate memory
+- garbage collection scheme
+- write wasm to disk to load in browser
 - run without compiling
+- array join: for easy string creation
+- flesh out list and map (use tree)
+- sorting algorithm
+- binary search tree (implemented)
+- more methods for number/boolean/list/string
 - vector is a list of arrays
+- implement vector as a binary search tree not a list
 - create array module
 - how to disallow null/undefined
 - implement message passing but without inheritance
-- compare two strings
-- sorting algorithm
+- compare two strings (done)
 - sort a list, array, or vector
-- use a map to create a type id map
+- use a map to create a type id map (types.wat.watm)
 - ensure to use property access helper functions e.g. see string and string_length
 - potential issue: string equals loop may assume minimum length of 1
-- implement string_equals in terms of string_compare
-- integrate string_compare into tree nodes
+- implement string_equals in terms of string_compare (done)
+- integrate string_compare into tree nodes (done)
 - implement comparators into tree insertion
-- integrate tree into map
+- integrate tree into map (no: tree will become map)

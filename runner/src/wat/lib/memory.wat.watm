@@ -6,26 +6,14 @@
 	(func $memory_allocate (param $size i32) (result i32)
 		
 		(local $result i32)
-		(set_local $result
-			(i32.load
-				(i32.const 0)
-			)
-		)
-		(i32.store
-			(i32.const 0)
-			(i32.add
-				(get_local $result)
-				(get_local $size)
-			)
-		)
+		(set_local $result (i32.load (i32.const 0)))
+		(i32.store (i32.const 0) (i32.add (get_local $result) (get_local $size)))
 		(get_local $result)
 	)
-
+	
 	(func $memory_allocate_handle (param $size i32) (result i32)
 		
-		(i32.load
-			(i32.const 0)
-		)
+		(i32.load (i32.const 0))
 	)
 
 	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)
@@ -37,29 +25,14 @@
 		
 		(local $i i32)
 		(set_local $i (i32.const 0))
-		(block
-			(loop
-				(i32.store
-					(i32.add
-						(get_local $b)
-						(get_local $i)
-					)
-					(i32.load8_u
-						(i32.add
-							(get_local $a)
-							(get_local $i)
-						)
-					)
-				)
-				(set_local $i
-					(i32.add
-						(get_local $i)
-						(i32.const 1)
-					)
-				)
-				(br_if 1 (i32.eq (get_local $i) (get_local $length)))
-				(br 0)
+		(block (loop
+			(i32.store
+				(i32.add (get_local $b) (get_local $i))
+				(i32.load8_u (i32.add (get_local $a) (get_local $i)))
 			)
-		)
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $length)))
+			(br 0)
+		))
 	)
 )

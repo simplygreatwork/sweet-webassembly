@@ -1,0 +1,22 @@
+(module
+	
+	(import "./utility.watm")
+	(import "./memory.watm")
+	(memory (import "host" "memory") 1)
+	
+	(func $register															;; unofficial
+		
+		(local $map i32)
+		(call $map_set (get_local $map) (string "boolean") (call $number_new (i32.const 10)))
+		(call $map_set (get_local $map) (string "number") (call $number_new (i32.const 20)))
+		(call $map_set (get_local $map) (string "string") (call $number_new (i32.const 30)))
+		(call $map_set (get_local $map) (string "function") (call $number_new (i32.const 40)))
+		(call $map_set (get_local $map) (string "array") (call $number_new (i32.const 50)))
+		(call $map_set (get_local $map) (string "list") (call $number_new (i32.const 60)))
+		(call $map_set (get_local $map) (string "vector") (call $number_new (i32.const 70)))
+		(call $map_set (get_local $map) (string "map") (call $number_new (i32.const 80)))
+		(call $map_set (get_local $map) (string "tree") (call $number_new (i32.const 90)))
+		(call $map_set (get_local $map) (string "tree_node") (call $number_new (i32.const 100)))
+		(call $map_set (get_local $map) (string "stream") (call $number_new (i32.const 110)))
+	)
+)

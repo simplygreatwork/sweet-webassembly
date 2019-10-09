@@ -25,7 +25,7 @@
 	(func $map_values (param $map i32) (result i32)
 		(i32.load (i32.add (get_local $map) (i32.const 8)))
 	)
-
+	
 	(func $map_set (param $map i32) (param $key i32) (param $value i32)
 		
 		(local $index i32)

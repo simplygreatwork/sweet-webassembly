@@ -7,7 +7,7 @@
 	(func $string_new (param $length i32) (result i32)
 		
 		(local $address i32)
-		(set_local $address (call $memory_allocate (i32.add (i32.const 2) (get_local $length))))
+		(set_local $address (call $memory_allocate (i32.add (i32.const 2) (get_local $length))))	;; verify sizing: e.g. 4, 8
 		(i32.store (get_local $address) (i32.const 1))
 		(i32.store (i32.add (get_local $address) (i32.const 1)) (get_local $length))
 		(get_local $address)
@@ -78,10 +78,7 @@
 			(call $string_chars (get_local $b))
 			(i32.add
 				(get_local $result)
-				(i32.add
-					(call $string_length (get_local $a))
-					(i32.const 2)
-				)
+				(i32.add (call $string_length (get_local $a)) (i32.const 2))
 			)
 			(call $string_length (get_local $b))
 		)

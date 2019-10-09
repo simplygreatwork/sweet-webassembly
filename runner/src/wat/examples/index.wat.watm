@@ -4,18 +4,23 @@
 	(import "../lib/memory.watm")
 	(import "../lib/string.watm")
 	(import "../lib/number.watm")
+	(import "../lib/function.watm")
 	(import "../lib/list.watm")
 	(import "../lib/assertion.watm")
 	(import "../lib/tree.watm")
 	(import "../lib/map.watm")
 	(import "../lib/treemap.watm")
+	(import "../lib/stream.watm")
 	(import "../lib/table.watm")
-	(import "host" "table" (table 2 anyfunc))
+	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
 	(elem (i32.const 0) $test_list_iterate_each)
 	(elem (i32.const 3) $test_map_iterate_each)
 	(elem (i32.const 4) $test_tree_iterate_each)
-
+	(elem (i32.const 6) $test_stream_step_one)
+	(elem (i32.const 7) $test_stream_step_two)
+	(elem (i32.const 8) $test_stream_step_three)
+	
 	(function $main
 		
 		(call $setup)
@@ -73,6 +78,8 @@
 		(call $print_string (string "------------------------------"))
 		(set_local $string (string "abc"))
 		(set_local $string_result (call $string_clone (get_local $string)))
+		(call $print_string (get_local $string))
+		(call $print_string (get_local $string_result))
 		(call $assert_string_equals (get_local $string) (get_local $string_result))
 	)
 	
@@ -94,6 +101,8 @@
 		
 		(set_local $string_result (call $string_append (get_local $string_a) (get_local $string_b)))
 		(set_local $string_expected (string "abcdefghi"))
+		(call $print_string (get_local $string_expected))
+		(call $print_string (get_local $string_result))
 		(call $assert_string_equals (get_local $string_expected) (get_local $string_result))
 	)
 	
@@ -236,7 +245,6 @@
 		(call $tree_set (get_local $tree) (string "c") (call $number_new (i32.const 3)))
 		(call $tree_set (get_local $tree) (string "e") (call $number_new (i32.const 5)))
 		(call $tree_set (get_local $tree) (string "d") (call $number_new (i32.const 4)))
-		;;(call $tree_walk (call $tree_root_get (get_local $tree)))
 		(call $tree_iterate (get_local $tree) (get_local $test_tree_iterate_each))
 	)
 	
@@ -265,11 +273,34 @@
 	)
 
 	(func $test_stream
-		
+
+		(local $stream i32)
+		(local $list i32)
+		(local $function i32)
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Testing a stream"))
 		(call $print_string (string "------------------------------"))
+		(set_local $stream (call $stream_new))
+		(set_local $list (call $list_new))
+		(call $list_append (get_local $list) (call $function_new (i32.const 6)))
+		(call $list_append (get_local $list) (call $function_new (i32.const 7)))
+		(call $list_append (get_local $list) (call $function_new (i32.const 8)))
+		(call $stream_list_set (get_local $stream) (get_local $list))
+		(call $stream_push (get_local $stream) (string "a"))
 	)
 
+	(func $test_stream_step_one (param $value i32) (result i32)
+		(call $string_append (get_local $value) (string "b"))
+	)
+
+	(func $test_stream_step_two (param $value i32) (result i32)
+		(call $string_append (get_local $value) (string "c"))
+	)
+
+	(func $test_stream_step_three (param $value i32) (result i32)
+		(call $assert_string_equals (get_local $value) (string "abc"))
+		(get_local $value)
+	)
+	
 	(export "main" (func $main))
 )

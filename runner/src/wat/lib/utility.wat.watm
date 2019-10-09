@@ -23,4 +23,8 @@
 		(set_local $a (get_local $b))
 		(set_local $b (get_local $temp))
 	)
+	
+	(func $get_type (param $value i32) (result i32)
+		(i32.load (get_local $value))
+	)
 )

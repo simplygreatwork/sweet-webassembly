@@ -18,8 +18,6 @@
 	
 	(func $assert_string_equals (param $string_a i32) (param $string_b i32)
 		
-		(call $print_string (get_local $string_a))
-		(call $print_string (get_local $string_b))
 		(if
 			(call $string_equals (get_local $string_a) (get_local $string_b))
 			(then (call $print_string (string "PASS")))
@@ -35,7 +33,7 @@
 			(else (call $print_string (string "FAIL")))
 		)
 	)
-
+	
 	(func $assert_number_equals (param $number_a i32) (param $number_b i32)
 		
 		(if

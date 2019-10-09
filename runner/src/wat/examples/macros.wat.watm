@@ -3,7 +3,7 @@
 	(import "../lib/utility.watm")
 	(import "../lib/memory.watm")
 	(import "../lib/string.watm")
-	(import "host" "table" (table 2 anyfunc))
+	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
 	
 	(function $main
