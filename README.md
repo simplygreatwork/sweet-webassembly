@@ -27,7 +27,10 @@ Get started with WebAssembly text format syntax and macros.
 
 ### Run
 
-Requires Node.js. Tested with Node.js 10.15.0
+- Requires Node.js.
+- Tested with Node.js 12.11.1
+- Node.js 10.16.3 seems to be missing WebAssembly.Global
+- 
 
 ```
 git clone https://github.com/simplygreatwork/sweet-webassembly.git
