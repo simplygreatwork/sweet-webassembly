@@ -13,11 +13,11 @@
 		
 		(local $tree i32)
 		(set_local $tree (call $memory_allocate (i32.const 12)))
-		(i32.store (i32.add (get_local $tree) (i32.const 0)) (i32.const 31))				;; type
+		(i32.store (i32.add (get_local $tree) (i32.const 0)) (typeof "tree"))			;; type
 		(call $tree_root_set (get_local $tree) (i32.const 0))									;; root (null)
 		(get_local $tree)
 	)
-
+	
 	(func $tree_root_get (param $tree i32) (result i32)
 		(i32.load (i32.add (get_local $tree) (i32.const 4)))
 	)
@@ -59,7 +59,7 @@
 		)
 		(get_local $result)
 	)
-
+	
 	(func $tree_find (param $key i32) (param $root i32) (result i32)
 		
 		(local $result i32)
@@ -94,7 +94,7 @@
 		(set_local $index (call $number_new (i32.const 0)))
 		(call $tree_iterate_walk (call $tree_root_get (get_local $tree)) (get_local $function) (get_local $index))
 	)
-
+	
 	(func $tree_iterate_walk (param $root i32) (param $function i32) (param $index i32)
 		
 		(local $index_ i32)
@@ -122,11 +122,11 @@
 		
 		(local $node i32)
 		(set_local $node (call $memory_allocate (i32.const 20)))
-		(i32.store (i32.add (get_local $node) (i32.const 0)) (i32.const 31))			;; type
-		(i32.store (i32.add (get_local $node) (i32.const 4)) (get_local $key))		;; key
-		(i32.store (i32.add (get_local $node) (i32.const 8)) (get_local $value))	;; value
-		(i32.store (i32.add (get_local $node) (i32.const 12)) (i32.const 0))			;; left (null)
-		(i32.store (i32.add (get_local $node) (i32.const 16)) (i32.const 0))			;; right (null)
+		(i32.store (i32.add (get_local $node) (i32.const 0)) (typeof "tree_node"))		;; type
+		(i32.store (i32.add (get_local $node) (i32.const 4)) (get_local $key))			;; key
+		(i32.store (i32.add (get_local $node) (i32.const 8)) (get_local $value))		;; value
+		(i32.store (i32.add (get_local $node) (i32.const 12)) (i32.const 0))				;; left (null)
+		(i32.store (i32.add (get_local $node) (i32.const 16)) (i32.const 0))				;; right (null)
 		(get_local $node)
 	)
 

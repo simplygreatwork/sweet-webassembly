@@ -9,7 +9,7 @@
 		
 		(local $function i32)
 		(set_local $function (call $memory_allocate (i32.const 8)))
-		(i32.store (i32.add (get_local $function) (i32.const 0)) (i32.const 90))			;; type
+		(i32.store (i32.add (get_local $function) (i32.const 0)) (typeof "function"))			;; type
 		(call $function_id_set (get_local $function) (call $number_new (get_local $id)))
 		(get_local $function)
 	)

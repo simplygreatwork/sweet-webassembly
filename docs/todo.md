@@ -1,11 +1,15 @@
 
+- use preprocessor for types mapping
+- $tree_insert needs to be able to update values
+- implement globals for refering to and accessing type ids
+- (string "result: ") does not parse
 - tree should become map
 - function type
 - also be able to name functions using a string
 - streams (source, sink)
 - source will push, sink will collect
 - stream will simply pipe
-- reclaim / deallocate memory
+- reclaim / deallocate / compact memory
 - garbage collection scheme
 - write wasm to disk to load in browser
 - run without compiling
@@ -14,7 +18,7 @@
 - sorting algorithm
 - binary search tree (implemented)
 - more methods for number/boolean/list/string
-- vector is a list of arrays
+- vector as a list of arrays
 - implement vector as a binary search tree not a list
 - create array module
 - how to disallow null/undefined

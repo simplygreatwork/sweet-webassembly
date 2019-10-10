@@ -19,7 +19,8 @@ function transform(tree) {
 		require('./macros/string.js'),
 		require('./macros/swap.js'),
 		require('./macros/imports.js'),
-		require('./macros/exports.js')
+		require('./macros/exports.js'),
+		require('./macros/typeof.js')
 	]
 	walk({ root: tree[0], visit: function(node, index, parents) {
 		if (node.type == 'expression') {

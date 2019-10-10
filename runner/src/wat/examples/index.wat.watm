@@ -1,5 +1,5 @@
 (module
-
+	
 	(import "../lib/utility.watm")
 	(import "../lib/memory.watm")
 	(import "../lib/string.watm")
@@ -14,6 +14,7 @@
 	(import "../lib/table.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
+   (global $global (import "host" "global") (mut i32))
 	(elem (i32.const 0) $test_list_iterate_each)
 	(elem (i32.const 3) $test_map_iterate_each)
 	(elem (i32.const 4) $test_tree_iterate_each)
@@ -24,6 +25,7 @@
 	(function $main
 		
 		(call $setup)
+		(call $test_typeof)
 		(call $test_hello_world)
 		(call $test_string_macro)
 		(call $test_string_alphanum)
@@ -40,14 +42,27 @@
 		(call $test_arguments_dynamic)
 		(call $test_stream)
 		(call $test_table)
-		(call $test_string_compare)
 	)
 	
 	(func $setup
 		
 		(i32.store (i32.const 0) (i32.const 4096))
+		(set_global $global (call $map_new))
 	)
 	
+	(func $test_typeof
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test typeof"))
+		(call $print_string (string "------------------------------"))
+		(call $print_integer (typeof "boolean"))
+		(call $print_integer (typeof "boolean"))
+		(call $print_integer (typeof "number"))
+		(call $print_integer (typeof "number"))
+		(call $print_integer (typeof "string"))
+		(call $print_integer (typeof "string"))
+	)
+
 	(func $test_hello_world
 		
 		(call $print_string (string "------------------------------"))

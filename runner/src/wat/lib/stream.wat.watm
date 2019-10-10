@@ -16,7 +16,7 @@
 		
 		(local $stream i32)
 		(set_local $stream (call $memory_allocate (i32.const 8)))
-		(i32.store (get_local $stream) (i32.const 90))
+		(i32.store (get_local $stream) (typeof "stream"))
 		(get_local $stream)
 	)
 
@@ -24,7 +24,7 @@
 		
 		(i32.load (i32.add (get_local $stream) (i32.const 4)))
 	)
-
+	
 	(func $stream_list_set (param $stream i32) (param $list i32)
 		
 		(i32.store (i32.add (get_local $stream) (i32.const 4)) (get_local $list))

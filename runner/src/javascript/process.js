@@ -183,7 +183,7 @@ function render_function_imports(document) {
 }
 
 function has_function_import(document, module, func) {
-
+	
 	if (document.function_imports[module]) {
 		if (document.function_imports[module][func]) {
 			return true

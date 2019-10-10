@@ -15,7 +15,7 @@
 		
 		(local $list i32)
 		(set_local $list (call $memory_allocate (i32.const 16)))
-		(i32.store (i32.add (get_local $list) (i32.const 0)) (i32.const 10))			;; type
+		(i32.store (i32.add (get_local $list) (i32.const 0)) (typeof "list"))			;; type
 		(i32.store (i32.add (get_local $list) (i32.const 4)) (get_local $list))		;; next
 		(i32.store (i32.add (get_local $list) (i32.const 8)) (get_local $list))		;; previous
 		(i32.store (i32.add (get_local $list) (i32.const 12)) (i32.const 0))			;; length or item ref
@@ -143,7 +143,7 @@
 		
 		(local $item i32)
 		(set_local $item (call $memory_allocate (i32.const 16)))
-		(i32.store (i32.add (get_local $item) (i32.const 0)) (i32.const 11))			;; type
+		(i32.store (i32.add (get_local $item) (i32.const 0)) (typeof "list_item"))			;; type
 		(i32.store (i32.add (get_local $item) (i32.const 4)) (get_local $item))		;; next
 		(i32.store (i32.add (get_local $item) (i32.const 8)) (get_local $item))		;; previous
 		(i32.store (i32.add (get_local $item) (i32.const 12)) (i32.const 0))			;; length or item ref

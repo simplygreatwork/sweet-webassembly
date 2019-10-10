@@ -8,7 +8,7 @@
 		
 		(local $number i32)
 		(set_local $number (call $memory_allocate (i32.const 8)))
-		(i32.store (get_local $number) (i32.const 2))
+		(i32.store (get_local $number) (typeof "boolean"))
 		(i32.store (i32.add (get_local $number) (i32.const 4)) (get_local $value))
 		(get_local $number)
 	)

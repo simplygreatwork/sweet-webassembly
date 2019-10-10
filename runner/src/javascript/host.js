@@ -10,6 +10,10 @@ function Host() {
 			initial: 256,
 			element: 'anyfunc'
 		}),
+		global: new WebAssembly.Global({
+			value: 'i32',
+			mutable: true
+		}, 0),
 		print_string: function(offset) {
 			var array = new Uint8Array(this.memory.buffer)
 			let type = array[offset++]
