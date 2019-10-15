@@ -12,18 +12,18 @@
 	(func $tree_new (result i32)
 		
 		(local $tree i32)
-		(set_local $tree (call $memory_allocate (i32.const 12)))
-		(i32.store (i32.add (get_local $tree) (i32.const 0)) (typeof "tree"))			;; type
+		(set_local $tree (call $memory_allocate (i32.const 8)))
+		(call $memory_store (get_local $tree) (i32.const 0) (typeof "tree"))				;; type
 		(call $tree_root_set (get_local $tree) (i32.const 0))									;; root (null)
 		(get_local $tree)
 	)
-	
+
 	(func $tree_root_get (param $tree i32) (result i32)
-		(i32.load (i32.add (get_local $tree) (i32.const 4)))
+		(call $memory_load (get_local $tree) (i32.const 4))		
 	)
 
 	(func $tree_root_set (param $tree i32) (param $node i32)
-		(i32.store (i32.add (get_local $tree) (i32.const 4)) (get_local $node))
+		(call $memory_store (get_local $tree) (i32.const 4) (get_local $node))
 	)
 
 	(func $tree_set (param $tree i32) (param $key i32) (param $value i32)
@@ -122,43 +122,43 @@
 		
 		(local $node i32)
 		(set_local $node (call $memory_allocate (i32.const 20)))
-		(i32.store (i32.add (get_local $node) (i32.const 0)) (typeof "tree_node"))		;; type
-		(i32.store (i32.add (get_local $node) (i32.const 4)) (get_local $key))			;; key
-		(i32.store (i32.add (get_local $node) (i32.const 8)) (get_local $value))		;; value
-		(i32.store (i32.add (get_local $node) (i32.const 12)) (i32.const 0))				;; left (null)
-		(i32.store (i32.add (get_local $node) (i32.const 16)) (i32.const 0))				;; right (null)
+		(call $memory_store (get_local $node) (i32.const 0) (typeof "tree_node"))		;; type
+		(call $memory_store (get_local $node) (i32.const 4) (get_local $key))			;; key
+		(call $memory_store (get_local $node) (i32.const 8) (get_local $value))			;; value
+		(call $memory_store (get_local $node) (i32.const 12) (i32.const 0))				;; left (null)
+		(call $memory_store (get_local $node) (i32.const 16) (i32.const 0))				;; right (null)
 		(get_local $node)
 	)
 
 	(func $node_key (param $node i32) (result i32)
-		(i32.load (i32.add (get_local $node) (i32.const 4)))
+		(call $memory_load (get_local $node) (i32.const 4))
 	)
 	
 	(func $node_key_set (param $node i32) (param $key i32)
-		(i32.store (i32.add (get_local $node) (i32.const 4)) (get_local $key))
+		(call $memory_store (get_local $node) (i32.const 4) (get_local $key))
 	)
 	
 	(func $node_value (param $node i32) (result i32)
-		(i32.load (i32.add (get_local $node) (i32.const 8)))
+		(call $memory_load (get_local $node) (i32.const 8))
 	)
 	
 	(func $node_value_set (param $node i32) (param $value i32)
-		(i32.store (i32.add (get_local $node) (i32.const 8)) (get_local $value))
+		(call $memory_store (get_local $node) (i32.const 8) (get_local $value))
 	)
 
 	(func $node_left (param $node i32) (result i32)
-		(i32.load (i32.add (get_local $node) (i32.const 12)))
+		(call $memory_load (get_local $node) (i32.const 12))
 	)
 	
 	(func $node_left_set (param $node i32) (param $left i32)
-		(i32.store (i32.add (get_local $node) (i32.const 12)) (get_local $left))
+		(call $memory_store (get_local $node) (i32.const 12) (get_local $left))
 	)
-
+	
 	(func $node_right (param $node i32) (result i32)
-		(i32.load (i32.add (get_local $node) (i32.const 16)))
+		(call $memory_load (get_local $node) (i32.const 16))
 	)
 	
 	(func $node_right_set (param $node i32) (param $right i32)
-		(i32.store (i32.add (get_local $node) (i32.const 16)) (get_local $right))
+		(call $memory_store (get_local $node) (i32.const 16) (get_local $right))
 	)
 )

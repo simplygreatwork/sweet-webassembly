@@ -3,13 +3,14 @@
 	(import "../lib/utility.watm")
 	(import "../lib/memory.watm")
 	(import "../lib/string.watm")
+	(import "../lib/boolean.watm")
 	(import "../lib/number.watm")
 	(import "../lib/function.watm")
+	(import "../lib/array.watm")
 	(import "../lib/list.watm")
 	(import "../lib/assertion.watm")
 	(import "../lib/tree.watm")
 	(import "../lib/map.watm")
-	(import "../lib/treemap.watm")
 	(import "../lib/stream.watm")
 	(import "../lib/table.watm")
 	(import "host" "table" (table 1 anyfunc))
@@ -26,6 +27,7 @@
 		
 		(call $setup)
 		(call $test_typeof)
+		(call $test_typeof_sizes)
 		(call $test_hello_world)
 		(call $test_string_macro)
 		(call $test_string_alphanum)
@@ -46,7 +48,7 @@
 	
 	(func $setup
 		
-		(i32.store (i32.const 0) (i32.const 4096))
+		(call $memory_bootstrap)
 		(set_global $global (call $map_new))
 	)
 	
@@ -61,8 +63,39 @@
 		(call $print_integer (typeof "number"))
 		(call $print_integer (typeof "string"))
 		(call $print_integer (typeof "string"))
+		(call $print_integer (typeof "function"))
+		(call $print_integer (typeof "function"))
+		(call $print_integer (typeof "list"))
+		(call $print_integer (typeof "list"))
+		(call $print_integer (typeof "list_item"))
+		(call $print_integer (typeof "list_item"))
+		(call $print_integer (typeof "map"))
+		(call $print_integer (typeof "map"))
+		(call $print_integer (typeof "tree"))
+		(call $print_integer (typeof "tree"))
+		(call $print_integer (typeof "tree_node"))
+		(call $print_integer (typeof "tree_node"))
+		(call $print_integer (typeof "stream"))
+		(call $print_integer (typeof "stream"))
 	)
 
+	(func $test_typeof_sizes
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test typeof sizes"))
+		(call $print_string (string "------------------------------"))
+		(call $print_integer (call $memory_sizeof (typeof "boolean")))
+		(call $print_integer (call $memory_sizeof (typeof "number")))
+		(call $print_integer (call $memory_sizeof (typeof "string")))
+		(call $print_integer (call $memory_sizeof (typeof "function")))
+		(call $print_integer (call $memory_sizeof (typeof "list")))
+		(call $print_integer (call $memory_sizeof (typeof "list_item")))
+		(call $print_integer (call $memory_sizeof (typeof "map")))
+		(call $print_integer (call $memory_sizeof (typeof "tree")))
+		(call $print_integer (call $memory_sizeof (typeof "tree_node")))
+		(call $print_integer (call $memory_sizeof (typeof "stream")))
+	)
+	
 	(func $test_hello_world
 		
 		(call $print_string (string "------------------------------"))

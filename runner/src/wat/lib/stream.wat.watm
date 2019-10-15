@@ -11,27 +11,28 @@
 	(import "host" "table" (table 1 anyfunc))
 	(elem (i32.const 5) $stream_iterate_each_function)
 	(type $i32_to_i32 (func (param i32) (result i32)))
-
+	
 	(func $stream_new (result i32)
 		
 		(local $stream i32)
 		(set_local $stream (call $memory_allocate (i32.const 8)))
-		(i32.store (get_local $stream) (typeof "stream"))
+		(call $stream_type_set (get_local $stream))
 		(get_local $stream)
 	)
 
+	(func $stream_type_set (param $stream i32)
+		(call $memory_store (get_local $stream) (i32.const 0) (typeof "stream"))
+	)
+	
 	(func $stream_list (param $stream i32) (result i32)
-		
-		(i32.load (i32.add (get_local $stream) (i32.const 4)))
+		(call $memory_load (get_local $stream) (i32.const 4))
 	)
 	
 	(func $stream_list_set (param $stream i32) (param $list i32)
-		
-		(i32.store (i32.add (get_local $stream) (i32.const 4)) (get_local $list))
+		(call $memory_store (get_local $stream) (i32.const 4) (get_local $list))
 	)
 	
 	(func $stream_push (param $stream i32) (param $value i32)
-		
 		(call $stream_iterate (get_local $stream) (get_local $value))
 	)
 	

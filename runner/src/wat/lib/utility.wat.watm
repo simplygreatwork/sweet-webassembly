@@ -25,6 +25,7 @@
 	)
 	
 	(func $get_type (param $value i32) (result i32)
+		;; (call $memory_load (get_local $value) (i32.const 0))
 		(i32.load (get_local $value))
 	)
 )

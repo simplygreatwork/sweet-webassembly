@@ -6,44 +6,43 @@
 	
 	(func $string_new (param $length i32) (result i32)
 		
-		(local $address i32)
-		(set_local $address (call $memory_allocate (i32.add (i32.const 2) (get_local $length))))	;; verify sizing: e.g. 4, 8
-		(i32.store (get_local $address) (typeof "string"))
-		(i32.store (i32.add (get_local $address) (i32.const 1)) (get_local $length))
-		(get_local $address)
+		(local $string i32)
+		(set_local $string (call $memory_allocate (i32.add (i32.const 2) (get_local $length))))	;; verify sizing: e.g. 4, 8
+		(call $string_type_set (typeof "string"))
+		(call $string_length_set (get_local $string) (get_local $length))
+		(get_local $string)
 	)
-	
-	(func $string_type (param $string i32) (result i32)
-		
-		(i32.load8_u
-			(i32.add (get_local $string) (i32.const 0))
-		)
+
+	(func $string_type_set (param $string i32)
+		(call $memory_store (get_local $string) (i32.const 0) (typeof "string"))
 	)
 	
 	(func $string_length (param $string i32) (result i32)
-		
-		(i32.load8_u
-			(i32.add (get_local $string) (i32.const 1))
-		)
+		(call $memory_load8_u (get_local $string) (i32.const 1))
+	)
+	
+	(func $string_length_set (param $string i32) (param $length i32)
+		(call $memory_store (get_local $string) (i32.const 1) (get_local $length))
 	)
 	
 	(func $string_chars (param $string i32) (result i32)
-		
-		(i32.add (get_local $string) (i32.const 2))
+		(i32.add (call $memory_from_handle (get_local $string)) (i32.const 2))
 	)
 	
 	(func $string_set_char (param $string i32) (param $index i32) (param $value i32)
 		
-		(i32.store
-			(i32.add (get_local $string) (i32.add (i32.const 2) (get_local $index)))
+		(call $memory_store
+			(get_local $string)
+			(i32.add (i32.const 2) (get_local $index))
 			(get_local $value)
 		)
 	)
 	
 	(func $string_get_char (param $string i32) (param $index i32) (result i32)
 		
-		(i32.load8_u
-			(i32.add (call $string_chars (get_local $string)) (get_local $index))
+		(call $memory_load8_u
+			(get_local $string)
+			(i32.add (i32.const 2) (get_local $index))
 		)
 	)
 
@@ -67,13 +66,11 @@
 				(i32.add (call $string_length (get_local $a)) (call $string_length (get_local $b)))
 			)
 		)
-		
 		(call $memory_copy
 			(call $string_chars (get_local $a))
 			(call $string_chars (get_local $result))
 			(call $string_length (get_local $a))
 		)
-
 		(call $memory_copy
 			(call $string_chars (get_local $b))
 			(i32.add
@@ -82,7 +79,6 @@
 			)
 			(call $string_length (get_local $b))
 		)
-
 		(get_local $result)
 	)
 	

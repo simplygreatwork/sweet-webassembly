@@ -1,5 +1,7 @@
 (module
 	
+	;; perhaps deprecate: tree already maps a key to a value
+
 	(import "./utility.watm")
 	(import "./memory.watm")
 	(import "./list.watm")	

@@ -1,11 +1,14 @@
 
-- use preprocessor for types mapping
+- gracefully handle out of memory when allocating
+	- with transactions ?
+	- https://en.wikipedia.org/wiki/Transactional_memory ?
+	- https://en.wikipedia.org/wiki/Software_transactional_memory ?
+- use preprocessor for types mapping (implemented)
 - $tree_insert needs to be able to update values
-- implement globals for refering to and accessing type ids
 - (string "result: ") does not parse
 - tree should become map
 - function type
-- also be able to name functions using a string
+- also be able to name functions using a string - as parameter to function object
 - streams (source, sink)
 - source will push, sink will collect
 - stream will simply pipe

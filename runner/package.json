@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node ./src/javascript/index.js",
+		"example": "~/n/n/versions/node/12.11.1/bin/node ./src/javascript/index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Philip Weaver",
