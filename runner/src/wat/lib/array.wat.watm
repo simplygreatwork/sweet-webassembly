@@ -13,7 +13,7 @@
 		
 		(local $array i32)
 		(set_local $array (call $memory_allocate
-			(i32.add (i32.const 8) (i32.mul (get_local $width) (get_local $length)))
+			(i32.add (i32.const 12) (i32.mul (get_local $width) (get_local $length)))
 		))
 		(call $array_type_set (get_local $array))
 		(call $array_length_set (get_local $array) (get_local $length))
@@ -32,7 +32,7 @@
 	(func $array_length_set (param $array i32) (param $length i32)
 		(call $memory_store (get_local $array) (i32.const 4) (get_local $length))
 	)
-
+	
 	(func $array_width (param $array i32) (result i32)
 		(call $memory_load (get_local $array) (i32.const 8))
 	)

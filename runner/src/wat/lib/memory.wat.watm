@@ -16,77 +16,111 @@
 		(i32.store (i32.const 4) (i32.const 1))
 		(i32.store (i32.const 8) (typeof "array"))
 		(i32.store (i32.const 12) (i32.const 65536))
-		(i32.store (i32.const 12) (i32.const 4))
-		(i32.store (i32.const 16) (i32.const 8))
+		(i32.store (i32.const 16) (i32.const 4))
+		(i32.store (i32.const 20) (i32.const 8))
 	)
 	
 	(func $memory_allocate (param $size i32) (result i32)
 		
 		(local $result i32)
+		(local $pointer i32)
+		(local $handle i32)
+		(set_local $pointer (call $memory_allocate_block (get_local $size)))
+		(set_local $handle (call $memory_allocate_handle (get_local $pointer)))
 		(if 
-			(i32.eq (i32.const 0) (i32.const 0))
-			(then
-				(set_local $result (i32.load (i32.const 0)))
-				(i32.store (i32.const 0) (i32.add (get_local $result) (get_local $size)))
-			)
-			(else
-				(set_local $result (i32.load (i32.const 0)))
-				(i32.store (i32.const 0) (i32.add (get_local $result) (get_local $size)))
-			)
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $result (get_local $handle)))
+			(else (set_local $result (get_local $pointer)))
 		)
 		(get_local $result)
 	)
 	
-	(func $handle_allocate (result i32)
+	(func $memory_allocate_block (param $size i32) (result i32)
 		
 		(local $result i32)
 		(set_local $result (i32.load (i32.const 0)))
-		(i32.store (i32.const 0) (i32.add (get_local $result) (i32.const 1)))
-		(get_local $result)
-	)
-	
-	(func $memory_store (param $handle i32) (param $offset i32) (param $value i32)
-		
-		(if 
-			(i32.eq (i32.const 0) (i32.const 0))
-			(then (i32.store (i32.add (get_local $handle) (get_local $offset)) (get_local $value)))
-			(else (i32.store (i32.add (get_local $handle) (get_local $offset)) (get_local $value)))
-		)
-	)
-	
-	(func $memory_load (param $handle i32) (param $offset i32) (result i32)
-		
-		(local $result i32)
-		(if 
-			(i32.eq (i32.const 0) (i32.const 0))
-			(then (set_local $result (i32.load (i32.add (get_local $handle) (get_local $offset)))))
-			(else (set_local $result (i32.load (i32.add (get_local $handle) (get_local $offset)))))
-		)
-		(get_local $result)
-	)
-	
-	(func $memory_load8_u (param $handle i32) (param $offset i32) (result i32)
-		
-		(local $result i32)
-		(if 
-			(i32.eq (i32.const 0) (i32.const 0))
-			(then (set_local $result (i32.load8_u (i32.add (get_local $handle) (get_local $offset)))))
-			(else (set_local $result (i32.load8_u (i32.add (get_local $handle) (get_local $offset)))))
-		)
+		(i32.store (i32.const 0) (i32.add (get_local $result) (get_local $size)))
 		(get_local $result)
 	)
 
-	(func $memory_from_handle (param $handle i32) (result i32)
+	(func $memory_allocate_handle (param $pointer i32) (result i32)
 		
-		(local $result i32)
-		(if 
-			(i32.eq (i32.const 0) (i32.const 0))
-			(then (set_local $result (get_local $handle)))
-			(else (set_local $result (get_local $handle)))
+		(local $handle i32)
+		(if
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $handle (call $memory_allocate_handle_impl (get_local $pointer))))
 		)
-		(get_local $result)
+		(get_local $handle)
 	)
 
+	(func $memory_allocate_handle_impl (param $pointer i32) (result i32)
+		
+		(local $handle i32)
+		(call $print_integer (get_local $pointer))
+		(set_local $handle (i32.load (i32.const 4)))
+		(i32.store (i32.const 4) (i32.add (get_local $handle) (i32.const 1)))
+		(i32.store
+			(i32.add
+				(i32.const 8)
+				(i32.add
+					(i32.const 12)
+					(i32.mul (get_local $handle) (i32.const 4))
+				)
+			)
+			(get_local $pointer)
+		)
+		(get_local $handle)
+	)
+	
+	(func $memory_store (param $address i32) (param $offset i32) (param $value i32)
+		
+		(if
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $address (call $memory_deference_handle (get_local $address))))
+		)
+		(i32.store (i32.add (get_local $address) (get_local $offset)) (get_local $value))
+	)
+	
+	(func $memory_load (param $address i32) (param $offset i32) (result i32)
+		
+		(if
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $address (call $memory_deference_handle (get_local $address))))
+		)
+		(i32.load (i32.add (get_local $address) (get_local $offset)))
+	)
+	
+	(func $memory_load8_u (param $address i32) (param $offset i32) (result i32)
+		
+		(if
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $address (call $memory_deference_handle (get_local $address))))
+		)
+		(i32.load8_u (i32.add (get_local $address) (get_local $offset)))
+	)
+	
+	(func $memory_deference_handle (param $handle i32) (result i32)
+		
+		(if
+			(i32.eq (i32.const 0) (i32.const 1))
+			(then (set_local $handle (call $memory_deference_handle_impl (get_local $handle))))
+		)
+		(get_local $handle)
+	)
+	
+	(func $memory_deference_handle_impl (param $handle i32) (result i32)
+		
+		(i32.load
+			(i32.add
+				(i32.const 8)
+				(i32.add
+					(i32.const 12)
+					(i32.mul (get_local $handle) (i32.const 4))
+				)
+			)
+		)
+	)
+	
 	(func $memory_compact
 		
 	)

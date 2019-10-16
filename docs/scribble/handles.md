@@ -1,4 +1,8 @@
 
+func $memory_allocate
+	call $memory_allocate_block
+	call $memory_allocate_handle
+	return handle
 
 note: also need to be able to reuse handle ids
 keep a pool of expired handle ids

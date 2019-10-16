@@ -26,7 +26,7 @@
 	)
 	
 	(func $string_chars (param $string i32) (result i32)
-		(i32.add (call $memory_from_handle (get_local $string)) (i32.const 2))
+		(i32.add (call $memory_deference_handle (get_local $string)) (i32.const 2))
 	)
 	
 	(func $string_set_char (param $string i32) (param $index i32) (param $value i32)

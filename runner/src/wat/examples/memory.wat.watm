@@ -1,2 +1,47 @@
 
-;; test memory deallocation, compaction, and garbage collection
+
+(module
+
+	;; test memory deallocation, compaction, and garbage collection
+
+	(import "../lib/utility.watm")
+	(import "../lib/memory.watm")
+	(import "../lib/string.watm")
+	(import "../lib/boolean.watm")
+	(import "../lib/number.watm")
+	(import "../lib/function.watm")
+	(import "../lib/array.watm")
+	(import "../lib/list.watm")
+	(import "../lib/assertion.watm")
+	(import "../lib/tree.watm")
+	(import "../lib/map.watm")
+	(import "../lib/stream.watm")
+	(import "../lib/table.watm")
+	(import "host" "table" (table 1 anyfunc))
+	(memory (import "host" "memory") 1)
+   (global $global (import "host" "global") (mut i32))
+	
+	(function $main
+		
+		(call $setup)
+		(call $testing)
+	)
+	
+	(func $setup
+		
+		(call $memory_bootstrap)
+	)
+	
+	(func $testing
+		
+		(local $number i32)
+		(set_local $number (call $number_new (i32.const 1)))
+		(set_local $number (call $number_new (i32.const 1)))
+		(set_local $number (call $number_new (i32.const 1)))
+		(set_local $number (call $number_new (i32.const 1)))
+		(set_local $number (call $number_new (i32.const 1)))
+		(call $print_string (string "hello"))
+	)
+	
+	(export "main" (func $main))
+)
