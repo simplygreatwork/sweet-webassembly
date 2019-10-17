@@ -5,13 +5,26 @@
 	(memory (import "host" "memory") 1)
 	
 	(func $print_string (param $string i32)
-		(call $host_print_string (get_local $string))
+		(call $host_print_string (call $deference_handle (get_local $string)))
 	)
 
 	(func $print_integer (param $pointer i32)
 		(call $host_print_integer (get_local $pointer))
 	)
 	
+	(func $deference_handle (param $handle i32) (result i32)
+		
+		(i32.load
+			(i32.add
+				(i32.const 8)
+				(i32.add
+					(i32.const 12)
+					(i32.mul (get_local $handle) (i32.const 4))
+				)
+			)
+		)
+	)
+
 	(func $swap_test (param $reference_a i32) (param $reference_b i32)	;; need to use compiler
 		
 		(local $a i32)

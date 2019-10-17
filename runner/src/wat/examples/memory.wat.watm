@@ -3,7 +3,7 @@
 (module
 
 	;; test memory deallocation, compaction, and garbage collection
-
+	
 	(import "../lib/utility.watm")
 	(import "../lib/memory.watm")
 	(import "../lib/string.watm")
@@ -24,7 +24,7 @@
 	(function $main
 		
 		(call $setup)
-		(call $testing)
+		(call $test_strings)
 	)
 	
 	(func $setup
@@ -32,16 +32,23 @@
 		(call $memory_bootstrap)
 	)
 	
-	(func $testing
+	(func $test_numbers
 		
-		(local $number i32)
-		(set_local $number (call $number_new (i32.const 1)))
-		(set_local $number (call $number_new (i32.const 1)))
-		(set_local $number (call $number_new (i32.const 1)))
-		(set_local $number (call $number_new (i32.const 1)))
-		(set_local $number (call $number_new (i32.const 1)))
-		(call $print_string (string "hello"))
+		(local $string i32)
+		(set_local $string (call $number_new (i32.const 2)))
+		(set_local $string (call $number_new (i32.const 2)))
+		(set_local $string (call $number_new (i32.const 2)))
+		(call $print_string (get_local $string))
 	)
-	
+
+	(func $test_strings
+		
+		(local $string i32)
+		(set_local $string (call $number_new (i32.const 2)))
+		(set_local $string (call $number_new (i32.const 2)))
+		(set_local $string (call $number_new (i32.const 2)))
+		(call $print_string (get_local $string))
+	)
+
 	(export "main" (func $main))
 )

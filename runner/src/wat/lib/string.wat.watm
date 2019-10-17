@@ -8,7 +8,7 @@
 		
 		(local $string i32)
 		(set_local $string (call $memory_allocate (i32.add (i32.const 2) (get_local $length))))	;; verify sizing: e.g. 4, 8
-		(call $string_type_set (typeof "string"))
+		(call $string_type_set (get_local $string))
 		(call $string_length_set (get_local $string) (get_local $length))
 		(get_local $string)
 	)
