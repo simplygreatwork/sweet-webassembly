@@ -13,6 +13,7 @@
 	(import "../lib/map.watm")
 	(import "../lib/stream.watm")
 	(import "../lib/table.watm")
+	(import "../lib/legend.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
    (global $global (import "host" "global") (mut i32))
@@ -44,6 +45,7 @@
 		(call $test_arguments_dynamic)
 		(call $test_stream)
 		(call $test_table)
+		(call $test_handles)
 	)
 	
 	(func $setup
@@ -137,7 +139,7 @@
 		(local $string_b i32)
 		(local $string_result i32)
 		(local $string_expected i32)
-
+		
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Appending a string"))
 		(call $print_string (string "------------------------------"))
@@ -348,6 +350,14 @@
 	(func $test_stream_step_three (param $value i32) (result i32)
 		(call $assert_string_equals (get_local $value) (string "abc"))
 		(get_local $value)
+	)
+
+	(func $test_handles
+
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Reserved handle count"))
+		(call $print_string (string "------------------------------"))
+		(call $print_integer (i32.load (i32.const 4)))
 	)
 	
 	(export "main" (func $main))

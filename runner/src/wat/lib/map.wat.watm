@@ -59,7 +59,7 @@
 		)
 		(get_local $result)
 	)
-
+	
 	(func $map_iterate (param $map i32) (param $function i32) (param $context i32)
 		
 		(local $index i32)

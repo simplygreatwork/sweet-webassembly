@@ -1,4 +1,5 @@
 
+- implement array inside core - but expose core module's array in array module
 - gracefully handle out of memory when allocating
 	- with transactions ?
 	- https://en.wikipedia.org/wiki/Transactional_memory ?

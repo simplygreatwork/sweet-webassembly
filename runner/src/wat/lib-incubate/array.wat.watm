@@ -1,4 +1,5 @@
 (module
+	
 	(import "utility.watm")
 	(import "memory.watm")
 	(import "utility" "print_string" (func $print_string (param i32)))

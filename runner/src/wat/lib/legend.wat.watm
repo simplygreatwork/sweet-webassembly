@@ -1,0 +1,46 @@
+(module
+	
+	(import "./utility.watm")
+	(import "./memory.watm")
+	(import "./string.watm")
+	(import "./array.watm")
+	(memory (import "host" "memory") 1)
+	
+	(func $legend_new (result i32)
+		
+		(local $legend i32)
+		(set_local $legend (call $memory_allocate (i32.const 12)))
+		(call $legend_type_set (get_local $legend))
+		(call $legend_counter_set (get_local $legend) (i32.const 0))
+		(call $legend_array_set (get_local $legend) (call $array_new (i32.const 16)))
+		(get_local $legend)
+	)
+	
+	(func $legend_type_set (param $legend i32)
+		(call $memory_store (get_local $legend) (i32.const 0) (typeof "legend"))
+	)
+
+	(func $legend_counter (param $legend i32) (result i32)
+		(call $memory_load (get_local $legend) (i32.const 4))
+	)
+	
+	(func $legend_counter_set (param $legend i32) (param $length i32)
+		(call $memory_store (get_local $legend) (i32.const 4) (get_local $length))
+	)
+
+	(func $legend_array (param $legend i32) (result i32)
+		(call $memory_load (get_local $legend) (i32.const 8))
+	)
+	
+	(func $legend_array_set (param $legend i32) (param $array i32)
+		(call $memory_store (get_local $legend) (i32.const 8) (get_local $array))
+	)
+	
+	(func $legend_value (param $legend i32) (param $index i32) (result i32)
+		(i32.const 0)
+	)
+	
+	(func $legend_value_set (param $legend i32) (param $index i32) (param $value i32)
+
+	)
+)

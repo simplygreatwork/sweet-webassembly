@@ -74,16 +74,7 @@
 	)
 	
 	(func $memory_deference_handle (param $handle i32) (result i32)
-		
-		(i32.load
-			(i32.add
-				(i32.const 8)
-				(i32.add
-					(i32.const 12)
-					(i32.mul (get_local $handle) (i32.const 4))
-				)
-			)
-		)
+		(call $dereference_handle (get_local $handle))
 	)
 	
 	(func $memory_compact
@@ -106,7 +97,7 @@
 		(if (i32.eq (get_local $type) (typeof "stream")) (then (set_local $result (i32.const 8))))
 		(get_local $result)
 	)
-
+	
 	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)
 		(i32.const 0)
 	)

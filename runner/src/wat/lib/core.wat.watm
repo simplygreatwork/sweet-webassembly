@@ -1,0 +1,4 @@
+
+;; anything which might need to be shared among memory, utility, etc
+;; example: deference_handle
+;; example: arrays
