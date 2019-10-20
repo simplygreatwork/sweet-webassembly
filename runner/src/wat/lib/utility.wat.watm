@@ -25,6 +25,21 @@
 		)
 	)
 	
+	(func $math_power (param $base i32) (param $exponent i32) (result i32)
+		
+		(local $result i32)
+		(local $i i32)
+		(set_local $result (i32.const 1))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(set_local $result (i32.mul (get_local $result) (get_local $base)))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $exponent)))
+			(br 0)
+		))
+		(get_local $result)
+	)
+	
 	(func $swap_test (param $reference_a i32) (param $reference_b i32)	;; need to use compilation phase
 		
 		(local $a i32)

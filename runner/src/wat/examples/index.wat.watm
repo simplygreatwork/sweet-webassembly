@@ -2,6 +2,7 @@
 	
 	(import "../lib/utility.watm")
 	(import "../lib/memory.watm")
+	(import "../lib/core.watm")
 	(import "../lib/string.watm")
 	(import "../lib/boolean.watm")
 	(import "../lib/number.watm")
@@ -37,7 +38,6 @@
 		(call $test_string_compare)
 		(call $test_number_add)
 		(call $test_boolean_and)
-		(call $test_array)
 		(call $test_list)
 		(call $test_map)
 		(call $test_tree)
@@ -46,6 +46,8 @@
 		(call $test_stream)
 		(call $test_table)
 		(call $test_handles)
+		(call $test_array)
+		(call $test_legend)
 	)
 	
 	(func $setup
@@ -227,14 +229,6 @@
 		(call $print_string (string "------------------------------"))
 	)
 
-	(func $test_array
-		
-		(local $array i32)
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "Testing an array"))
-		(call $print_string (string "------------------------------"))
-	)
-
 	(func $test_list
 		
 		(local $list i32)
@@ -359,6 +353,40 @@
 		(call $print_string (string "------------------------------"))
 		(call $print_integer (i32.load (i32.const 4)))
 	)
+
+	(func $test_array
+		
+		(local $array i32)
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Testing an array"))
+		(call $print_string (string "------------------------------"))
+		(set_local $array (call $array_new (i32.const 3)))
+		(call $array_value_set (get_local $array) (i32.const 0) (i32.const 0))
+		(call $print_integer (call $array_value_get (get_local $array) (i32.const 0)))
+		(call $array_value_set (get_local $array) (i32.const 1) (i32.const 1))
+		(call $print_integer (call $array_value_get (get_local $array) (i32.const 1)))
+		(call $array_value_set (get_local $array) (i32.const 2) (i32.const 2))
+		(call $print_integer (call $array_value_get (get_local $array) (i32.const 2)))
+	)
 	
+	(func $test_legend
+
+		(local $legend i32)
+		(local $i i32)
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test legend"))
+		(call $print_string (string "------------------------------"))
+		(set_local $legend (call $legend_new))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $i))
+			(call $print_integer (call $legend_value_get (get_local $legend) (get_local $i)))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 81)))
+			(br 0)
+		))
+	)
+
 	(export "main" (func $main))
 )
+18

@@ -1,5 +1,4 @@
 
-
 (module
 
 	;; test memory deallocation, compaction, and garbage collection
