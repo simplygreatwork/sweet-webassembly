@@ -1,59 +1,29 @@
 (module
-	
-	(import "host" "print_string" (func $host_print_string (param i32)))
-	(import "host" "print_integer" (func $host_print_integer (param i32)))
+
+	(import "./core.watm")
 	(memory (import "host" "memory") 1)
 	
 	(func $print_string (param $string i32)
-		(call $host_print_string (call $dereference_handle (get_local $string)))
+		(call $print_string_ (get_local $string))
 	)
-
+	
 	(func $print_integer (param $pointer i32)
-		(call $host_print_integer (get_local $pointer))
+		(call $print_integer_ (get_local $pointer))
 	)
 	
 	(func $dereference_handle (param $handle i32) (result i32)
-		
-		(i32.load
-			(i32.add
-				(i32.const 8)
-				(i32.add
-					(i32.const 12)
-					(i32.mul (get_local $handle) (i32.const 4))
-				)
-			)
-		)
+		(call $memory_dereference_handle_ (get_local $handle))
 	)
 	
 	(func $math_power (param $base i32) (param $exponent i32) (result i32)
-		
-		(local $result i32)
-		(local $i i32)
-		(set_local $result (i32.const 1))
-		(set_local $i (i32.const 0))
-		(block (loop
-			(set_local $result (i32.mul (get_local $result) (get_local $base)))
-			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (get_local $exponent)))
-			(br 0)
-		))
-		(get_local $result)
+		(call $math_power_ (get_local $base) (get_local $exponent))
 	)
 	
 	(func $swap_test (param $reference_a i32) (param $reference_b i32)	;; need to use compilation phase
-		
-		(local $a i32)
-		(local $b i32)
-		(local $temp i32)
-		(set_local $a (i32.const 1))
-		(set_local $a (i32.const 2))
-		(set_local $temp (get_local $a))
-		(set_local $a (get_local $b))
-		(set_local $b (get_local $temp))
+		(call $swap_test_ (get_local $reference_a) (get_local $reference_b))
 	)
 	
 	(func $get_type (param $value i32) (result i32)
-		;; (call $memory_load (get_local $value) (i32.const 0))
-		(i32.load (get_local $value))
+		(call $get_type_ (get_local $value))
 	)
 )

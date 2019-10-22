@@ -12,8 +12,8 @@
 		(call $memory_allocate_ (get_local $size))
 	)
 	
-	(func $memory_allocate_block (param $size i32) (result i32)
-		(call $memory_allocate_block_ (get_local $size))
+	(func $memory_allocate_pointer (param $size i32) (result i32)
+		(call $memory_allocate_pointer_ (get_local $size))
 	)
 	
 	(func $memory_allocate_handle (param $pointer i32) (result i32)
@@ -32,8 +32,8 @@
 		(call $memory_load8_u_ (get_local $address) (get_local $offset))
 	)
 	
-	(func $memory_deference_handle (param $handle i32) (result i32)
-		(call $memory_deference_handle_ (get_local $handle))
+	(func $memory_dereference_handle (param $handle i32) (result i32)
+		(call $memory_dereference_handle_ (get_local $handle))
 	)
 	
 	(func $memory_compact

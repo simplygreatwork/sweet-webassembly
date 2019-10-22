@@ -19,7 +19,7 @@
 	(func $number_type_set (param $number i32)
 		(call $memory_store (get_local $number) (i32.const 0) (typeof "number"))
 	)
-
+	
 	(func $number_value (param $number i32) (result i32)
 		(call $memory_load (get_local $number) (i32.const 4))
 	)
