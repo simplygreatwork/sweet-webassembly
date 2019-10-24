@@ -1,7 +1,7 @@
 (module
 	
-	(import "./utility.watm")
 	(import "./core.watm")
+	(import "./utility.watm")
 	(memory (import "host" "memory") 1)
 	
 	(func $memory_bootstrap
@@ -35,13 +35,17 @@
 	(func $memory_dereference_handle (param $handle i32) (result i32)
 		(call $memory_dereference_handle_ (get_local $handle))
 	)
-	
-	(func $memory_compact
-		(call $memory_compact_)
-	)
 
-	(func $memory_sizeof (param $type i32) (result i32)
-		(call $memory_sizeof_ (get_local $type))
+	(func $memory_free (param $handle i32)
+		(call $memory_free_ (get_local $handle))
+	)
+	
+	(func $memory_sizeof (param $address i32) (result i32)
+		(call $memory_sizeof_ (get_local $address))
+	)
+	
+	(func $memory_sizeof_type (param $type i32) (result i32)
+		(call $memory_sizeof_type_ (get_local $type))
 	)
 	
 	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)

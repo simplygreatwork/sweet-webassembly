@@ -133,7 +133,7 @@
 			(then (call $item_value_set (get_local $item) (get_local $value_)))
 		)
 	)
-
+	
 	(func $list_to_string (param $list i32) (result i32)
 		(i32.const 0)
 	)

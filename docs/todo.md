@@ -1,4 +1,12 @@
 
+- when freeing structures - need to be able to free substructures
+- when compacting memory - compact first page then fill in the end from higher pages 
+- remove legend.wat
+- recreate array.wat as a handle based array
+- store id (handle id) with every structure created
+	- this way can update pointer from handle id when moving a structure during compaction
+	- allow memory_allocate_handle to do this automatically
+- implement ranges for available handle id reuse (for gaps)
 - implement array inside core - but expose core module's array in array module
 - gracefully handle out of memory when allocating
 	- with transactions ?

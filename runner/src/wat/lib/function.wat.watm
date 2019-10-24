@@ -14,8 +14,8 @@
 		(get_local $function)
 	)
 	
-	(func $function_type_set (param $boolean i32)
-		(call $memory_store (get_local $boolean) (i32.const 0) (typeof "function"))
+	(func $function_type_set (param $function i32)
+		(call $memory_store (get_local $function) (i32.const 0) (typeof "function"))
 	)
 	
 	(func $function_id (param $function i32) (result i32)

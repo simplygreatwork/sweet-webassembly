@@ -60,11 +60,55 @@
 		(call $legend_value_get_ (get_global $legend) (get_local $handle))
 	)
 	
-	(func $memory_compact_
+	(func $memory_free_ (param $address i32)
 		
+		(local $typeof i32)
+		(local $sizeof i32)
+		(set_local $typeof (call $memory_load_ (get_local $address) (i32.const 0)))
+		(set_local $sizeof (call $memory_sizeof_ (typeof "string")))
+		(call $memory_store_ (get_local $address) (i32.const 0) (typeof "void"))
+		(call $memory_store_ (get_local $address) (i32.const 4) (get_local $typeof))
 	)
-
-	(func $memory_sizeof_ (param $type i32) (result i32)
+	
+	(func $memory_sizeof_ (param $address i32) (result i32)
+		
+		(local $result i32)
+		(local $type i32)
+		(set_local $result (i32.const -1))
+		(set_local $type (i32.load (i32.add (get_local $address) (i32.const 0))))
+		(if (i32.eq (get_local $type) (typeof "void")) (then (set_local $result (i32.const 8))))
+		(if (i32.eq (get_local $type) (typeof "legend")) (then (set_local $result (i32.const 20))))
+		(if (i32.eq (get_local $type) (typeof "handle_array")) (then (set_local $result (i32.const 8))))
+		(if (i32.eq (get_local $type) (typeof "boolean")) (then (set_local $result (i32.const 8))))
+		(if (i32.eq (get_local $type) (typeof "number")) (then (set_local $result (i32.const 8))))
+		(if (i32.eq (get_local $type) (typeof "function")) (then (set_local $result (i32.const 8))))
+		(if (i32.eq (get_local $type) (typeof "list")) (then (set_local $result (i32.const 16))))
+		(if (i32.eq (get_local $type) (typeof "list_item")) (then (set_local $result (i32.const 16))))
+		(if (i32.eq (get_local $type) (typeof "map")) (then (set_local $result (i32.const 12))))
+		(if (i32.eq (get_local $type) (typeof "tree")) (then (set_local $result (i32.const 12))))
+		(if (i32.eq (get_local $type) (typeof "tree_node")) (then (set_local $result (i32.const 20))))
+		(if (i32.eq (get_local $type) (typeof "stream")) (then (set_local $result (i32.const 8))))
+		(if
+			(i32.eq (get_local $type) (typeof "string"))
+			(then (set_local $result (i32.add
+				(i32.const 8)
+				(i32.load (i32.add (get_local $address) (i32.const 8)))
+			)))
+		)
+		(if
+			(i32.eq (get_local $type) (typeof "handle_array"))
+			(then (set_local $result (i32.add
+				(i32.const 16)
+				(i32.mul
+					(call $array_width_ (get_local $address))
+					(call $array_length_ (get_local $address))
+				)
+			)))
+		)
+		(get_local $result)
+	)
+	
+	(func $memory_sizeof_type_ (param $type i32) (result i32)
 		
 		(local $result i32)
 		(set_local $result (i32.const -1))
@@ -118,7 +162,7 @@
 	)
 	
 	(func $array_type_set_ (param $array i32)
-		(i32.store (i32.add (get_local $array) (i32.const 0)) (typeof "array"))
+		(i32.store (i32.add (get_local $array) (i32.const 0)) (typeof "handle_array"))
 	)
 	
 	(func $array_parent_ (param $array i32) (result i32)
@@ -300,7 +344,7 @@
 		))
 		(call $array_value_get_ (get_local $array) (get_local $key))
 	)
-	
+		
 	(func $print_string_ (param $string i32)
 		(call $host_print_string (call $memory_dereference_handle_ (get_local $string)))
 	)

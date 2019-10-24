@@ -1,15 +1,14 @@
-
 (module
-
-	;; test memory deallocation, compaction, and garbage collection
 	
 	(import "../lib/utility.watm")
+	(import "../lib/array.watm")
+	(import "../lib/legend.watm")
 	(import "../lib/memory.watm")
+	(import "../lib/compactor.watm")
 	(import "../lib/string.watm")
 	(import "../lib/boolean.watm")
 	(import "../lib/number.watm")
 	(import "../lib/function.watm")
-	(import "../lib/array.watm")
 	(import "../lib/list.watm")
 	(import "../lib/assertion.watm")
 	(import "../lib/tree.watm")
@@ -19,35 +18,83 @@
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
    (global $global (import "host" "global") (mut i32))
-	
+   (global $legend (import "host" "legend") (mut i32))
+	(elem (i32.const 200) $free_iterate_each)
+
 	(function $main
 		
 		(call $setup)
-		(call $test_strings)
+		(call $exercise)
+		(call $compact)
 	)
-	
+
 	(func $setup
 		
 		(call $memory_bootstrap)
-	)
-	
-	(func $test_numbers
-		
-		(local $string i32)
-		(set_local $string (call $number_new (i32.const 2)))
-		(set_local $string (call $number_new (i32.const 2)))
-		(set_local $string (call $number_new (i32.const 2)))
-		(call $print_string (get_local $string))
+		(set_global $global (call $map_new))
 	)
 
-	(func $test_strings
+	(func $exercise
+		
+		(local $i i32)
+		(local $string i32)
+		(local $list i32)
+		(call $print_string (string "exercise"))
+		(set_local $list (call $list_new))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(call $list_append (get_local $list) (call $create_string (get_local $i)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 100)))
+			(br 0)
+		))
+		(call $print_integer (call $number_value (call $list_length (get_local $list))))
+		(call $free (get_local $list))
+	)
+	
+	(func $create_string (param $length i32) (result i32)
+		
+		(local $i i32)
+		(local $string i32)
+		(set_local $i (i32.const 0))
+		(set_local $string (call $string_new (get_local $length)))
+		(block (loop
+			(call $string_set_char (get_local $string) (get_local $i) (i32.const 88))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $length)))
+			(br 0)
+		))
+		(get_local $string)
+	)
+	
+	(func $free (param $list i32)
+		
+		(local $item i32)
+		(local $index i32)
+		(local $test_list_iterate_each i32)
+		(set_local $test_list_iterate_each (i32.const 200))
+		(call $print_string (string "free"))
+		(call $list_iterate (get_local $list) (get_local $test_list_iterate_each) (i32.const 0))
+	)
+	
+	(func $free_iterate_each (param $item i32) (param $index i32) (param $context i32)
 		
 		(local $string i32)
-		(set_local $string (call $number_new (i32.const 2)))
-		(set_local $string (call $number_new (i32.const 2)))
-		(set_local $string (call $number_new (i32.const 2)))
-		(call $print_string (get_local $string))
+		(set_local $string (call $item_value (get_local $item)))
+		(if
+			(i32.eq (i32.rem_u (get_local $index) (i32.const 10)) (i32.const 0))
+			(then (call $print_string (get_local $string)))
+			(else (call $memory_free (get_local $string)))
+		)
 	)
+	
+	(func $compact
+		
+		(local $compactor i32)
+		(call $print_string (string "compact"))
+		(set_local $compactor (call $compactor_new))
+		(call $compactor_compact (get_local $compactor))
+	)	
 
 	(export "main" (func $main))
 )

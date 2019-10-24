@@ -1,11 +1,10 @@
 (module
 	
 	(import "../lib/utility.watm")
-	(import "../lib/core.watm")
-	(import "../lib/object.watm")
 	(import "../lib/array.watm")
 	(import "../lib/legend.watm")
 	(import "../lib/memory.watm")
+	(import "../lib/compactor.watm")
 	(import "../lib/string.watm")
 	(import "../lib/boolean.watm")
 	(import "../lib/number.watm")
@@ -30,7 +29,6 @@
 	(function $main
 		
 		(call $setup)
-		(call $test_object)
 		(call $test_typeof)
 		(call $test_typeof_sizes)
 		(call $test_hello_world)
@@ -59,12 +57,6 @@
 		(set_global $global (call $map_new))
 	)
 	
-	(func $test_object
-		
-		(local $object i32)
-		(set_local $object (call $object_new))
-	)
-	
 	(func $test_typeof
 		
 		(call $print_string (string "------------------------------"))
@@ -91,7 +83,7 @@
 		(call $print_integer (typeof "stream"))
 		(call $print_integer (typeof "stream"))
 	)
-
+	
 	(func $test_typeof_sizes
 		
 		(call $print_string (string "------------------------------"))
@@ -326,7 +318,7 @@
 	)
 
 	(func $test_stream
-
+		
 		(local $stream i32)
 		(local $list i32)
 		(local $function i32)
