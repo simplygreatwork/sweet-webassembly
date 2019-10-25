@@ -132,27 +132,6 @@
 		(get_local $result)
 	)
 	
-	(func $type_to_string_ (param $type i32) (result i32)
-		
-		(local $result i32)
-		(set_local $result (string "missing"))
-		(if (i32.eq (get_local $type) (typeof "void")) (then (set_local $result (string "void"))))
-		(if (i32.eq (get_local $type) (typeof "legend")) (then (set_local $result (string "legend"))))
-		(if (i32.eq (get_local $type) (typeof "handle_array")) (then (set_local $result (string "handle_array"))))
-		(if (i32.eq (get_local $type) (typeof "boolean")) (then (set_local $result (string "boolean"))))
-		(if (i32.eq (get_local $type) (typeof "number")) (then (set_local $result (string "number"))))
-		(if (i32.eq (get_local $type) (typeof "function")) (then (set_local $result (string "function"))))
-		(if (i32.eq (get_local $type) (typeof "list")) (then (set_local $result (string "list"))))
-		(if (i32.eq (get_local $type) (typeof "list_item")) (then (set_local $result (string "list_item"))))
-		(if (i32.eq (get_local $type) (typeof "map")) (then (set_local $result (string "map"))))
-		(if (i32.eq (get_local $type) (typeof "tree")) (then (set_local $result (string "tree"))))
-		(if (i32.eq (get_local $type) (typeof "tree_node")) (then (set_local $result (string "tree_node"))))
-		(if (i32.eq (get_local $type) (typeof "stream")) (then (set_local $result (string "stream"))))
-		(if (i32.eq (get_local $type) (typeof "string")) (then (set_local $result (string "string"))))
-		(if (i32.eq (get_local $type) (typeof "handle_array")) (then (set_local $result (string "handle_array"))))
-		(get_local $result)
-	)
-	
 	(func $memory_deallocate_ (param $pointer i32) (param $size i32) (result i32)
 		(i32.const 0)
 	)
@@ -362,46 +341,6 @@
 			(br 0)
 		))
 		(call $array_value_get_ (get_local $array) (get_local $key))
-	)
-	
-	(func $string_new (param $length i32) (result i32)
-		
-		(local $string i32)
-		(set_local $string (call $memory_allocate_			;; verify sizing: e.g. 4, 8
-			(typeof "string")
-			(i32.add (i32.const 8) (get_local $length))
-		))
-		(call $string_length_set (get_local $string) (get_local $length))
-		(get_local $string)
-	)
-	
-	(func $string_length (param $string i32) (result i32)
-		(call $memory_load_ (get_local $string) (i32.const 4))
-	)
-	
-	(func $string_length_set (param $string i32) (param $length i32)
-		(call $memory_store_ (get_local $string) (i32.const 4) (get_local $length))
-	)
-	
-	(func $string_chars (param $string i32) (result i32)
-		(i32.add (call $memory_dereference_handle_ (get_local $string)) (i32.const 8))
-	)
-	
-	(func $string_set_char (param $string i32) (param $index i32) (param $value i32)
-		
-		(call $memory_store_
-			(get_local $string)
-			(i32.add (i32.const 8) (get_local $index))
-			(get_local $value)
-		)
-	)
-	
-	(func $string_get_char (param $string i32) (param $index i32) (result i32)
-		
-		(call $memory_load8_u_
-			(get_local $string)
-			(i32.add (i32.const 8) (get_local $index))
-		)
 	)
 	
 	(func $print_string_ (param $string i32)
