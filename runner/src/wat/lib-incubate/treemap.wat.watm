@@ -13,7 +13,7 @@
 	(func $treemap_new (result i32)
 		
 		(local $map i32)
-		(set_local $map (call $memory_allocate (i32.const 12)))
+		(set_local $map (call $memory_allocate (typeof "treemap") (i32.const 12)))
 		(i32.store (i32.add (get_local $map) (i32.const 0)) (i32.const 12))			;; type
 		(i32.store (i32.add (get_local $map) (i32.const 4)) (call $list_new))		;; keys
 		(i32.store (i32.add (get_local $map) (i32.const 8)) (call $list_new))		;; values

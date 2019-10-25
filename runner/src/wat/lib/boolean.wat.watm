@@ -7,14 +7,9 @@
 	(func $boolean_new (param $value i32) (result i32)
 		
 		(local $boolean i32)
-		(set_local $boolean (call $memory_allocate (i32.const 8)))
-		(call $boolean_type_set (get_local $boolean))
+		(set_local $boolean (call $memory_allocate (typeof "boolean") (i32.const 8)))
 		(call $boolean_value_set (get_local $boolean) (get_local $value))
 		(get_local $boolean)
-	)
-	
-	(func $boolean_type_set (param $boolean i32)
-		(call $memory_store (get_local $boolean) (i32.const 0) (typeof "boolean"))
 	)
 	
 	(func $boolean_value (param $boolean i32) (result i32)

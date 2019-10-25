@@ -10,14 +10,9 @@
 	(func $number_new (param $value i32) (result i32)
 		
 		(local $number i32)
-		(set_local $number (call $memory_allocate (i32.const 8)))
-		(call $number_type_set (get_local $number))
+		(set_local $number (call $memory_allocate (typeof "number") (i32.const 8)))
 		(call $number_value_set (get_local $number) (get_local $value))
 		(get_local $number)
-	)
-	
-	(func $number_type_set (param $number i32)
-		(call $memory_store (get_local $number) (i32.const 0) (typeof "number"))
 	)
 	
 	(func $number_value (param $number i32) (result i32)

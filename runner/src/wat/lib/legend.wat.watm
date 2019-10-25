@@ -7,10 +7,6 @@
 		(call $legend_new_)
 	)
 	
-	(func $legend_type_set (param $legend i32)
-		(call $legend_type_set_ (get_local $legend))
-	)
-	
 	(func $legend_base (param $legend i32) (result i32)
 		(call $legend_base_ (get_local $legend))
 	)

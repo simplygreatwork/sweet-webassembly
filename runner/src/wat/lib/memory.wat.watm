@@ -8,12 +8,16 @@
 		(call $memory_bootstrap_)
 	)
 	
-	(func $memory_allocate (param $size i32) (result i32)
-		(call $memory_allocate_ (get_local $size))
+	(func $memory_allocate (param $type i32) (param $size i32) (result i32)
+		(call $memory_allocate_ (get_local $type) (get_local $size))
 	)
 	
-	(func $memory_allocate_pointer (param $size i32) (result i32)
-		(call $memory_allocate_pointer_ (get_local $size))
+	(func $memory_allocate_pointer (param $type i32) (param $size i32) (result i32)
+		(call $memory_allocate_pointer_ (get_local $type) (get_local $size))
+	)
+	
+	(func $memory_allocate_block_on (param $function i32)
+		(call $memory_allocate_block_on_ (get_local $function))
 	)
 	
 	(func $memory_allocate_handle (param $pointer i32) (result i32)
@@ -43,11 +47,7 @@
 	(func $memory_sizeof (param $address i32) (result i32)
 		(call $memory_sizeof_ (get_local $address))
 	)
-	
-	(func $memory_sizeof_type (param $type i32) (result i32)
-		(call $memory_sizeof_type_ (get_local $type))
-	)
-	
+
 	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)
 		(call $memory_deallocate_ (get_local $pointer) (get_local $size))
 	)

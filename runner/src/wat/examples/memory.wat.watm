@@ -15,12 +15,12 @@
 	(import "../lib/map.watm")
 	(import "../lib/stream.watm")
 	(import "../lib/table.watm")
+	(import "../lib/types.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
-   (global $global (import "host" "global") (mut i32))
-   (global $legend (import "host" "legend") (mut i32))
 	(elem (i32.const 200) $free_iterate_each)
-
+	(elem (i32.const 201) $memory_block_allocated)
+	
 	(function $main
 		
 		(call $setup)
@@ -31,9 +31,20 @@
 	(func $setup
 		
 		(call $memory_bootstrap)
-		(set_global $global (call $map_new))
+		(call $type_strings_init)
+		(call $memory_allocate_block_on (i32.const 201))
 	)
 
+	(func $memory_block_allocated (param $type i32) (param $size i32)
+		
+		(local $string i32)
+		(set_local $string (call $type_strings_get (get_local $type)))
+		(if
+			(i32.gt_u (get_local $string) (i32.const 0))
+			(then (call $print_string (get_local $string)))
+		)
+	)
+	
 	(func $exercise
 		
 		(local $i i32)

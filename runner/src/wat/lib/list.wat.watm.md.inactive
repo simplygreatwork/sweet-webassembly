@@ -17,7 +17,7 @@
 	(func $list_new (result i32)
 		
 		(local $list i32)
-		(set_local $list (call $memory_allocate (i32.const 16)))
+		(set_local $list (call $memory_allocate (typeof "list") (i32.const 16)))
 		(call $memory_store (get_local $list) (i32.const 0) (typeof "list"))				;; type
 		(call $memory_store (get_local $list) (i32.const 4) (get_local $list))			;; next
 		(call $memory_store (get_local $list) (i32.const 8) (get_local $list))			;; previous
@@ -144,7 +144,7 @@
 	(func $item_new (result i32)
 		
 		(local $item i32)
-		(set_local $item (call $memory_allocate (i32.const 16)))
+		(set_local $item (call $memory_allocate (typeof "list_item") (i32.const 16)))
 		(call $memory_store (get_local $item) (i32.const 0) (typeof "list_item"))			;; type
 		(call $memory_store (get_local $item) (i32.const 4) (get_local $item))				;; next
 		(call $memory_store (get_local $item) (i32.const 8) (get_local $item))				;; previous

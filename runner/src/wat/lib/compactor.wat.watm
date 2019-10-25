@@ -8,13 +8,8 @@
 	(func $compactor_new (result i32)
 		
 		(local $compactor i32)
-		(set_local $compactor (call $memory_allocate (i32.const 4)))
-		(call $compactor_type_set (get_local $compactor))
+		(set_local $compactor (call $memory_allocate (typeof "compactor") (i32.const 4)))
 		(get_local $compactor)
-	)
-	
-	(func $compactor_type_set (param $compactor i32)
-		(call $memory_store (get_local $compactor) (i32.const 0) (typeof "compactor"))
 	)
 	
 	(func $compactor_compact (param $compactor i32)
@@ -37,10 +32,6 @@
 			(set_local $type (i32.load (get_local $address)))
 			(br_if 1 (i32.eq (get_local $type) (i32.const -1)))
 			(set_local $size (call $memory_sizeof (get_local $address)))
-			(call $print_string (string "-----------"))
-			(call $print_integer (get_local $address))
-			(call $print_integer (get_local $type))
-			(call $print_integer (get_local $size))
 			(set_local $address (i32.add (get_local $address) (get_local $size)))
 			(br_if 1 (i32.gt_s (get_local $address) (i32.const 500)))
 			(br 0)

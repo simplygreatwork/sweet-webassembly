@@ -15,13 +15,8 @@
 	(func $stream_new (result i32)
 		
 		(local $stream i32)
-		(set_local $stream (call $memory_allocate (i32.const 8)))
-		(call $stream_type_set (get_local $stream))
+		(set_local $stream (call $memory_allocate (typeof "stream") (i32.const 8)))
 		(get_local $stream)
-	)
-
-	(func $stream_type_set (param $stream i32)
-		(call $memory_store (get_local $stream) (i32.const 0) (typeof "stream"))
 	)
 	
 	(func $stream_list (param $stream i32) (result i32)
