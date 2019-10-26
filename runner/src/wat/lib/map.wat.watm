@@ -7,14 +7,19 @@
 	(memory (import "host" "memory") 1)
 	(type $i32_i32_i32_i32_to_void (func (param i32) (param i32) (param i32) (param i32)))
 	
+	(func $map_memory_size (result i32)
+		(i32.const 12)
+	)
+	
 	(func $map_new (result i32)
 		
 		(local $map i32)
-		(set_local $map (call $memory_allocate (typeof "map") (i32.const 12)))
+		(set_local $map (call $memory_allocate (typeof "map") (call $map_memory_size)))
 		(call $memory_store (get_local $map) (i32.const 4) (call $list_new))			;; keys
 		(call $memory_store (get_local $map) (i32.const 8) (call $list_new))			;; values
 		(get_local $map)
 	)
+	
 	
 	(func $map_keys (param $map i32) (result i32)
 		(call $memory_load (get_local $map) (i32.const 4))

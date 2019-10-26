@@ -5,10 +5,14 @@
 	(import "./number.watm")
 	(memory (import "host" "memory") 1)
 	
+	(func $function_memory_size (result i32)
+		(i32.const 8)
+	)
+	
 	(func $function_new (param $id i32) (result i32)
 		
 		(local $function i32)
-		(set_local $function (call $memory_allocate (typeof "function") (i32.const 8)))
+		(set_local $function (call $memory_allocate (typeof "function") (call $function_memory_size)))
 		(call $function_id_set (get_local $function) (call $number_new (get_local $id)))
 		(get_local $function)
 	)

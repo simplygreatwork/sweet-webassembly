@@ -3,35 +3,44 @@
 	(import "./utility.watm")
 	(import "./memory.watm")
 	(import "./string.watm")
+	(import "./types.watm")
 	(memory (import "host" "memory") 1)
+	
+	(func $compactor_memory_size (result i32)
+		(i32.const 4)
+	)
 	
 	(func $compactor_new (result i32)
 		
 		(local $compactor i32)
-		(set_local $compactor (call $memory_allocate (typeof "compactor") (i32.const 4)))
+		(set_local $compactor (call $memory_allocate (typeof "compactor") (call $compactor_memory_size_)))
 		(get_local $compactor)
 	)
 	
 	(func $compactor_compact (param $compactor i32)
-
+		
 		(call $print_string (string "compactor_compact"))
 		(call $compactor_iterate)
 	)
-
+	
 	(func $compactor_iterate									;; work in process
 		
 		(local $bound i32)
 		(local $address i32)
 		(local $type i32)
+		(local $type_string i32)
 		(local $size i32)
 		(call $print_string (string "compactor_iterate"))
 		(set_local $address (i32.const 8))
 		(set_local $bound (i32.load (i32.const 0)))
-		(set_local $bound (i32.const 200))
 		(block (loop
 			(set_local $type (i32.load (get_local $address)))
-			(br_if 1 (i32.eq (get_local $type) (i32.const -1)))
-			(set_local $size (call $memory_sizeof (get_local $address)))
+			(call $print_string (string "-----"))
+			(call $print_integer (get_local $type))
+			(set_local $type_string (call $type_strings_get (get_local $type)))
+			(call $print_string (get_local $type_string))
+			(br_if 1 (i32.eq (get_local $type_string) (i32.const 0)))
+			(set_local $size (call $types_sizeof_record (get_local $address)))
 			(set_local $address (i32.add (get_local $address) (get_local $size)))
 			(br_if 1 (i32.gt_s (get_local $address) (i32.const 500)))
 			(br 0)

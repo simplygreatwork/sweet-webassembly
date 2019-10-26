@@ -208,6 +208,15 @@ function find_function_signature(func) {
 	return result
 }
 
+function render_function_elements(document) {
+	
+	document.module_imports.forEach(function(document_) {
+		document_.functions.forEach(function(func) {
+			
+		}.bind(this))
+	}.bind(this))
+}
+
 module.exports = {
 	
 	process_md: process_md,

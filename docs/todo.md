@@ -1,4 +1,8 @@
 
+- use function pointers to work around module circular dependencies
+- in types.wat, $types_sizeof_base needs to load values from the source files (e.g. array_memory_size)
+- switch sizeof functions to : if/else
+- store data id (handle) with each record
 - when freeing structures - need to be able to free substructures
 - when compacting memory - compact first page then fill in the end from higher pages 
 - remove legend.wat

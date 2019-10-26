@@ -18,6 +18,7 @@
 	(import "../lib/types.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
+   (global $global (import "host" "global") (mut i32))	
 	(elem (i32.const 200) $free_iterate_each)
 	(elem (i32.const 201) $memory_block_allocated)
 	
@@ -33,16 +34,22 @@
 		(call $memory_bootstrap)
 		(call $type_strings_init)
 		(call $memory_allocate_block_on (i32.const 201))
+		(set_global $global (i32.const 0))
 	)
 
 	(func $memory_block_allocated (param $type i32) (param $size i32)
 		
 		(local $string i32)
-		(set_local $string (call $type_strings_get (get_local $type)))
-		(if
-			(i32.gt_u (get_local $string) (i32.const 0))
-			(then (call $print_string (get_local $string)))
-		)
+		(local $string_prefix i32)
+		(if (i32.eq (get_global $global) (i32.const 0)) (then
+			(set_global $global (i32.add (get_global $global) (i32.const 1)))
+			(set_local $string_prefix (string "allocated:"))
+			(set_local $string (call $type_strings_get (get_local $type)))
+			(if (i32.gt_u (get_local $string) (i32.const 0)) (then
+				(call $print_string (call $string_append (get_local $string_prefix) (get_local $string)))
+			))
+			(set_global $global (i32.sub (get_global $global) (i32.const 1)))
+		))
 	)
 	
 	(func $exercise
@@ -56,7 +63,7 @@
 		(block (loop
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
 			(call $list_append (get_local $list) (call $create_string (get_local $i)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 100)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1)))
 			(br 0)
 		))
 		(call $print_integer (call $number_value (call $list_length (get_local $list))))
@@ -92,11 +99,11 @@
 		
 		(local $string i32)
 		(set_local $string (call $item_value (get_local $item)))
-		(if
-			(i32.eq (i32.rem_u (get_local $index) (i32.const 10)) (i32.const 0))
-			(then (call $print_string (get_local $string)))
-			(else (call $memory_free (get_local $string)))
-		)
+		(if (i32.eq (i32.rem_u (get_local $index) (i32.const 10)) (i32.const 0)) (then
+			(call $print_string (get_local $string))
+		) (else
+			(call $memory_free (get_local $string) (call $types_sizeof_record (get_local $string)))
+		))
 	)
 	
 	(func $compact
@@ -104,8 +111,10 @@
 		(local $compactor i32)
 		(call $print_string (string "compact"))
 		(set_local $compactor (call $compactor_new))
-		(call $compactor_compact (get_local $compactor))
-	)	
-
+		(if (i32.eq (i32.const 1) (i32.const 0)) (then
+			(call $compactor_compact (get_local $compactor))
+		))
+	)
+	
 	(export "main" (func $main))
 )
