@@ -1,7 +1,7 @@
 
 const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
-let counter = 0;
+let counter = 1;
 let types = {}
 
 function transform(node, index, parents) {

@@ -26,6 +26,7 @@
 		(call $array_value_set (get_local $array) (typeof "number") (string "number"))
 		(call $array_value_set (get_local $array) (typeof "function") (string "function"))
 		(call $array_value_set (get_local $array) (typeof "string") (string "string"))
+		(call $array_value_set (get_local $array) (typeof "array") (string "array"))
 		(call $array_value_set (get_local $array) (typeof "list") (string "list"))
 		(call $array_value_set (get_local $array) (typeof "list_item") (string "list_item"))
 		(call $array_value_set (get_local $array) (typeof "map") (string "map"))
@@ -39,6 +40,7 @@
 	(func $type_strings_get (param $type i32) (result i32)
 		
 		(local $result i32)
+		(set_local $result (i32.const -1))
 		(if
 			(i32.gt_u (get_global $type_strings) (i32.const 0))
 			(then
@@ -70,40 +72,49 @@
 		(get_local $result)
 	)
 	
-	(func $types_sizeof_record (param $address i32) (result i32)
+	(func $types_sizeof_record (param $pointer i32) (result i32)
 		
 		(local $result i32)
 		(local $type i32)
+		(local $handle i32)
 		(set_local $result (i32.const -1))
-		(set_local $type (i32.load (get_local $address)))
-		(set_local $result (call $types_sizeof_type (get_local $type)))
-		(if (i32.eq (get_local $type) (typeof "void")) (then (set_local $result (i32.const 8))))
+		(set_local $type (i32.load (get_local $pointer)))
+		(set_local $result (i32.add (call $types_sizeof_type (get_local $type)) (i32.const 8)))
 		(if
-			(i32.eq (get_local $type) (typeof "string"))
-			(then (set_local $result (i32.add
-				(get_local $result)
-				(i32.load (i32.add (get_local $address) (i32.const 8)))
+			(i32.eq (get_local $type) (typeof "void"))
+			(then (set_local $result 
+				(i32.add (get_local $result) (i32.const 0)
 			)))
 		)
 		(if
 			(i32.eq (get_local $type) (typeof "legend_array"))
 			(then (set_local $result (i32.add
-				(i32.const 16)
+				(get_local $result)
 				(i32.mul
-					(call $array_width (get_local $address))		;; need to lookup by handle/id stored in record
-					(call $array_length (get_local $address))
+					(call $array_width_ (get_local $pointer))
+					(call $array_length_ (get_local $pointer))
 				)
 			)))
 		)
 		(if
 			(i32.eq (get_local $type) (typeof "array"))
-			(then (set_local $result (i32.add
-				(i32.const 12)
-				(i32.mul
-					(call $array_width (get_local $address))
-					(call $array_length (get_local $address))
-				)
-			)))
+			(then
+				(set_local $handle (i32.load (i32.add (get_local $pointer) (i32.const 4))))
+				(set_local $result (i32.add
+					(get_local $result)
+					(i32.mul
+						(call $array_width (get_local $handle))
+						(call $array_length (get_local $handle))
+					)
+				))
+			)
+		)
+		(if
+			(i32.eq (get_local $type) (typeof "string"))
+			(then
+				(set_local $handle (i32.load (i32.add (get_local $pointer) (i32.const 4))))
+				(set_local $result (i32.add (get_local $result) (call $string_length (get_local $handle))))
+			)
 		)
 		(get_local $result)
 	)

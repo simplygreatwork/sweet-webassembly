@@ -63,7 +63,7 @@
 		(block (loop
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
 			(call $list_append (get_local $list) (call $create_string (get_local $i)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 10)))
 			(br 0)
 		))
 		(call $print_integer (call $number_value (call $list_length (get_local $list))))
@@ -111,7 +111,7 @@
 		(local $compactor i32)
 		(call $print_string (string "compact"))
 		(set_local $compactor (call $compactor_new))
-		(if (i32.eq (i32.const 1) (i32.const 0)) (then
+		(if (i32.eq (i32.const 0) (i32.const 0)) (then
 			(call $compactor_compact (get_local $compactor))
 		))
 	)
