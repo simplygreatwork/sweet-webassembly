@@ -26,6 +26,10 @@ function Host() {
 			value: 'i32',
 			mutable: true
 		}, 0),
+		on_memory_allocate_handle: new WebAssembly.Global({
+			value: 'i32',
+			mutable: true
+		}, 0),
 		print_string: function(offset) {
 			var array = new Uint8Array(this.memory.buffer)
 			let type = array[offset]

@@ -21,7 +21,8 @@
    (global $global (import "host" "global") (mut i32))	
 	(elem (i32.const 200) $free_iterate_each)
 	(elem (i32.const 201) $memory_block_allocated)
-	
+	(elem (i32.const 202) $memory_handle_allocated)
+
 	(function $main
 		
 		(call $setup)
@@ -33,25 +34,58 @@
 		
 		(call $memory_bootstrap)
 		(call $type_strings_init)
-		(call $memory_allocate_block_on (i32.const 201))
+		;;(call $memory_allocate_block_on (i32.const 201))
+		;;(call $memory_allocate_handle_on (i32.const 202))
 		(set_global $global (i32.const 0))
 	)
 
-	(func $memory_block_allocated (param $type i32) (param $size i32)
+	(func $memory_block_allocated (param $pointer i32) (param $type i32) (param $size i32)
 		
+		(local $string i32)
+		(local $string_prefix i32)
+		(if (i32.eq (get_global $global) (i32.const 0))						;; prevent recursion
+			(then
+				(set_global $global (i32.add (get_global $global) (i32.const 1)))
+				(set_local $string_prefix (string "allocated:"))
+				(set_local $string (call $type_strings_get (get_local $type)))
+				(if (i32.gt_u (get_local $string) (i32.const 0))
+					(then
+						(call $print_string (call $string_append (get_local $string_prefix) (get_local $string)))
+						(if (i32.eq (i32.const 0) (i32.const 0))
+							(then
+								(call $print_integer (get_local $pointer))
+							)
+						)
+					)
+				)
+				(set_global $global (i32.sub (get_global $global) (i32.const 1)))
+			)
+		)
+	)
+	
+	(func $memory_handle_allocated (param $handle i32)
+		
+		(local $type i32)
 		(local $string i32)
 		(local $string_prefix i32)
 		(if (i32.eq (get_global $global) (i32.const 0)) (then
 			(set_global $global (i32.add (get_global $global) (i32.const 1)))
-			(set_local $string_prefix (string "allocated:"))
+			(set_local $type (call $memory_type (get_local $handle)))
+			(set_local $string_prefix (string "allocated_string:"))
 			(set_local $string (call $type_strings_get (get_local $type)))
-			(if (i32.gt_u (get_local $string) (i32.const 0)) (then
-				(call $print_string (call $string_append (get_local $string_prefix) (get_local $string)))
-			))
+			(if (i32.gt_u (get_local $string) (i32.const 0))
+				(then
+					(if (i32.eq (get_local $type) (typeof "string"))
+						(then
+							(call $print_string (call $string_append (get_local $string_prefix) (get_local $handle)))
+						)
+					)
+				)
+			)
 			(set_global $global (i32.sub (get_global $global) (i32.const 1)))
 		))
 	)
-	
+
 	(func $exercise
 		
 		(local $i i32)
@@ -61,13 +95,14 @@
 		(set_local $list (call $list_new))
 		(set_local $i (i32.const 0))
 		(block (loop
+			(br_if 1 (i32.eq (get_local $i) (i32.const 100)))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
 			(call $list_append (get_local $list) (call $create_string (get_local $i)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 10)))
 			(br 0)
 		))
 		(call $print_integer (call $number_value (call $list_length (get_local $list))))
-		(call $free (get_local $list))
+		;;(call $free (get_local $list))
+		(call $print_integer (i32.const 0))
 	)
 	
 	(func $create_string (param $length i32) (result i32)

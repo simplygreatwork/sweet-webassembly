@@ -60,7 +60,7 @@
 		(if (i32.eq (get_local $type) (typeof "boolean")) (then (set_local $result (call $boolean_memory_size))))
 		(if (i32.eq (get_local $type) (typeof "number")) (then (set_local $result (call $number_memory_size))))
 		(if (i32.eq (get_local $type) (typeof "function")) (then (set_local $result (call $function_memory_size))))
-		(if (i32.eq (get_local $type) (typeof "string")) (then (set_local $result (call $string_memory_size))))
+		(if (i32.eq (get_local $type) (typeof "string")) (then (set_local $result (call $string_bytes))))
 		(if (i32.eq (get_local $type) (typeof "array")) (then (set_local $result (call $array_memory_size))))
 		(if (i32.eq (get_local $type) (typeof "list")) (then (set_local $result (call $list_memory_size))))
 		(if (i32.eq (get_local $type) (typeof "list_item")) (then (set_local $result (call $item_memory_size))))
@@ -113,7 +113,10 @@
 			(i32.eq (get_local $type) (typeof "string"))
 			(then
 				(set_local $handle (i32.load (i32.add (get_local $pointer) (i32.const 4))))
-				(set_local $result (i32.add (get_local $result) (call $string_length (get_local $handle))))
+				(set_local $result (i32.add
+					(get_local $result)
+					(call $string_content_bytes (call $string_length (get_local $handle)))
+				))
 			)
 		)
 		(get_local $result)
@@ -124,6 +127,6 @@
 	)
 
 	(func $compactor_memory_size_ (result i32)
-		(i32.const 4)
+		(i32.const 0)
 	)
 )
