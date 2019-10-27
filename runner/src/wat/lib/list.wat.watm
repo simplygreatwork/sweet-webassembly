@@ -19,9 +19,9 @@
 		
 		(local $list i32)
 		(set_local $list (call $memory_allocate (typeof "list") (call $list_memory_size)))
-		(call $memory_store (get_local $list) (i32.const 4) (get_local $list))			;; next
-		(call $memory_store (get_local $list) (i32.const 8) (get_local $list))			;; previous
-		(call $memory_store (get_local $list) (i32.const 12) (i32.const 0))				;; value
+		(call $memory_store (get_local $list) (i32.const 0) (get_local $list))			;; next
+		(call $memory_store (get_local $list) (i32.const 4) (get_local $list))			;; previous
+		(call $memory_store (get_local $list) (i32.const 8) (i32.const 0))				;; value
 		(get_local $list)
 	)
 	
@@ -30,7 +30,6 @@
 		(call $print_integer (call $memory_load (get_local $list) (i32.const 0)))
 		(call $print_integer (call $memory_load (get_local $list) (i32.const 4)))
 		(call $print_integer (call $memory_load (get_local $list) (i32.const 8)))
-		(call $print_integer (call $memory_load (get_local $list) (i32.const 12)))
 	)
 	
 	(func $list_append (param $list i32) (param $data i32)
@@ -44,7 +43,7 @@
 		(set_local $result (i32.const 0))
 		(set_local $item (get_local $list))
 		(block (loop
-			(set_local $item (call $memory_load (get_local $item) (i32.const 4)))
+			(set_local $item (call $memory_load (get_local $item) (i32.const 0)))
 			(br_if 1 (i32.eq (get_local $item) (get_local $list)))
 			(set_local $result (i32.add (get_local $result) (i32.const 1)))
 			(br 0)
@@ -142,41 +141,40 @@
 	)
 	
 	(func $item_memory_size (result i32)
-		(i32.const 16)
+		(i32.const 12)
 	)
 	
 	(func $item_new (result i32)
 		
 		(local $item i32)
 		(set_local $item (call $memory_allocate (typeof "list_item") (call $item_memory_size)))
-		(call $memory_store (get_local $item) (i32.const 4) (get_local $item))				;; next
-		(call $memory_store (get_local $item) (i32.const 8) (get_local $item))				;; previous
-		(call $memory_store (get_local $item) (i32.const 12) (i32.const 0))					;; value
+		(call $memory_store (get_local $item) (i32.const 0) (get_local $item))				;; next
+		(call $memory_store (get_local $item) (i32.const 4) (get_local $item))				;; previous
+		(call $memory_store (get_local $item) (i32.const 8) (i32.const 0))					;; value
 		(get_local $item)
 	)
-		
+	
 	(func $item_dump (param $item i32)
 		
 		(call $print_integer (call $memory_load (get_local $item) (i32.const 0)))
 		(call $print_integer (call $memory_load (get_local $item) (i32.const 4)))
 		(call $print_integer (call $memory_load (get_local $item) (i32.const 8)))
-		(call $print_integer (call $memory_load (get_local $item) (i32.const 12)))
 	)
 	
 	(func $item_next (param $item i32) (result i32)
-		(call $memory_load (get_local $item) (i32.const 4))
+		(call $memory_load (get_local $item) (i32.const 0))
 	)
 	
 	(func $item_previous (param $item i32) (result i32)
-		(call $memory_load (get_local $item) (i32.const 8))
+		(call $memory_load (get_local $item) (i32.const 4))
 	)
 	
 	(func $item_value (param $item i32) (result i32)
-		(call $memory_load (get_local $item) (i32.const 12))
+		(call $memory_load (get_local $item) (i32.const 8))
 	)
 
 	(func $item_value_set (param $item i32) (param $value i32)
-		(call $memory_store (get_local $item) (i32.const 12) (get_local $value))
+		(call $memory_store (get_local $item) (i32.const 8) (get_local $value))
 	)
 
 	(func $item_append (param $item i32) (param $data i32)
@@ -189,10 +187,10 @@
 		(set_local $item_b (call $item_new))
 		(set_local $item_c (call $item_next (get_local $item_a)))
 		
-		(call $memory_store (get_local $item_a) (i32.const 4) (get_local $item_b))
-		(call $memory_store (get_local $item_b) (i32.const 4) (get_local $item_c))
-		(call $memory_store (get_local $item_b) (i32.const 8) (get_local $item_a))
-		(call $memory_store (get_local $item_c) (i32.const 8) (get_local $item_b))
-		(call $memory_store (get_local $item_b) (i32.const 12) (get_local $data))
+		(call $memory_store (get_local $item_a) (i32.const 0) (get_local $item_b))
+		(call $memory_store (get_local $item_b) (i32.const 0) (get_local $item_c))
+		(call $memory_store (get_local $item_b) (i32.const 4) (get_local $item_a))
+		(call $memory_store (get_local $item_c) (i32.const 4) (get_local $item_b))
+		(call $memory_store (get_local $item_b) (i32.const 8) (get_local $data))
 	)
 )

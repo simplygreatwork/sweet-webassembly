@@ -10,7 +10,7 @@
 	(func $assert_string_type (param $string i32)
 		
 		(if
-			(i32.eq (call $memory_load (get_local $string) (i32.const 0)) (typeof "string"))
+			(i32.eq (call $memory_type (get_local $string)) (typeof "string"))
 			(then (call $print_string (string "PASS")))
 			(else (call $print_string (string "FAIL")))
 		)
@@ -24,11 +24,11 @@
 			(else (call $print_string (string "FAIL")))
 		)
 	)
-
+	
 	(func $assert_number_type (param $number i32)
 		
 		(if
-			(i32.eq (call $memory_load (get_local $number) (i32.const 0)) (typeof "number"))
+			(i32.eq (call $memory_type (get_local $number)) (typeof "number"))
 			(then (call $print_string (string "PASS")))
 			(else (call $print_string (string "FAIL")))
 		)
@@ -46,7 +46,7 @@
 	(func $assert_list_type (param $list i32)
 		
 		(if
-			(i32.eq (call $memory_load (get_local $list) (i32.const 0)) (typeof "list"))
+			(i32.eq (call $memory_type (get_local $list)) (typeof "list"))
 			(then (call $print_string (string "PASS")))
 			(else (call $print_string (string "FAIL")))
 		)

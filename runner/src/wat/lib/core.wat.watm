@@ -26,12 +26,13 @@
 	
 	(func $memory_allocate_block_ (param $type i32) (param $size i32) (result i32)
 		
-		(local $result i32)
-		(set_local $result (i32.load (i32.const 0)))
-		(i32.store (i32.const 0) (i32.add (get_local $result) (get_local $size)))
-		(i32.store (get_local $result) (get_local $type))
+		(local $pointer i32)
+		(set_local $size (i32.add (get_local $size) (i32.const 8)))
+		(set_local $pointer (i32.load (i32.const 0)))
+		(i32.store (i32.const 0) (i32.add (get_local $pointer) (get_local $size)))
+		(call $memory_type_set_ (get_local $pointer) (get_local $type))
 		(call $memory_allocate_block_emit_ (get_local $type) (get_local $size))
-		(get_local $result)
+		(get_local $pointer)
 	)
 	
 	(func $memory_allocate_block_on_ (param $function i32)
@@ -58,6 +59,7 @@
 		(local $handle i32)
 		(set_local $handle (i32.load (i32.const 4)))
 		(i32.store (i32.const 4) (i32.add (get_local $handle) (i32.const 1)))
+		(call $memory_id_set_ (get_local $pointer) (get_local $handle))
 		(call $legend_value_set_ (get_global $legend) (get_local $handle) (get_local $pointer))
 		(get_local $handle)
 	)
@@ -65,21 +67,41 @@
 	(func $memory_store_ (param $address i32) (param $offset i32) (param $value i32)
 		
 		(set_local $address (call $memory_dereference_handle_ (get_local $address)))
-		(i32.store (i32.add (get_local $address) (get_local $offset)) (get_local $value))
+		(i32.store (i32.add (get_local $address) (i32.add (get_local $offset) (i32.const 8))) (get_local $value))
 	)
 	
 	(func $memory_load_ (param $address i32) (param $offset i32) (result i32)
 		
 		(set_local $address (call $memory_dereference_handle_ (get_local $address)))
-		(i32.load (i32.add (get_local $address) (get_local $offset)))
+		(i32.load (i32.add (get_local $address) (i32.add (get_local $offset) (i32.const 8))))
 	)
 	
 	(func $memory_load8_u_ (param $address i32) (param $offset i32) (result i32)
 		
 		(set_local $address (call $memory_dereference_handle_ (get_local $address)))
-		(i32.load8_u (i32.add (get_local $address) (get_local $offset)))
+		(i32.load8_u (i32.add (get_local $address) (i32.add (get_local $offset) (i32.const 8))))
 	)
 	
+	(func $memory_type_ (param $address i32) (result i32)
+		
+		(set_local $address (call $memory_dereference_handle_ (get_local $address)))
+		(i32.load (i32.add (get_local $address) (i32.const 0)))
+	)
+	
+	(func $memory_type_set_ (param $pointer i32) (param $type i32)
+		(i32.store (i32.add (get_local $pointer) (i32.const 0)) (get_local $type))
+	)
+
+	(func $memory_id_ (param $address i32) (result i32)
+		
+		(set_local $address (call $memory_dereference_handle_ (get_local $address)))
+		(i32.load (i32.add (get_local $address) (i32.const 4)))
+	)
+	
+	(func $memory_id_set_ (param $pointer i32) (param $id i32)
+		(i32.store (i32.add (get_local $pointer) (i32.const 4)) (get_local $id))
+	)
+
 	(func $memory_dereference_handle_ (param $handle i32) (result i32)
 		(call $legend_value_get_ (get_global $legend) (get_local $handle))
 	)
@@ -114,7 +136,7 @@
 	)
 	
 	(func $legend_array_memory_size_ (result i32)
-		(i32.const 16)
+		(i32.const 12)
 	)
 
 	(func $array_new_ (param $length i32) (result i32)
@@ -135,27 +157,27 @@
 	)
 	
 	(func $array_parent_ (param $array i32) (result i32)
-		(i32.load (i32.add (get_local $array) (i32.const 4)))
-	)
-	
-	(func $array_parent_set_ (param $array i32) (param $parent i32)
-		(i32.store (i32.add (get_local $array) (i32.const 4)) (get_local $parent))
-	)
-
-	(func $array_length_ (param $array i32) (result i32)
 		(i32.load (i32.add (get_local $array) (i32.const 8)))
 	)
 	
+	(func $array_parent_set_ (param $array i32) (param $parent i32)
+		(i32.store (i32.add (get_local $array) (i32.const 8)) (get_local $parent))
+	)
+
+	(func $array_length_ (param $array i32) (result i32)
+		(i32.load (i32.add (get_local $array) (i32.const 12)))
+	)
+	
 	(func $array_length_set_ (param $array i32) (param $length i32)
-		(i32.store (i32.add (get_local $array) (i32.const 8)) (get_local $length))
+		(i32.store (i32.add (get_local $array) (i32.const 12)) (get_local $length))
 	)
 	
 	(func $array_width_ (param $array i32) (result i32)
-		(i32.load (i32.add (get_local $array) (i32.const 12)))
+		(i32.load (i32.add (get_local $array) (i32.const 16)))
 	)
 
 	(func $array_width_set_ (param $array i32) (param $width i32)
-		(i32.store (i32.add (get_local $array) (i32.const 12)) (get_local $width))
+		(i32.store (i32.add (get_local $array) (i32.const 16)) (get_local $width))
 	)
 	
 	(func $array_value_get_ (param $array i32) (param $index i32) (result i32)
@@ -164,7 +186,7 @@
 			(i32.add
 				(get_local $array)
 				(i32.add 
-					(i32.const 16)
+					(i32.const 20)
 					(i32.mul
 						(call $array_width_ (get_local $array))
 						(get_local $index)
@@ -180,7 +202,7 @@
 			(i32.add
 				(get_local $array)
 				(i32.add
-					(i32.const 16)
+					(i32.const 20)
 					(i32.mul
 						(call $array_width_ (get_local $array))
 						(get_local $index)
@@ -192,7 +214,7 @@
 	)
 	
 	(func $legend_memory_size_ (result i32)
-		(i32.const 20)
+		(i32.const 16)
 	)
 	
 	(func $legend_new_ (result i32)
@@ -207,35 +229,35 @@
 	)
 	
 	(func $legend_base_ (param $legend i32) (result i32)
-		(i32.load (i32.add (get_local $legend) (i32.const 4)))
-	)
-	
-	(func $legend_base_set_ (param $legend i32) (param $base i32)
-		(i32.store (i32.add (get_local $legend) (i32.const 4)) (get_local $base))
-	)
-	
-	(func $legend_exponent_ (param $legend i32) (result i32)
 		(i32.load (i32.add (get_local $legend) (i32.const 8)))
 	)
 	
-	(func $legend_exponent_set_ (param $legend i32) (param $exponent i32)
-		(i32.store (i32.add (get_local $legend) (i32.const 8)) (get_local $exponent))
+	(func $legend_base_set_ (param $legend i32) (param $base i32)
+		(i32.store (i32.add (get_local $legend) (i32.const 8)) (get_local $base))
 	)
-
-	(func $legend_counter_ (param $legend i32) (result i32)
+	
+	(func $legend_exponent_ (param $legend i32) (result i32)
 		(i32.load (i32.add (get_local $legend) (i32.const 12)))
 	)
 	
-	(func $legend_counter_set_ (param $legend i32) (param $counter i32)
-		(i32.store (i32.add (get_local $legend) (i32.const 12)) (get_local $counter))
+	(func $legend_exponent_set_ (param $legend i32) (param $exponent i32)
+		(i32.store (i32.add (get_local $legend) (i32.const 12)) (get_local $exponent))
 	)
 
-	(func $legend_array_get_ (param $legend i32) (result i32)
+	(func $legend_counter_ (param $legend i32) (result i32)
 		(i32.load (i32.add (get_local $legend) (i32.const 16)))
 	)
 	
+	(func $legend_counter_set_ (param $legend i32) (param $counter i32)
+		(i32.store (i32.add (get_local $legend) (i32.const 16)) (get_local $counter))
+	)
+
+	(func $legend_array_get_ (param $legend i32) (result i32)
+		(i32.load (i32.add (get_local $legend) (i32.const 20)))
+	)
+	
 	(func $legend_array_set_ (param $legend i32) (param $array i32)
-		(i32.store (i32.add (get_local $legend) (i32.const 16)) (get_local $array))
+		(i32.store (i32.add (get_local $legend) (i32.const 20)) (get_local $array))
 	)
 	
 	(func $legend_array_new_ (param $legend i32) (result i32)
@@ -314,7 +336,7 @@
 	)
 	
 	(func $print_string_ (param $string i32)
-		(call $host_print_string (call $memory_dereference_handle_ (get_local $string)))
+		(call $host_print_string (i32.add (call $memory_dereference_handle_ (get_local $string)) (i32.const 4)))
 	)
 	
 	(func $print_integer_ (param $pointer i32)

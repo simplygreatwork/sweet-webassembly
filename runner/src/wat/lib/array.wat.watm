@@ -5,7 +5,7 @@
 	(memory (import "host" "memory") 1)
 	
 	(func $array_memory_size (result i32)
-		(i32.const 12)
+		(i32.const 8)
 	)
 	
 	(func $array_new (param $length i32) (result i32)
@@ -22,19 +22,19 @@
 	)
 	
 	(func $array_length (param $array i32) (result i32)
-		(call $memory_load (get_local $array) (i32.const 4))		
+		(call $memory_load (get_local $array) (i32.const 0))		
 	)
 	
 	(func $array_length_set (param $array i32) (param $length i32)
-		(call $memory_store (get_local $array) (i32.const 4) (get_local $length))
+		(call $memory_store (get_local $array) (i32.const 0) (get_local $length))
 	)
 	
 	(func $array_width (param $array i32) (result i32)
-		(call $memory_load (get_local $array) (i32.const 8))		
+		(call $memory_load (get_local $array) (i32.const 4))		
 	)
 	
 	(func $array_width_set (param $array i32) (param $width i32)
-		(call $memory_store (get_local $array) (i32.const 8) (get_local $width))
+		(call $memory_store (get_local $array) (i32.const 4) (get_local $width))
 	)
 	
 	(func $array_value_get (param $array i32) (param $index i32) (result i32)
@@ -42,7 +42,7 @@
 		(call $memory_load
 			(get_local $array)
 			(i32.add 
-				(i32.const 12)
+				(i32.const 16)
 				(i32.mul
 					(call $array_width (get_local $array))
 					(get_local $index)
@@ -56,7 +56,7 @@
 		(call $memory_store
 			(get_local $array)
 			(i32.add 
-				(i32.const 12)
+				(i32.const 16)
 				(i32.mul
 					(call $array_width (get_local $array))
 					(get_local $index)

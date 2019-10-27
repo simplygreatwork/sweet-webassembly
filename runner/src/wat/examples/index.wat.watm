@@ -342,7 +342,7 @@
 	(func $test_stream_step_two (param $value i32) (result i32)
 		(call $string_append (get_local $value) (string "c"))
 	)
-
+	
 	(func $test_stream_step_three (param $value i32) (result i32)
 		(call $assert_string_equals (get_local $value) (string "abc"))
 		(get_local $value)

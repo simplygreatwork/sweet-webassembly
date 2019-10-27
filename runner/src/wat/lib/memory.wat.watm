@@ -36,6 +36,22 @@
 		(call $memory_load8_u_ (get_local $address) (get_local $offset))
 	)
 	
+	(func $memory_type (param $handle i32) (result i32)
+		(call $memory_type_ (get_local $handle))
+	)
+
+	(func $memory_type_set (param $pointer i32) (param $type i32)
+		(call $memory_type_set_ (get_local $pointer) (get_local $type))
+	)
+
+	(func $memory_id (param $handle i32) (result i32)
+		(call $memory_id_ (get_local $handle))
+	)
+	
+	(func $memory_id_set (param $pointer i32) (param $id i32)
+		(call $memory_id_set_ (get_local $pointer) (get_local $id))
+	)
+
 	(func $memory_dereference_handle (param $handle i32) (result i32)
 		(call $memory_dereference_handle_ (get_local $handle))
 	)

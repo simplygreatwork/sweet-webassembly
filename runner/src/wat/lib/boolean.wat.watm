@@ -5,7 +5,7 @@
 	(memory (import "host" "memory") 1)
 	
 	(func $boolean_memory_size (result i32)
-		(i32.const 8)
+		(i32.const 4)
 	)
 	
 	(func $boolean_new (param $value i32) (result i32)
@@ -17,11 +17,11 @@
 	)
 	
 	(func $boolean_value (param $boolean i32) (result i32)
-		(call $memory_load (get_local $boolean) (i32.const 4))
+		(call $memory_load (get_local $boolean) (i32.const 0))
 	)
 	
 	(func $boolean_value_set (param $boolean i32) (param $value i32)
-		(call $memory_store (get_local $boolean) (i32.const 4) (get_local $value))
+		(call $memory_store (get_local $boolean) (i32.const 0) (get_local $value))
 	)
 
 	(func $boolean_and (param $boolean_a i32) (param $boolean_b i32) (result i32)
