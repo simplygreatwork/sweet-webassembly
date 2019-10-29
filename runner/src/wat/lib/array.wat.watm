@@ -4,7 +4,7 @@
 	(import "./memory.watm")
 	(memory (import "host" "memory") 1)
 	
-	(func $array_memory_size (result i32)
+	(func $array_bytes (result i32)
 		(i32.const 8)
 	)
 	
@@ -15,7 +15,7 @@
 	(func $array_new_width (param $length i32) (param $width i32) (result i32)
 		
 		(local $array i32)
-		(set_local $array (call $memory_allocate (typeof "array") (i32.add (call $array_memory_size) (i32.mul (get_local $width) (get_local $length)))))
+		(set_local $array (call $memory_allocate (typeof "array") (i32.add (call $array_bytes) (i32.mul (get_local $width) (get_local $length)))))
 		(call $array_length_set (get_local $array) (get_local $length))
 		(call $array_width_set (get_local $array) (get_local $width))
 		(get_local $array)

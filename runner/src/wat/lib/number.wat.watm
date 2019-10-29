@@ -7,14 +7,14 @@
 	
 	;; use f32 float instead
 	
-	(func $number_memory_size (result i32)
+	(func $number_bytes (result i32)
 		(i32.const 4)
 	)
 	
 	(func $number_new (param $value i32) (result i32)
 		
 		(local $number i32)
-		(set_local $number (call $memory_allocate (typeof "number") (call $number_memory_size)))
+		(set_local $number (call $memory_allocate (typeof "number") (call $number_bytes)))
 		(call $number_value_set (get_local $number) (get_local $value))
 		(get_local $number)
 	)

@@ -12,14 +12,14 @@
 	(elem (i32.const 5) $stream_iterate_each_function)
 	(type $i32_to_i32 (func (param i32) (result i32)))
 	
-	(func $stream_memory_size (result i32)
+	(func $stream_bytes (result i32)
 		(i32.const 4)
 	)
 
 	(func $stream_new (result i32)
 		
 		(local $stream i32)
-		(set_local $stream (call $memory_allocate (typeof "stream") (call $stream_memory_size)))
+		(set_local $stream (call $memory_allocate (typeof "stream") (call $stream_bytes)))
 		(get_local $stream)
 	)
 	

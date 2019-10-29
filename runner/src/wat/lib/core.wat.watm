@@ -196,7 +196,7 @@
 		))
 	)
 	
-	(func $legend_array_memory_size_ (result i32)
+	(func $legend_array_bytes_ (result i32)
 		(i32.const 12)
 	)
 
@@ -209,7 +209,7 @@
 		(local $array i32)
 		(set_local $array (call $memory_allocate_block_
 			(typeof "legend_array")
-			(i32.add (call $legend_array_memory_size_) (i32.mul (get_local $width) (get_local $length)))
+			(i32.add (call $legend_array_bytes_) (i32.mul (get_local $width) (get_local $length)))
 		))
 		(call $array_parent_set_ (get_local $array) (i32.const 0))
 		(call $array_length_set_ (get_local $array) (get_local $length))
@@ -274,14 +274,14 @@
 		)
 	)
 	
-	(func $legend_memory_size_ (result i32)
+	(func $legend_bytes_ (result i32)
 		(i32.const 16)
 	)
 	
 	(func $legend_new_ (result i32)
 		
 		(local $legend i32)
-		(set_local $legend (call $memory_allocate_block_ (typeof "legend") (call $legend_memory_size_)))
+		(set_local $legend (call $memory_allocate_block_ (typeof "legend") (call $legend_bytes_)))
 		(call $legend_base_set_ (get_local $legend) (i32.const 16))
 		(call $legend_exponent_set_ (get_local $legend) (i32.const 4))
 		(call $legend_counter_set_ (get_local $legend) (i32.const 0))
