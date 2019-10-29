@@ -22,7 +22,7 @@
 	(elem (i32.const 200) $free_iterate_each)
 	(elem (i32.const 201) $memory_block_allocated)
 	(elem (i32.const 202) $memory_handle_allocated)
-	
+
 	(function $main
 		
 		(call $setup)
@@ -63,7 +63,7 @@
 		)
 	)
 	
-	(func $memory_handle_allocated (param $handle i32)
+	(func $memory_handle_allocated (param $handle i32)						;; fails
 		
 		(local $type i32)
 		(local $string i32)

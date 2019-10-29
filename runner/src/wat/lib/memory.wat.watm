@@ -19,7 +19,7 @@
 	(func $memory_handle_next (result i32)
 		(call $memory_handle_next_)
 	)
-
+	
 	(func $memory_allocate (param $type i32) (param $size i32) (result i32)
 		(call $memory_allocate_ (get_local $type) (get_local $size))
 	)
