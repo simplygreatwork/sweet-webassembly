@@ -34,12 +34,13 @@
 		(local $boundary i32)
 		(local $pointer i32)
 		(local $type i32)
-		(set_local $pointer (call $memory_pointer_first))
+		(local $active i32)
 		(set_local $boundary (call $memory_pointer_next))
+		(set_local $pointer (call $memory_pointer_first))
 		(block (loop
 			(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
-			(if (i32.lt_s (get_local $type) (i32.const 0)) (then 
-				(set_local $type (i32.mul (get_local $type) (i32.const -1)))
+			(set_local $active (call $memory_active_by_pointer (get_local $pointer)))
+			(if (i32.eq (get_local $active) (i32.const 0)) (then 
 				(call $print_string (string "+ was freed"))
 			))
 			(br_if 1 (i32.eq (get_local $type) (i32.const 0)))

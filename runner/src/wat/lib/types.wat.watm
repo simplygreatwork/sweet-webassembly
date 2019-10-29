@@ -79,9 +79,6 @@
 		(local $handle i32)
 		(set_local $result (i32.const -1))
 		(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
-		(if (i32.lt_s (get_local $type) (i32.const 0)) (then 
-			(set_local $type (i32.mul (get_local $type) (i32.const -1)))
-		))
 		(set_local $result (i32.add (call $types_sizeof_type (get_local $type)) (i32.const 8)))
 		(if
 			(i32.eq (get_local $type) (typeof "void"))

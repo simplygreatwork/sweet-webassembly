@@ -45,6 +45,7 @@
 		(set_local $pointer (call $memory_pointer_next_))
 		(i32.store (i32.const 0) (i32.add (get_local $pointer) (get_local $size)))
 		(call $memory_type_set_by_pointer_ (get_local $pointer) (get_local $type))
+		(call $memory_active_set_by_pointer_ (get_local $pointer) (i32.const 1))
 		(call $memory_allocate_block_emit_ (get_local $pointer) (get_local $type) (get_local $size))
 		(get_local $pointer)
 	)
@@ -125,11 +126,11 @@
 	)
 
 	(func $memory_type_by_pointer_ (param $pointer i32) (result i32)
-		(i32.load (i32.add (get_local $pointer) (i32.const 0)))
+		(i32.load16_u (i32.add (get_local $pointer) (i32.const 0)))
 	)
 	
 	(func $memory_type_set_by_pointer_ (param $pointer i32) (param $type i32)
-		(i32.store (i32.add (get_local $pointer) (i32.const 0)) (get_local $type))
+		(i32.store16 (i32.add (get_local $pointer) (i32.const 0)) (get_local $type))
 	)
 
 	(func $memory_active_ (param $handle i32) (result i32)
@@ -147,7 +148,7 @@
 	(func $memory_active_set_by_pointer_ (param $pointer i32) (param $active i32)
 		(i32.store16 (i32.add (get_local $pointer) (i32.const 2)) (get_local $active))
 	)
-
+	
 	(func $memory_id_ (param $handle i32) (result i32)
 		(call $memory_id_by_pointer_ (call $memory_dereference_handle_ (get_local $handle)))
 	)
@@ -169,13 +170,7 @@
 	)
 	
 	(func $memory_free_ (param $handle i32)
-		
-		(local $pointer i32)
-		(local $type i32)
-		(if (i32.eq (i32.const 0) (i32.const 0)) (then
-			(set_local $type (i32.mul (call $memory_type_ (get_local $handle)) (i32.const -1)))
-			(call $memory_type_set_ (get_local $handle) (get_local $type))
-		))
+		(call $memory_active_set_ (get_local $handle) (i32.const 0))
 	)
 	
 	(func $memory_deallocate_ (param $pointer i32) (param $size i32) (result i32)

@@ -12,7 +12,7 @@
 	(func $tree_memory_size (result i32)
 		(i32.const 4)
 	)
-
+	
 	(func $tree_new (result i32)
 		
 		(local $tree i32)
