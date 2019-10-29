@@ -38,7 +38,7 @@
 		;;(call $memory_allocate_handle_on (i32.const 202))
 		(set_global $global (i32.const 0))
 	)
-
+	
 	(func $memory_block_allocated (param $pointer i32) (param $type i32) (param $size i32)
 		
 		(local $string i32)
@@ -91,6 +91,8 @@
 		(local $i i32)
 		(local $string i32)
 		(local $list i32)
+		(local $heading i32)
+		(call $print_integer (i32.mul (i32.const 2) (i32.const -1)))
 		(call $print_string (string "exercise"))
 		(set_local $list (call $list_new))
 		(set_local $i (i32.const 0))
@@ -101,8 +103,9 @@
 			(br 0)
 		))
 		(call $print_integer (call $number_value (call $list_length (get_local $list))))
-		;;(call $free (get_local $list))
-		(call $print_integer (i32.const 0))
+		(if (i32.eq (i32.const 0) (i32.const 0)) (then
+			(call $free (get_local $list))
+		))
 	)
 	
 	(func $create_string (param $length i32) (result i32)
@@ -137,7 +140,7 @@
 		(if (i32.eq (i32.rem_u (get_local $index) (i32.const 10)) (i32.const 0)) (then
 			(call $print_string (get_local $string))
 		) (else
-			(call $memory_free (get_local $string) (call $types_sizeof_record (get_local $string)))
+			(call $memory_free (get_local $string))
 		))
 	)
 	

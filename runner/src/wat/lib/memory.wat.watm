@@ -8,6 +8,18 @@
 		(call $memory_bootstrap_)
 	)
 	
+	(func $memory_pointer_first (result i32)
+		(call $memory_pointer_first_)
+	)
+	
+	(func $memory_pointer_next (result i32)
+		(call $memory_pointer_next_)
+	)
+	
+	(func $memory_handle_next (result i32)
+		(call $memory_handle_next_)
+	)
+
 	(func $memory_allocate (param $type i32) (param $size i32) (result i32)
 		(call $memory_allocate_ (get_local $type) (get_local $size))
 	)
@@ -44,24 +56,56 @@
 		(call $memory_type_ (get_local $handle))
 	)
 
-	(func $memory_type_set (param $pointer i32) (param $type i32)
-		(call $memory_type_set_ (get_local $pointer) (get_local $type))
+	(func $memory_type_set (param $handle i32) (param $type i32)
+		(call $memory_type_set_ (get_local $handle) (get_local $type))
+	)
+
+	(func $memory_type_by_pointer (param $pointer i32) (result i32)
+		(call $memory_type_by_pointer_ (get_local $pointer))
+	)
+
+	(func $memory_type_set_by_pointer (param $pointer i32) (param $type i32)
+		(call $memory_type_set_by_pointer_ (get_local $pointer) (get_local $type))
+	)
+
+	(func $memory_active (param $handle i32) (result i32)
+		(call $memory_active_ (get_local $handle))
+	)
+
+	(func $memory_active_set (param $handle i32) (param $active i32)
+		(call $memory_active_set_ (get_local $handle) (get_local $active))
+	)
+
+	(func $memory_active_by_pointer (param $pointer i32) (result i32)
+		(call $memory_active_by_pointer_ (get_local $pointer))
+	)
+	
+	(func $memory_active_set_by_pointer (param $pointer i32) (param $active i32)
+		(call $memory_active_set_by_pointer_ (get_local $pointer) (get_local $active))
 	)
 
 	(func $memory_id (param $handle i32) (result i32)
 		(call $memory_id_ (get_local $handle))
 	)
+
+	(func $memory_id_set (param $handle i32) (param $id i32)
+		(call $memory_id_set_ (get_local $handle) (get_local $id))
+	)
+
+	(func $memory_id_by_pointer (param $pointer i32) (result i32)
+		(call $memory_id_by_pointer_ (get_local $pointer))
+	)
 	
-	(func $memory_id_set (param $pointer i32) (param $id i32)
-		(call $memory_id_set_ (get_local $pointer) (get_local $id))
+	(func $memory_id_set_by_pointer (param $pointer i32) (param $id i32)
+		(call $memory_id_set_by_pointer_ (get_local $pointer) (get_local $id))
 	)
 
 	(func $memory_dereference_handle (param $handle i32) (result i32)
 		(call $memory_dereference_handle_ (get_local $handle))
 	)
 	
-	(func $memory_free (param $handle i32) (param $size i32)
-		(call $memory_free_ (get_local $handle) (get_local $size))
+	(func $memory_free (param $handle i32)
+		(call $memory_free_ (get_local $handle))
 	)
 	
 	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)

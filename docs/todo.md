@@ -1,4 +1,5 @@
 
+- convert use of negative types to use void types - but then must allow core to call types function using func table
 - use function pointers to work around module circular dependencies
 - in types.wat, $types_sizeof_base needs to load values from the source files (e.g. array_memory_size)
 - switch sizeof functions to : if/else

@@ -24,27 +24,28 @@
 	)
 	
 	(func $compactor_walk
-
-		(call $print_string (string "compactor_walk"))	
+		
+		(call $print_string (string "compactor_walk"))
 		(call $compactor_iterate)
 	)
 	
-	(func $compactor_iterate																;; work in process
+	(func $compactor_iterate																	;; work in process
 		
 		(local $boundary i32)
 		(local $pointer i32)
 		(local $type i32)
-		(local $type_string i32)
-		(local $size i32)
-		(set_local $pointer (i32.const 8))												;; use helper function to lookup this address
-		(set_local $boundary (i32.load (i32.const 0)))								;; use helper function to lookup this address
+		(set_local $pointer (call $memory_pointer_first))
+		(set_local $boundary (call $memory_pointer_next))
 		(block (loop
+			(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
+			(if (i32.lt_s (get_local $type) (i32.const 0)) (then 
+				(set_local $type (i32.mul (get_local $type) (i32.const -1)))
+				(call $print_string (string "+ was freed"))
+			))
+			(br_if 1 (i32.eq (get_local $type) (i32.const 0)))
 			(br_if 1 (i32.ge_u (get_local $pointer) (get_local $boundary)))
-			(set_local $type (i32.load (get_local $pointer)))						;; use (call $memory_type)
-			(set_local $type_string (call $type_strings_get (get_local $type)))
-			(call $print_string (get_local $type_string))
-			(set_local $size (call $types_sizeof_record (get_local $pointer)))
-			(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
+			(call $print_string (call $type_strings_get (get_local $type)))
+			(set_local $pointer (i32.add (get_local $pointer) (call $types_sizeof_record (get_local $pointer))))
 			(br 0)
 		))
 	)

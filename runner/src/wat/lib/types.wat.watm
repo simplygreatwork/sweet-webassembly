@@ -78,7 +78,10 @@
 		(local $type i32)
 		(local $handle i32)
 		(set_local $result (i32.const -1))
-		(set_local $type (i32.load (get_local $pointer)))
+		(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
+		(if (i32.lt_s (get_local $type) (i32.const 0)) (then 
+			(set_local $type (i32.mul (get_local $type) (i32.const -1)))
+		))
 		(set_local $result (i32.add (call $types_sizeof_type (get_local $type)) (i32.const 8)))
 		(if
 			(i32.eq (get_local $type) (typeof "void"))
@@ -99,7 +102,7 @@
 		(if
 			(i32.eq (get_local $type) (typeof "array"))
 			(then
-				(set_local $handle (i32.load (i32.add (get_local $pointer) (i32.const 4))))
+				(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
 				(set_local $result (i32.add
 					(get_local $result)
 					(i32.mul
@@ -112,7 +115,7 @@
 		(if
 			(i32.eq (get_local $type) (typeof "string"))
 			(then
-				(set_local $handle (i32.load (i32.add (get_local $pointer) (i32.const 4))))
+				(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
 				(set_local $result (i32.add
 					(get_local $result)
 					(call $string_content_bytes (call $string_length (get_local $handle)))
@@ -125,7 +128,7 @@
 	(func $void_memory_size_ (result i32)
 		(i32.const 0)
 	)
-
+	
 	(func $compactor_memory_size_ (result i32)
 		(i32.const 0)
 	)
