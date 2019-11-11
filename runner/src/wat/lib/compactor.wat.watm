@@ -40,12 +40,12 @@
 		(block (loop
 			(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
 			(set_local $active (call $memory_active_by_pointer (get_local $pointer)))
-			(if (i32.eq (get_local $active) (i32.const 0)) (then 
-				(call $print_string (string "+ was freed"))
-			))
 			(br_if 1 (i32.eq (get_local $type) (i32.const 0)))
 			(br_if 1 (i32.ge_u (get_local $pointer) (get_local $boundary)))
 			(call $print_string (call $type_strings_get (get_local $type)))
+			(if (i32.eq (get_local $active) (i32.const 0)) (then 
+				(call $print_string (string "    is inactive"))
+			))
 			(set_local $pointer (i32.add (get_local $pointer) (call $types_sizeof_record (get_local $pointer))))
 			(br 0)
 		))

@@ -13,8 +13,10 @@
 	(import "./tree.watm")
 	(import "./stream.watm")
 	(memory (import "host" "memory") 1)
+	(import "host" "table" (table 1 anyfunc))
+	(elem (i32.const 300) $types_sizeof_record)
    (global $type_strings (import "host" "type_strings") (mut i32))
-	
+
 	(func $type_strings_init
 		
 		(local $array i32)
@@ -42,8 +44,7 @@
 		(local $result i32)
 		(set_local $result (i32.const -1))
 		(if
-			(i32.gt_u (get_global $type_strings) (i32.const 0))
-			(then
+			(i32.gt_u (get_global $type_strings) (i32.const 0)) (then
 				(set_local $result (call $array_value_get (get_global $type_strings) (get_local $type)))
 			)
 		)
@@ -80,45 +81,33 @@
 		(set_local $result (i32.const -1))
 		(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
 		(set_local $result (i32.add (call $types_sizeof_type (get_local $type)) (i32.const 8)))
-		(if
-			(i32.eq (get_local $type) (typeof "void"))
-			(then (set_local $result 
-				(i32.add (get_local $result) (i32.const 0)
-			)))
-		)
-		(if
-			(i32.eq (get_local $type) (typeof "legend_array"))
-			(then (set_local $result (i32.add
-				(get_local $result)
-				(i32.mul
+		(if (i32.eq (get_local $type) (typeof "void")) (then
+			(set_local $result (i32.add (get_local $result) (i32.const 0)))
+		))
+		(if (i32.eq (get_local $type) (typeof "legend_array")) (then 
+			(set_local $result (i32.add
+				(get_local $result) (i32.mul
 					(call $array_width_ (get_local $pointer))
 					(call $array_length_ (get_local $pointer))
 				)
-			)))
-		)
-		(if
-			(i32.eq (get_local $type) (typeof "array"))
-			(then
-				(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
-				(set_local $result (i32.add
-					(get_local $result)
-					(i32.mul
-						(call $array_width (get_local $handle))
-						(call $array_length (get_local $handle))
-					)
-				))
-			)
-		)
-		(if
-			(i32.eq (get_local $type) (typeof "string"))
-			(then
-				(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
-				(set_local $result (i32.add
-					(get_local $result)
-					(call $string_content_bytes (call $string_length (get_local $handle)))
-				))
-			)
-		)
+			))
+		))
+		(if (i32.eq (get_local $type) (typeof "array")) (then
+			(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
+			(set_local $result (i32.add
+				(get_local $result) (i32.mul
+					(call $array_width (get_local $handle))
+					(call $array_length (get_local $handle))
+				)
+			))
+		))
+		(if (i32.eq (get_local $type) (typeof "string")) (then
+			(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
+			(set_local $result (i32.add
+				(get_local $result)
+				(call $string_content_bytes (call $string_length (get_local $handle)))
+			))
+		))
 		(get_local $result)
 	)
 	

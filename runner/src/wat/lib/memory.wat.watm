@@ -104,14 +104,14 @@
 		(call $memory_dereference_handle_ (get_local $handle))
 	)
 	
-	(func $memory_free (param $handle i32)
-		(call $memory_free_ (get_local $handle))
+	(func $memory_deallocate (param $handle i32)
+		(call $memory_deallocate_ (get_local $handle))
 	)
 	
-	(func $memory_deallocate (param $pointer i32) (param $size i32) (result i32)
-		(call $memory_deallocate_ (get_local $pointer) (get_local $size))
+	(func $memory_deallocate_by_pointer (param $pointer i32)
+		(call $memory_deallocate_by_pointer_ (get_local $pointer))
 	)
-	
+
 	(func $memory_copy (param $a i32) (param $b i32) (param $length i32)
 		(call $memory_copy_ (get_local $a) (get_local $b) (get_local $length))
 	)

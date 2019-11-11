@@ -26,7 +26,7 @@
 	(func $number_value_set (param $number i32) (param $value i32)
 		(call $memory_store (get_local $number) (i32.const 0) (get_local $value))
 	)
-
+	
 	(func $number_add (param $number_a i32) (param $number_b i32) (result i32)
 		
 		(call $number_new

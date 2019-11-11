@@ -1,5 +1,8 @@
 (module
 	
+	(import "./allocator.watm")
+	(import "./frame.watm")
+	(import "./hole.watm")
 	(import "host" "print_string" (func $host_print_string (param i32)))
 	(import "host" "print_integer" (func $host_print_integer (param i32)))
 	(import "host" "table" (table 1 anyfunc))
@@ -9,30 +12,40 @@
 	(global $on_memory_allocate_handle (import "host" "on_memory_allocate_handle") (mut i32))
 	(type $i32_to_void (func (param i32)))
 	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))	
+	(type $i32_to_i32 (func (param i32) (result i32)))
 	
 	(func $memory_bootstrap_
 		
-		(i32.store (i32.const 0) (i32.const 8))
-		(i32.store (i32.const 4) (i32.const 1))
+		(call $memory_pointer_next_set_ (call $memory_pointer_first_))
+		(call $memory_handle_next_set_ (call $memory_handle_first_))
+		(call $allocator_initialize)
 		(set_global $legend (call $legend_new_))
 	)
 	
-	(func $memory_pointer_first_ (result i32)
-		(i32.const 8)
-	)
-	
-	(func $memory_pointer_next_ (result i32)
-		(i32.load (i32.const 0))
-	)
-
-	(func $memory_pointer_next_set_ (param $next i32)
-		(i32.store (i32.const 0) (get_local $next))
+	(func $memory_handle_first_ (result i32)
+		(i32.const 1)
 	)
 
 	(func $memory_handle_next_ (result i32)
-		(i32.load (i32.const 4))
+		(i32.load (i32.const 12))
 	)
-
+	
+	(func $memory_handle_next_set_ (param $next i32)
+		(i32.store (i32.const 12) (get_local $next))
+	)
+	
+	(func $memory_pointer_first_ (result i32)
+		(i32.const 24)
+	)
+	
+	(func $memory_pointer_next_ (result i32)
+		(i32.load (i32.const 16))
+	)
+	
+	(func $memory_pointer_next_set_ (param $next i32)
+		(i32.store (i32.const 16) (get_local $next))
+	)
+	
 	(func $memory_allocate_ (param $type i32) (param $size i32) (result i32)
 		
 		(local $pointer i32)
@@ -44,6 +57,28 @@
 	
 	(func $memory_allocate_block_ (param $type i32) (param $size i32) (result i32)
 		
+		(local $result i32)
+		(if (i32.eq (i32.const 0) (i32.const 0)) (then
+			(set_local $result (call $memory_allocate_block_with_allocator (get_local $type) (get_local $size)))
+		) (else
+			(set_local $result (call $memory_allocate_block_without_allocator (get_local $type) (get_local $size)))			
+		))
+		(get_local $result)
+	)
+
+	(func $memory_allocate_block_with_allocator (param $type i32) (param $size i32) (result i32)
+		
+		(local $pointer i32)
+		(set_local $size (i32.add (get_local $size) (i32.const 8)))
+		(set_local $pointer (call $allocator_allocate (get_local $type) (get_local $size)))
+		(call $memory_type_set_by_pointer_ (get_local $pointer) (get_local $type))
+		(call $memory_active_set_by_pointer_ (get_local $pointer) (i32.const 1))
+		(call $memory_allocate_block_emit_ (get_local $pointer) (get_local $type) (get_local $size))
+		(get_local $pointer)
+	)
+
+	(func $memory_allocate_block_without_allocator (param $type i32) (param $size i32) (result i32)
+		
 		(local $pointer i32)
 		(set_local $size (i32.add (get_local $size) (i32.const 8)))
 		(set_local $pointer (call $memory_pointer_next_))
@@ -53,18 +88,17 @@
 		(call $memory_allocate_block_emit_ (get_local $pointer) (get_local $type) (get_local $size))
 		(get_local $pointer)
 	)
-	
+
 	(func $memory_allocate_block_on_ (param $function i32)
 		(set_global $on_memory_allocate_block (get_local $function))
 	)
 	
 	(func $memory_allocate_block_emit_ (param $pointer i32) (param $type i32) (param $size i32)
-
+		
 		(local $function i32)
 		(set_local $function (get_global $on_memory_allocate_block))
 		(if
-			(i32.ne (get_local $function) (i32.const 0))
-			(then
+			(i32.ne (get_local $function) (i32.const 0)) (then
 				(call_indirect (type $i32_i32_i32_to_void)
 					(get_local $pointer) (get_local $type) (get_local $size)
 					(get_local $function)
@@ -77,7 +111,7 @@
 		
 		(local $handle i32)
 		(set_local $handle (call $memory_handle_next_))
-		(i32.store (i32.const 4) (i32.add (get_local $handle) (i32.const 1)))
+		(call $memory_handle_next_set_ (i32.add (get_local $handle) (i32.const 1)))
 		(call $memory_id_set_by_pointer_ (get_local $pointer) (get_local $handle))
 		(call $legend_value_set_ (get_global $legend) (get_local $handle) (get_local $pointer))
 		(call $memory_allocate_handle_emit_ (get_local $handle))
@@ -124,7 +158,7 @@
 	(func $memory_type_ (param $handle i32) (result i32)
 		(call $memory_type_by_pointer_ (call $memory_dereference_handle_ (get_local $handle)))
 	)
-
+	
 	(func $memory_type_set_ (param $handle i32) (param $type i32)
 		(call $memory_type_set_by_pointer_ (call $memory_dereference_handle_ (get_local $handle)) (get_local $type))
 	)
@@ -173,14 +207,27 @@
 		(call $legend_value_get_ (get_global $legend) (get_local $handle))
 	)
 	
-	(func $memory_free_ (param $handle i32)
-		(call $memory_active_set_ (get_local $handle) (i32.const 0))
+	(func $memory_deallocate_ (param $handle i32)
+		(call $memory_deallocate_by_pointer_ (call $memory_dereference_handle_ (get_local $handle)))
 	)
 	
-	(func $memory_deallocate_ (param $pointer i32) (param $size i32) (result i32)
-		(i32.const 0)
+	(func $memory_deallocate_by_pointer_ (param $pointer i32)
+		
+		(call $allocator_deallocate (get_local $pointer)
+			(call $memory_type_sizeof_record_
+				(call $memory_type_by_pointer_ (get_local $pointer))
+			)
+		)
 	)
-	
+
+	(func $memory_type_sizeof_record_ (param $pointer i32) (result i32)
+		
+		(call_indirect (type $i32_to_i32)
+			(get_local $pointer)
+			(i32.const 300)
+		)
+	)
+
 	(func $memory_copy_ (param $a i32) (param $b i32) (param $length i32)
 		
 		(local $i i32)
@@ -236,7 +283,7 @@
 	(func $array_width_ (param $array i32) (result i32)
 		(i32.load (i32.add (get_local $array) (i32.const 16)))
 	)
-
+	
 	(func $array_width_set_ (param $array i32) (param $width i32)
 		(i32.store (i32.add (get_local $array) (i32.const 16)) (get_local $width))
 	)

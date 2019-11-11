@@ -1,0 +1,166 @@
+(module
+	
+	(import "./hole.watm")
+	(import "host" "print_string" (func $host_print_string (param i32)))
+	(import "host" "print_integer" (func $host_print_integer (param i32)))
+	(import "host" "table" (table 1 anyfunc))
+	(memory (import "host" "memory") 1)
+	
+	(func $frame_local_to_global (param $frame i32) (param $pointer i32) (result i32)
+		(i32.add (get_local $frame) (get_local $pointer))
+	)
+
+	(func $frame_global_to_local (param $frame i32) (param $pointer i32) (result i32)
+		(i32.sub (get_local $pointer) (get_local $frame))
+	)
+
+	(func $frame_width (result i32)
+		(i32.const 65536)
+	)
+
+	(func $frame_width_usable (result i32)
+		(i32.sub (call $frame_width) (call $frame_bytes_header))
+	)
+
+	(func $frame_bytes_header (result i32)
+		(i32.const 16)
+	)
+	
+	(func $frame_bytes_usable (result i32)
+		(i32.sub (call $frame_width) (call $frame_bytes_header))
+	)
+	
+	(func $frame_initialize (param $frame i32)
+		
+		(call $frame_bytes_used_set (get_local $frame) (i32.const 0))
+		(call $frame_cursor_allocate_set (get_local $frame) (call $frame_bytes_header))
+		(call $frame_cursor_compact_from_set (get_local $frame) (call $frame_bytes_header))
+		(call $frame_cursor_compact_to_set (get_local $frame) (call $frame_bytes_header))
+		(call $frame_hole_first_set (get_local $frame) (i32.const 0))
+		(call $frame_hole_current_set (get_local $frame) (i32.const 0))
+	)
+	
+	(func $frame_bytes_used (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 0)))
+	)
+	
+	(func $frame_bytes_used_set (param $frame i32) (param $bytes i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 0)) (get_local $bytes))
+	)
+
+	(func $frame_cursor_allocate (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 2)))
+	)
+	
+	(func $frame_cursor_allocate_set (param $frame i32) (param $cursor i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 2)) (get_local $cursor))
+	)
+
+	(func $frame_cursor_compact_from (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 4)))
+	)
+	
+	(func $frame_cursor_compact_from_set (param $frame i32) (param $cursor i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 4)) (get_local $cursor))
+	)
+
+	(func $frame_cursor_compact_to (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 6)))
+	)
+	
+	(func $frame_cursor_compact_to_set (param $frame i32) (param $cursor i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 6)) (get_local $cursor))
+	)
+
+	(func $frame_hole_first (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 8)))
+	)
+	
+	(func $frame_hole_first_set (param $frame i32) (param $hole i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 8)) (get_local $hole))
+	)
+	
+	(func $frame_hole_current (param $frame i32) (result i32)
+		(i32.load16_u (i32.add (get_local $frame) (i32.const 10)))
+	)
+	
+	(func $frame_hole_current_set (param $frame i32) (param $hole i32)
+		(i32.store16 (i32.add (get_local $frame) (i32.const 10)) (get_local $hole))
+	)
+
+	(func $frame_cursor_allocate_increment_by (param $frame i32) (param $bytes i32)
+		(call $frame_cursor_allocate_set (get_local $frame) (i32.add (call $frame_cursor_allocate (get_local $frame)) (get_local $bytes)))
+	)
+
+	(func $frame_cursor_allocate_decrement_by (param $frame i32) (param $bytes i32)
+		(call $frame_cursor_allocate_set (get_local $frame) (i32.sub (call $frame_cursor_allocate (get_local $frame)) (get_local $bytes)))
+	)
+	
+	(func $frame_bytes_used_increment_by (param $frame i32) (param $bytes i32)
+		(call $frame_bytes_used_set (get_local $frame) (i32.add (call $frame_bytes_used (get_local $frame)) (get_local $bytes)))
+	)
+
+	(func $frame_bytes_used_decrement_by (param $frame i32) (param $bytes i32)
+		(call $frame_bytes_used_set (get_local $frame) (i32.sub (call $frame_bytes_used (get_local $frame)) (get_local $bytes)))
+	)
+
+	(func $frame_allocate (param $frame i32) (param $type i32) (param $size i32) (result i32)
+		
+		(local $result i32)
+		(set_local $result (call $frame_allocate_using_cursor (get_local $frame) (get_local $type) (get_local $size)))
+		(call $frame_bytes_used_increment_by (get_local $frame) (get_local $size))
+		(get_local $result)
+	)
+	
+	(func $frame_allocate_using_cursor (param $frame i32) (param $type i32) (param $size i32) (result i32)
+		
+		(local $pointer i32)
+		(local $cursor i32)
+		(local $cursor_next i32)
+		(set_local $pointer (i32.const 0))
+		(set_local $cursor (call $frame_cursor_allocate (get_local $frame)))
+		(set_local $cursor_next (i32.add (get_local $cursor) (get_local $size)))
+		(if
+			(i32.le_u (get_local $cursor_next) (call $frame_width))
+			(then
+				(set_local $pointer (get_local $cursor))
+				(call $frame_cursor_allocate_set (get_local $frame) (get_local $cursor_next))
+			)
+		)
+		(get_local $pointer)
+	)
+	
+	(func $frame_bytes_free (param $frame i32) (result i32)
+		(i32.const 0)
+	)
+	
+	(func $frame_deallocate (param $frame i32) (param $pointer i32) (param $size i32)
+		
+		(local $pointer_local i32)
+		(set_local $pointer_local (call $frame_global_to_local (get_local $frame) (get_local $pointer)))
+		(call $frame_bytes_used_decrement_by (get_local $frame) (get_local $size))
+		(call $frame_allocate_hole (get_local $frame) (get_local $pointer) (get_local $size))
+	)
+	
+	(func $frame_allocate_hole (param $frame i32) (param $pointer i32) (param $length i32)
+		
+		(local $hole i32)
+		(local $hole_local i32)
+		(local $hole_local_next i32)
+		(set_local $hole (call $hole_initialize (get_local $pointer) (get_local $length)))
+		(set_local $hole_local (call $frame_global_to_local (get_local $frame) (get_local $hole)))
+		(set_local $hole_local_next (call $frame_hole_first (get_local $frame)))
+		(call $frame_hole_first_set (get_local $frame) (get_local $hole_local))
+		(call $hole_next_set (get_local $hole) (get_local $hole_local_next))
+	)
+	
+	(func $frame_compact_next (param $frame i32)
+		
+		;; compact the first hole of the frame
+		;; update the hole list to remove that hole
+		(local $hole i32)
+		(local $hole_next i32)
+		(set_local $hole (call $frame_hole_first (get_local $frame)))
+		(set_local $hole_next (call $hole_next (get_local $hole)))
+	)
+)

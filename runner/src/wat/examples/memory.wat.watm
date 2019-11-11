@@ -16,20 +16,22 @@
 	(import "../lib/stream.watm")
 	(import "../lib/table.watm")
 	(import "../lib/types.watm")
-	(import "host" "table" (table 1 anyfunc))
+	(import "../lib/allocator.watm")
 	(memory (import "host" "memory") 1)
-   (global $global (import "host" "global") (mut i32))	
+	(import "host" "table" (table 1 anyfunc))
 	(elem (i32.const 200) $free_iterate_each)
 	(elem (i32.const 201) $memory_block_allocated)
 	(elem (i32.const 202) $memory_handle_allocated)
-
+   (global $global (import "host" "global") (mut i32))	
+	
 	(function $main
 		
 		(call $setup)
 		(call $exercise)
 		(call $compact)
+		(call $test_allocator)
 	)
-
+	
 	(func $setup
 		
 		(call $memory_bootstrap)
@@ -141,6 +143,7 @@
 			(call $print_string (get_local $string))
 		) (else
 			(call $memory_free (get_local $string))
+			(call $item_remove (get_local $item))
 		))
 	)
 	
@@ -152,6 +155,25 @@
 		(if (i32.eq (i32.const 0) (i32.const 0)) (then
 			(call $compactor_compact (get_local $compactor))
 		))
+	)
+	
+	(func $test_allocator
+		
+		(local $allocator i32)
+		(local $pointer i32)
+		(local $i i32)
+		(set_local $allocator (call $allocator_new))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(set_local $pointer (call $allocator_allocate (get_local $allocator) (typeof "string") (i32.const 1000)))
+			(if (i32.eq (i32.const 0) (i32.const 0)) (then
+				(call $print_integer (get_local $pointer))
+			))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1000)))
+			(br 0)
+		))
+		(call $print_integer (call $allocator_page_total (get_local $allocator)))
 	)
 	
 	(export "main" (func $main))

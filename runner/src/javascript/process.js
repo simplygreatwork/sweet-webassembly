@@ -45,11 +45,20 @@ function process_watm(document) {
 function find_line(document, position) {
 	
 	let result = {}
+	console.log('document.source.length: ' + document.source.length);
+	console.log('line length: ' + document.source.split('\n').length);
+	console.log('position: ' + position);
+	console.log('first newline: ' + document.source.indexOf('\n'));
 	let a = document.source.indexOf('\n', position)
+	console.log('a: ' + a);
 	let b = document.source.lastIndexOf('\n', a - 1)
+	console.log('b: ' + b);
 	result.text = document.source.substring(b + 1, a)
+	console.log('result.text: ' + result.text);
 	result.line = document.source.substring(0, b).split('\n').length
+	console.log('result.line: ' + result.line);
 	result.char = position - b
+	console.log('result.char: ' + result.char);
 	return result
 }
 

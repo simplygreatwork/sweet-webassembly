@@ -7,7 +7,7 @@ function Host() {
 			maximum: 65536
 		}),
 		table: new WebAssembly.Table({
-			initial: 256,
+			initial: 512,
 			element: 'anyfunc'
 		}),
 		global: new WebAssembly.Global({

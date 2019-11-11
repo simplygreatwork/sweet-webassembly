@@ -13,6 +13,7 @@ class Runner {
 		let root = path.join(process.cwd(), '/src/wat/examples/index')
 		if (false) root = path.join(process.cwd(), '/src/wat/examples/macros')
 		if (false) root = path.join(process.cwd(), '/src/wat/examples/memory')
+		if (true) root = path.join(process.cwd(), '/src/wat/examples/memory_next')
 		logger('index').log('root module: ' + root)
 		let loader = new Loader({
 			imports: {
