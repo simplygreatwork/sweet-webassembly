@@ -103,7 +103,7 @@
 	(func $frame_bytes_used_decrement_by (param $frame i32) (param $bytes i32)
 		(call $frame_bytes_used_set (get_local $frame) (i32.sub (call $frame_bytes_used (get_local $frame)) (get_local $bytes)))
 	)
-
+	
 	(func $frame_allocate (param $frame i32) (param $type i32) (param $size i32) (result i32)
 		
 		(local $result i32)

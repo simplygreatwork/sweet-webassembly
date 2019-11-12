@@ -77,10 +77,7 @@
 	(func $allocator_frame_next
 		
 		(call $allocator_frame_indice_increment)
-		(if (i32.eq
-			(call $allocator_frame_indice)
-			(call $allocator_frame_total)
-		) (then
+		(if (i32.eq (call $allocator_frame_indice) (call $allocator_frame_total)) (then
 			(call $allocator_frame_indice_set (i32.const 0))
 		))
 	)
