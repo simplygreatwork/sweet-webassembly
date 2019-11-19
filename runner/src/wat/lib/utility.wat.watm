@@ -22,8 +22,4 @@
 	(func $swap_test (param $reference_a i32) (param $reference_b i32)	;; need to use compilation phase
 		(call $swap_test_ (get_local $reference_a) (get_local $reference_b))
 	)
-	
-	(func $get_type (param $value i32) (result i32)
-		(call $get_type_ (get_local $value))
-	)
 )

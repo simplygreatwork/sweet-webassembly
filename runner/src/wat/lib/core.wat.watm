@@ -6,13 +6,17 @@
 	(import "host" "print_string" (func $host_print_string (param i32)))
 	(import "host" "print_integer" (func $host_print_integer (param i32)))
 	(import "host" "table" (table 1 anyfunc))
+	(elem (i32.const 400) $memory_type_by_pointer_)
+	(elem (i32.const 401) $memory_id_by_pointer_)
+	(elem (i32.const 402) $memory_copy_)
+	(elem (i32.const 403) $legend_value_set_)
+	(type $i32_to_void (func (param i32)))
+	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))	
+	(type $i32_to_i32 (func (param i32) (result i32)))
 	(memory (import "host" "memory") 1)
 	(global $legend (import "host" "legend") (mut i32))
 	(global $on_memory_allocate_block (import "host" "on_memory_allocate_block") (mut i32))
 	(global $on_memory_allocate_handle (import "host" "on_memory_allocate_handle") (mut i32))
-	(type $i32_to_void (func (param i32)))
-	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))	
-	(type $i32_to_i32 (func (param i32) (result i32)))
 	
 	(func $memory_bootstrap_
 		
@@ -74,14 +78,12 @@
 		
 		(local $function i32)
 		(set_local $function (get_global $on_memory_allocate_block))
-		(if
-			(i32.ne (get_local $function) (i32.const 0)) (then
-				(call_indirect (type $i32_i32_i32_to_void)
-					(get_local $pointer) (get_local $type) (get_local $size)
-					(get_local $function)
-				)
+		(if (i32.ne (get_local $function) (i32.const 0)) (then
+			(call_indirect (type $i32_i32_i32_to_void)
+				(get_local $pointer) (get_local $type) (get_local $size)
+				(get_local $function)
 			)
-		)
+		))
 	)
 	
 	(func $memory_allocate_handle_ (param $pointer i32) (result i32)
@@ -103,15 +105,12 @@
 		
 		(local $function i32)
 		(set_local $function (get_global $on_memory_allocate_handle))
-		(if
-			(i32.ne (get_local $function) (i32.const 0))
-			(then
-				(call_indirect (type $i32_to_void)
-					(get_local $handle)
-					(get_local $function)
-				)
+		(if (i32.ne (get_local $function) (i32.const 0)) (then
+			(call_indirect (type $i32_to_void)
+				(get_local $handle)
+				(get_local $function)
 			)
-		)
+		))
 	)
 	
 	(func $memory_store_ (param $address i32) (param $offset i32) (param $value i32)
@@ -189,14 +188,9 @@
 	)
 	
 	(func $memory_deallocate_by_pointer_ (param $pointer i32)
-		
-		(call $allocator_deallocate (get_local $pointer)
-			(call $memory_type_sizeof_record_
-				(call $memory_type_by_pointer_ (get_local $pointer))
-			)
-		)
+		(call $allocator_deallocate (get_local $pointer))
 	)
-
+	
 	(func $memory_type_sizeof_record_ (param $pointer i32) (result i32)
 		
 		(call_indirect (type $i32_to_i32)
@@ -268,14 +262,9 @@
 	(func $array_value_get_ (param $array i32) (param $index i32) (result i32)
 
 		(i32.load
-			(i32.add
-				(get_local $array)
-				(i32.add 
-					(i32.const 20)
-					(i32.mul
-						(call $array_width_ (get_local $array))
-						(get_local $index)
-					)
+			(i32.add (get_local $array)
+				(i32.add (i32.const 20)
+					(i32.mul (call $array_width_ (get_local $array)) (get_local $index))
 				)
 			)
 		)
@@ -284,12 +273,9 @@
 	(func $array_value_set_ (param $array i32) (param $index i32) (param $value i32)
 		
 		(i32.store
-			(i32.add
-				(get_local $array)
-				(i32.add
-					(i32.const 20)
-					(i32.mul
-						(call $array_width_ (get_local $array))
+			(i32.add (get_local $array)
+				(i32.add (i32.const 20)
+					(i32.mul (call $array_width_ (get_local $array))
 						(get_local $index)
 					)
 				)
@@ -366,13 +352,10 @@
 		
 		(local $result i32)
 		(set_local $result (call $array_value_get_ (get_local $array) (get_local $index)))
-		(if
-			(i32.eq (get_local $result) (i32.const 0))
-			(then
-				(set_local $result (call $legend_array_new_ (get_local $legend)))
-				(call $array_value_set_ (get_local $array) (get_local $index) (get_local $result))
-			)
-		)
+		(if (i32.eq (get_local $result) (i32.const 0)) (then
+			(set_local $result (call $legend_array_new_ (get_local $legend)))
+			(call $array_value_set_ (get_local $array) (get_local $index) (get_local $result))
+		))
 		(get_local $result)
 	)
 	
@@ -453,10 +436,5 @@
 		(set_local $temp (get_local $a))
 		(set_local $a (get_local $b))
 		(set_local $b (get_local $temp))
-	)
-	
-	(func $get_type_ (param $value i32) (result i32)
-		;; (call $memory_load (get_local $value) (i32.const 0))
-		(i32.load (get_local $value))
 	)
 )

@@ -14,10 +14,12 @@
 	(import "./stream.watm")
 	(memory (import "host" "memory") 1)
 	(import "host" "table" (table 1 anyfunc))
-	(elem (i32.const 300) $types_sizeof_record)
+	(elem (i32.const 300) $types_strings_get)
+	(elem (i32.const 301) $types_sizeof_type)
+	(elem (i32.const 302) $types_sizeof_record)
    (global $type_strings (import "host" "type_strings") (mut i32))
-
-	(func $type_strings_init
+	
+	(func $types_strings_init
 		
 		(local $array i32)
 		(set_local $array (call $array_new (i32.const 256)))
@@ -39,7 +41,7 @@
 		(set_global $type_strings (get_local $array))
 	)
 	
-	(func $type_strings_get (param $type i32) (result i32)
+	(func $types_strings_get (param $type i32) (result i32)
 		
 		(local $result i32)
 		(set_local $result (i32.const -1))

@@ -42,7 +42,7 @@
 			(set_local $active (call $memory_active_by_pointer (get_local $pointer)))
 			(br_if 1 (i32.eq (get_local $type) (i32.const 0)))
 			(br_if 1 (i32.ge_u (get_local $pointer) (get_local $boundary)))
-			(call $print_string (call $type_strings_get (get_local $type)))
+			(call $print_string (call $types_strings_get (get_local $type)))
 			(if (i32.eq (get_local $active) (i32.const 0)) (then 
 				(call $print_string (string "    is inactive"))
 			))
