@@ -110,6 +110,9 @@
 				(call $string_content_bytes (call $string_length (get_local $handle)))
 			))
 		))
+		(if (i32.eq (get_local $type) (typeof "hole")) (then
+			(set_local $result (i32.load16_u (i32.add (get_local $pointer) (i32.const 2))))
+		))
 		(get_local $result)
 	)
 	

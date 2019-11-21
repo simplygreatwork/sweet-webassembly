@@ -156,7 +156,7 @@
 	)
 	
 	(func $allocator_frame_by_pointer (param $pointer i32) (result i32)
-
+		
 		(i32.add
 			(call $allocator_frames_offset)
 			(i32.mul (i32.div_u (get_local $pointer) (call $frame_width)) (call $frame_width))

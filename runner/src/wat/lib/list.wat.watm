@@ -43,7 +43,7 @@
 		(set_local $result (i32.const 0))
 		(set_local $item (get_local $list))
 		(block (loop
-			(set_local $item (call $memory_load (get_local $item) (i32.const 0)))
+			(set_local $item (call $item_next (get_local $item)))
 			(br_if 1 (i32.eq (get_local $item) (get_local $list)))
 			(set_local $result (i32.add (get_local $result) (i32.const 1)))
 			(br 0)

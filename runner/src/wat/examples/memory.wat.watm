@@ -42,7 +42,7 @@
 		(set_local $list (call $list_new))
 		(call $allocate (get_local $list))
 		(call $deallocate (get_local $list))
-		;;(call $compact (get_local $list))
+		(call $compact (get_local $list))
 		(call $display (get_local $list))
 	)
 	
@@ -63,6 +63,8 @@
 			(br_if 1 (i32.eq (get_local $i) (i32.const 10)))
 			(br 0)
 		))
+		(call $print_string (string "list_length"))
+		(call $print_integer (call $number_value (call $list_length (get_local $list))))
 		(call $print_string (string "frame_total"))
 		(call $print_integer (call $allocator_frame_total))
 	)
@@ -75,6 +77,8 @@
 		(set_local $context (i32.const 0))
 		(set_local $deallocate_iterate_each (i32.const 200))
 		(call $list_iterate (get_local $list) (get_local $deallocate_iterate_each) (get_local $context))
+		(call $print_string (string "list_length"))
+		(call $print_integer (call $number_value (call $list_length (get_local $list))))
 	)
 	
 	(func $deallocate_iterate_each (param $item i32) (param $index i32) (param $context i32)

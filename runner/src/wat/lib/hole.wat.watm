@@ -29,7 +29,7 @@
 	(func $hole_type_set (param $hole i32) (param $type i32)
 		(i32.store16 (i32.add (get_local $hole) (i32.const 0)) (get_local $type))
 	)
-
+	
 	(func $hole_length (param $hole i32) (result i32)
 		(i32.load16_u (i32.add (get_local $hole) (i32.const 2)))
 	)
@@ -43,7 +43,7 @@
 	)
 
 	(func $hole_next_set (param $hole i32) (param $next i32)
-		(i32.store16 (i32.add (get_local $hole) (i32.const 4)) (get_local $next))		
+		(i32.store16 (i32.add (get_local $hole) (i32.const 4)) (get_local $next))
 	)
 	
 	(func $hole_skip (param $hole i32) (result i32)
@@ -52,5 +52,5 @@
 
 	(func $hole_skip_set (param $hole i32) (param $next i32)
 		(i32.store16 (i32.add (get_local $hole) (i32.const 6)) (get_local $next))		
-	)	
+	)
 )

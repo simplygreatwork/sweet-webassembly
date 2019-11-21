@@ -10,6 +10,8 @@
 	(elem (i32.const 401) $memory_id_by_pointer_)
 	(elem (i32.const 402) $memory_copy_)
 	(elem (i32.const 403) $legend_value_set_)
+	(elem (i32.const 404) $legend_array_repoint_)
+	(elem (i32.const 405) $array_parent_)
 	(type $i32_to_void (func (param i32)))
 	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))	
 	(type $i32_to_i32 (func (param i32) (result i32)))
@@ -354,11 +356,31 @@
 		(set_local $result (call $array_value_get_ (get_local $array) (get_local $index)))
 		(if (i32.eq (get_local $result) (i32.const 0)) (then
 			(set_local $result (call $legend_array_new_ (get_local $legend)))
+			(call $array_parent_set_ (get_local $result) (get_local $array))
 			(call $array_value_set_ (get_local $array) (get_local $index) (get_local $result))
 		))
 		(get_local $result)
 	)
-	
+
+	(func $legend_array_repoint_ (param $legend i32) (param $array i32) (param $from i32) (param $to i32)
+		
+		(local $i i32)
+		(local $pointer i32)
+		(set_local $i (i32.const 0))
+
+		(if (i32.ne (get_local $array) (i32.const 0)) (then
+			(block (loop
+				(set_local $pointer (call $array_value_get_ (get_local $array) (get_local $i)))
+				(if (i32.eq (get_local $pointer) (get_local $from)) (then
+					(call $array_value_set_ (get_local $array) (get_local $i) (get_local $to))
+				))
+				(set_local $i (i32.add (get_local $i) (i32.const 1)))
+				(br_if 1 (i32.eq (get_local $i) (call $legend_base_ (get_local $legend))))
+				(br 0)
+			))
+		))
+	)
+
 	(func $legend_value_set_ (param $legend i32) (param $key i32) (param $value i32)
 		
 		(local $base i32)
