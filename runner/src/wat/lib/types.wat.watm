@@ -107,12 +107,7 @@
 		))
 		(if (i32.eq (get_local $type) (typeof "string")) (then
 			(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
-			(if (i32.eq (i32.const 0) (i32.const 0)) (then
-				(set_local $length (i32.load (i32.add (get_local $pointer) (i32.const 8))))
-			) (else
-				;; fails: why?
-				(set_local $length (call $string_length (get_local $handle)))
-			))
+			(set_local $length (call $string_length (get_local $handle)))
 			(set_local $bytes (call $string_content_bytes (get_local $length)))
 			(set_local $result (i32.add
 				(get_local $result)
