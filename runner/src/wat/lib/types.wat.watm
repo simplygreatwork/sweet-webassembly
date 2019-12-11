@@ -80,11 +80,13 @@
 		(local $result i32)
 		(local $type i32)
 		(local $handle i32)
+		(local $length i32)
+		(local $bytes i32)
 		(set_local $result (i32.const -1))
 		(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
 		(set_local $result (i32.add (call $types_sizeof_type (get_local $type)) (i32.const 8)))
-		(if (i32.eq (get_local $type) (typeof "void")) (then
-			(set_local $result (i32.add (get_local $result) (i32.const 0)))
+		(if (i32.eq (get_local $type) (typeof "hole")) (then
+			(set_local $result (i32.load16_u (i32.add (get_local $pointer) (i32.const 2))))
 		))
 		(if (i32.eq (get_local $type) (typeof "legend_array")) (then 
 			(set_local $result (i32.add
@@ -105,13 +107,17 @@
 		))
 		(if (i32.eq (get_local $type) (typeof "string")) (then
 			(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
+			(if (i32.eq (i32.const 0) (i32.const 0)) (then
+				(set_local $length (i32.load (i32.add (get_local $pointer) (i32.const 8))))
+			) (else
+				;; fails: why?
+				(set_local $length (call $string_length (get_local $handle)))
+			))
+			(set_local $bytes (call $string_content_bytes (get_local $length)))
 			(set_local $result (i32.add
 				(get_local $result)
-				(call $string_content_bytes (call $string_length (get_local $handle)))
+				(get_local $bytes)
 			))
-		))
-		(if (i32.eq (get_local $type) (typeof "hole")) (then
-			(set_local $result (i32.load16_u (i32.add (get_local $pointer) (i32.const 2))))
 		))
 		(get_local $result)
 	)

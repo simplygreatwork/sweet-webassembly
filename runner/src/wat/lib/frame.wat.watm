@@ -6,13 +6,13 @@
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
 	(type $i32_to_i32 (func (param i32) (result i32)))
+	(type $i32_i32_to_i32 (func (param i32) (param i32) (result i32)))
 	(type $i32_to_void (func (param i32)))
 	(type $i32_i32_to_void (func (param i32) (param i32)))
 	(type $i32_i32_i32_to_void (func (param i32) (param i32) (param i32)))
 	(type $i32_i32_i32_i32_to_void (func (param i32) (param i32) (param i32) (param i32)))
-
 	(global $legend (import "host" "legend") (mut i32))
-
+	
 	(func $frame_local_to_global (param $frame i32) (param $pointer i32) (result i32)
 		(i32.add (get_local $frame) (get_local $pointer))
 	)
@@ -106,7 +106,7 @@
 	(func $frame_bytes_used_increment_by (param $frame i32) (param $bytes i32)
 		(call $frame_bytes_used_set (get_local $frame) (i32.add (call $frame_bytes_used (get_local $frame)) (get_local $bytes)))
 	)
-		
+	
 	(func $frame_bytes_used_decrement_by (param $frame i32) (param $bytes i32)
 		(call $frame_bytes_used_set (get_local $frame) (i32.sub (call $frame_bytes_used (get_local $frame)) (get_local $bytes)))
 	)
@@ -166,47 +166,84 @@
 	
 	(func $frame_compact (param $frame i32)
 		
+		(local $debug i32)
 		(local $boundary i32)
+		(local $boundary_new i32)
 		(local $pointer i32)
 		(local $type i32)
 		(local $handle i32)
 		(local $parent i32)
 		(local $size i32)
 		(local $destination i32)
-		(set_local $boundary (call $frame_local_to_global (get_local $frame) (call $frame_width)))
+		(local $delta i32)
+		(set_local $debug (i32.const 1))
+		(set_local $boundary (call $frame_local_to_global (get_local $frame) (call $frame_cursor_allocate (get_local $frame))))
 		(set_local $pointer (call $frame_local_to_global (get_local $frame) (call $frame_bytes_header)))
 		(set_local $destination (call $frame_local_to_global (get_local $frame) (call $frame_bytes_header)))
+		(set_local $delta (i32.const 0))
 		(block (loop
-			(br_if 1 (i32.ge_u (get_local $pointer) (get_local $boundary)))
+			(if (i32.ge_u (get_local $pointer) (get_local $boundary)) (then (br 2)))
 			(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
-			(br_if 1 (i32.eq (get_local $type) (i32.const 0)))
+			(set_local $size (call $types_sizeof_record (get_local $pointer)))
 			(if (i32.eq (get_local $type) (typeof "hole")) (then
-				(set_local $size (call $types_sizeof_record (get_local $pointer)))
-				(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
 				(call $frame_hole_first_set (get_local $frame) (call $hole_next (get_local $pointer)))
+				(set_local $delta (i32.add (get_local $delta) (get_local $size)))
+			) (else (if (i32.eq (get_local $type) (typeof "legend")) (then
+
+			) (else (if (i32.eq (get_local $type) (typeof "legend_array")) (then
+				(set_local $destination (i32.sub (get_local $pointer) (get_local $delta)))
+				(call $memory_copy (get_local $pointer) (get_local $destination) (get_local $size))
+				(call $legend_array_repoint (get_global $legend) (get_local $destination) (get_local $pointer) (get_local $destination))
 			) (else
-				(if (i32.eq (get_local $type) (typeof "legend_array")) (then
-					(set_local $size (call $types_sizeof_record (get_local $pointer)))
-					(set_local $parent (call $legend_array_parent (get_local $pointer)))
-					(call $memory_copy (get_local $pointer) (get_local $destination) (get_local $size))
-					(call $legend_array_repoint (get_global $legend) (get_local $parent) (get_local $pointer) (get_local $destination))
-					(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
-					(set_local $destination (i32.add (get_local $destination) (get_local $size)))
-				) (else
-					(set_local $size (call $types_sizeof_record (get_local $pointer)))
-					(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
-					(call $memory_copy (get_local $pointer) (get_local $destination) (get_local $size))
-					(call $legend_value_set (get_global $legend) (get_local $handle) (get_local $destination))
-					(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
-					(set_local $destination (i32.add (get_local $destination) (get_local $size)))
-				))
-			))
+				(set_local $destination (i32.sub (get_local $pointer) (get_local $delta)))
+				(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
+				(call $memory_copy (get_local $pointer) (get_local $destination) (get_local $size))
+				(call $legend_value_set (get_global $legend) (get_local $handle) (get_local $destination))
+			))))))
+			(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
+			(br 0)
+		))
+		(set_local $boundary_new (i32.sub (get_local $boundary) (get_local $delta)))
+		(if (i32.eq (i32.const 1) (i32.const 0)) (then
+			(call $print_integer (i32.const 9999))
+			(call $print_integer (get_local $boundary))
+			(call $print_integer (get_local $pointer))
+			(call $print_integer (get_local $boundary_new))
+			(call $print_integer (get_local $delta))
+		))
+		(call $frame_cursor_allocate_set (get_local $frame) (call $frame_global_to_local (get_local $frame) (get_local $boundary_new)))
+	)
+	
+	(func $frame_validate (param $frame i32)
+		
+		(local $boundary i32)
+		(local $pointer i32)
+		(local $type i32)
+		(local $size i32)
+		(local $handle i32)
+		(set_local $boundary (call $frame_local_to_global (get_local $frame) (call $frame_cursor_allocate (get_local $frame))))
+		(set_local $pointer (call $frame_local_to_global (get_local $frame) (call $frame_bytes_header)))
+		(if (i32.eq (i32.const 0) (i32.const 0)) (then
+			(call $print_integer (i32.const 1111))
+			(call $print_integer (get_local $boundary))
+		))
+		(block (loop
+			(call $print_integer (i32.const 2222))
+			(call $print_integer (get_local $pointer))
+			(if (i32.ge_u (get_local $pointer) (get_local $boundary)) (then (br 2)))
+			(set_local $type (call $memory_type_by_pointer (get_local $pointer)))
+			(call $print_integer (get_local $type))
+			(set_local $size (call $types_sizeof_record (get_local $pointer)))
+			(call $print_integer (get_local $size))
+			(set_local $handle (call $memory_id_by_pointer (get_local $pointer)))
+			(call $print_integer (get_local $handle))
+			(set_local $pointer (i32.add (get_local $pointer) (get_local $size)))
 			(br 0)
 		))
 	)
-	
-	(func $frame_compact_step (param $frame i32) (param $pointer i32)
 
+	(func $frame_compact_step (param $frame i32) (param $pointer i32)
+		
 	)
 	
 	(func $memory_type_by_pointer (param $pointer i32) (result i32)
@@ -216,21 +253,29 @@
 	(func $memory_id_by_pointer (param $pointer i32) (result i32)
 		(call_indirect (type $i32_to_i32) (get_local $pointer) (i32.const 401))
 	)
+	
+	(func $memory_load (param $address i32) (param $offset i32) (result i32)
+		(call_indirect (type $i32_i32_to_i32) (get_local $address) (get_local $offset) (i32.const 402))
+	)
 
 	(func $memory_copy (param $a i32) (param $b i32) (param $length i32)
-		(call_indirect (type $i32_i32_i32_to_void) (get_local $a) (get_local $b) (get_local $length) (i32.const 402))
+		(call_indirect (type $i32_i32_i32_to_void) (get_local $a) (get_local $b) (get_local $length) (i32.const 403))
 	)
 
 	(func $legend_value_set (param $legend i32) (param $key i32) (param $value i32)
-		(call_indirect (type $i32_i32_i32_to_void) (get_local $legend) (get_local $key) (get_local $value) (i32.const 403))
+		(call_indirect (type $i32_i32_i32_to_void) (get_local $legend) (get_local $key) (get_local $value) (i32.const 404))
+	)
+
+	(func $legend_value_get (param $legend i32) (param $key i32) (result i32)
+		(call_indirect (type $i32_i32_to_i32) (get_local $legend) (get_local $key) (i32.const 405))
 	)
 
 	(func $legend_array_repoint (param $legend i32) (param $array i32) (param $from i32) (param $to i32)
-		(call_indirect (type $i32_i32_i32_i32_to_void) (get_local $legend) (get_local $array) (get_local $from) (get_local $to) (i32.const 404))
+		(call_indirect (type $i32_i32_i32_i32_to_void) (get_local $legend) (get_local $array) (get_local $from) (get_local $to) (i32.const 406))
 	)
 
 	(func $legend_array_parent (param $array i32) (result i32)
-		(call_indirect (type $i32_to_i32) (get_local $array) (i32.const 405))
+		(call_indirect (type $i32_to_i32) (get_local $array) (i32.const 407))
 	)
 
 	(func $types_strings_get (param $type i32) (result i32)

@@ -55,4 +55,8 @@
 	(func $legend_value_get (param $legend i32) (param $key i32) (result i32)
 		(call $legend_value_get_ (get_local $legend) (get_local $key))
 	)
+
+	(func $legend_dump (param $legend i32)
+		(call $legend_dump_ (get_local $legend))
+	)
 )

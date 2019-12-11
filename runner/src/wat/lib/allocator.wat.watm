@@ -22,7 +22,7 @@
 		(call $allocator_frame_merge_pointer_set (i32.const -1))
 		(call $allocator_grow)
 	)
-
+	
 	(func $allocator_frame_total (result i32)
 		(i32.load16_u (i32.const 20))
 	)
@@ -144,7 +144,7 @@
 	)
 	
 	(func $allocator_frames_offset (result i32)
-		(i32.mul (i32.const 4) (call $frame_width))
+		(i32.mul (i32.const 0) (call $frame_width))
 	)
 	
 	(func $allocator_frame_by_indice (param $indice i32) (result i32)
@@ -173,9 +173,23 @@
 	(func $allocator_compact
 		(call $allocator_compact_frame (call $allocator_frame_compact_indice))
 	)
-	
+
 	(func $allocator_compact_frame (param $indice i32)
-		(call $frame_compact (call $allocator_frame_by_indice (get_local $indice)))
+
+		(local $frame i32)
+		(set_local $frame (call $allocator_frame_by_indice (get_local $indice)))
+		(if (i32.eq (i32.const 0) (i32.const 0)) (then (call $frame_compact (get_local $frame))))
+	)
+
+	(func $allocator_validate
+		(call $allocator_validate_frame (call $allocator_frame_compact_indice))
+	)
+	
+	(func $allocator_validate_frame (param $indice i32)
+		
+		(local $frame i32)
+		(set_local $frame (call $allocator_frame_by_indice (get_local $indice)))
+		(if (i32.eq (i32.const 1) (i32.const 0)) (then (call $frame_validate (get_local $frame))))
 	)
 	
 	(func $allocator_compact_frame_step

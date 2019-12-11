@@ -19,9 +19,11 @@
 	(func $string_new (param $length i32) (result i32)
 		
 		(local $string i32)
+		(local $bytes i32)
+		(set_local $bytes (call $string_content_bytes (get_local $length)))
 		(set_local $string (call $memory_allocate (typeof "string") (i32.add
 			(call $string_bytes)
-			(call $string_content_bytes (get_local $length))
+			(get_local $bytes)
 		)))
 		(call $string_length_set (get_local $string) (get_local $length))
 		(get_local $string)
@@ -41,7 +43,7 @@
 	
 	(func $string_set_char (param $string i32) (param $index i32) (param $value i32)
 		
-		(call $memory_store
+		(call $memory_store8
 			(get_local $string)
 			(i32.add (i32.const 4) (get_local $index))
 			(get_local $value)

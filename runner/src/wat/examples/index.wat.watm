@@ -353,7 +353,7 @@
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Reserved handle count"))
 		(call $print_string (string "------------------------------"))
-		(call $print_integer (i32.load (i32.const 4)))
+		(call $print_integer (i32.load (i32.const 12)))
 	)
 
 	(func $test_array
@@ -382,9 +382,29 @@
 		(set_local $i (i32.const 0))
 		(block (loop
 			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $i))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br 0)
+		))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(call $legend_value_set (get_local $legend) (get_local $i) (i32.const 1025))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br 0)
+		))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $i))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br 0)
+		))
+		(set_local $i (i32.const 300))
+		(block (loop
 			(call $print_integer (call $legend_value_get (get_local $legend) (get_local $i)))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 81)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
 			(br 0)
 		))
 	)

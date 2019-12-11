@@ -12,7 +12,7 @@
 	(func $hole_bytes_actual (param $hole i32) (result i32)
 		(call $hole_length (get_local $hole))
 	)
-
+	
 	(func $hole_initialize (param $pointer i32) (param $length i32) (result i32)
 		
 		(local $hole i32)

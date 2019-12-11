@@ -43,7 +43,11 @@
 	(func $memory_store (param $address i32) (param $offset i32) (param $value i32)
 		(call $memory_store_ (get_local $address) (get_local $offset) (get_local $value))
 	)
-	
+
+	(func $memory_store8 (param $address i32) (param $offset i32) (param $value i32)
+		(call $memory_store8_ (get_local $address) (get_local $offset) (get_local $value))
+	)
+
 	(func $memory_load (param $address i32) (param $offset i32) (result i32)
 		(call $memory_load_ (get_local $address) (get_local $offset))
 	)
@@ -91,7 +95,7 @@
 	(func $memory_id_set (param $handle i32) (param $id i32)
 		(call $memory_id_set_ (get_local $handle) (get_local $id))
 	)
-
+	
 	(func $memory_id_by_pointer (param $pointer i32) (result i32)
 		(call $memory_id_by_pointer_ (get_local $pointer))
 	)
