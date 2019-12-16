@@ -189,7 +189,28 @@
 		
 		(local $frame i32)
 		(set_local $frame (call $allocator_frame_by_indice (get_local $indice)))
-		(if (i32.eq (i32.const 1) (i32.const 0)) (then (call $frame_validate (get_local $frame))))
+		(call $frame_validate (get_local $frame))
+	)
+
+	(func $allocator_info
+		
+		(local $total i32)
+		(local $i i32)
+		(local $frame i32)
+		(local $cursor i32)
+		(set_local $total (call $allocator_frame_total))
+		(call $print_integer (get_local $total))
+		(set_local $i (i32.const 0))
+		(block (loop
+			(set_local $frame (call $allocator_frame_by_indice (get_local $i)))
+			(set_local $cursor (call $frame_cursor_allocate (get_local $frame)))
+			(call $print_integer (get_local $cursor))
+			(set_local $i (i32.add (get_local $i) (i32.const 1)))
+			(if (i32.eq (get_local $i) (get_local $total)) (then
+				(br 2)
+			))
+			(br 0)
+		))
 	)
 	
 	(func $allocator_compact_frame_step
