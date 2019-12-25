@@ -46,7 +46,7 @@
 		(block (loop
 			(call $exercise (get_local $list))			
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 16)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 20)))
 			(br 0)
 		))
 		(call $boundary)
@@ -65,7 +65,7 @@
 		(local $pointer i32)
 		(local $string i32)
 		(local $i i32)
-		(call $print_string (string "allocate"))
+		;;(call $print_string (string "allocate"))
 		(set_local $i (i32.const 0))
 		(block (loop
 			(if (i32.eq (i32.const 1) (i32.const 0)) (then
@@ -75,7 +75,7 @@
 			))
 			(call $list_append (get_local $list) (get_local $pointer))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 16)))
+			(br_if 1 (i32.eq (get_local $i) (i32.const 100)))
 			(br 0)
 		))
 		(if (i32.eq (i32.const 1) (i32.const 0)) (then
@@ -88,7 +88,7 @@
 		
 		(local $context i32)
 		(local $deallocate_iterate_each i32)
-		(call $print_string (string "deallocate"))
+		;;(call $print_string (string "deallocate"))
 		(set_local $context (i32.const 0))
 		(set_local $deallocate_iterate_each (i32.const 200))
 		(call $list_iterate (get_local $list) (get_local $deallocate_iterate_each) (get_local $context))
@@ -109,7 +109,7 @@
 	
 	(func $compact (param $list i32)
 
-		(call $print_string (string "compact"))
+		;;(call $print_string (string "compact"))
 		(if (i32.eq (i32.const 0) (i32.const 0)) (then
 			(call $allocator_compact_frame (i32.const 0))
 		))
@@ -127,7 +127,7 @@
 		
 		(local $context i32)
 		(local $display_iterate_each i32)
-		(call $print_string (string "display"))
+		;;(call $print_string (string "display"))
 		(call $print_integer (call $number_value (call $list_length (get_local $list))))
 		(set_local $context (i32.const 0))
 		(set_local $display_iterate_each (i32.const 201))
