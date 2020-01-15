@@ -37,7 +37,6 @@
 		(call $array_value_set (get_local $array) (typeof "tree") (string "tree"))
 		(call $array_value_set (get_local $array) (typeof "tree_node") (string "tree_node"))
 		(call $array_value_set (get_local $array) (typeof "stream") (string "stream"))
-		(call $array_value_set (get_local $array) (typeof "compactor") (string "compactor"))
 		(set_global $type_strings (get_local $array))
 	)
 	
@@ -71,7 +70,6 @@
 		(if (i32.eq (get_local $type) (typeof "tree")) (then (set_local $result (call $tree_bytes))))
 		(if (i32.eq (get_local $type) (typeof "tree_node")) (then (set_local $result (call $node_bytes))))
 		(if (i32.eq (get_local $type) (typeof "stream")) (then (set_local $result (call $stream_bytes))))
-		(if (i32.eq (get_local $type) (typeof "compactor")) (then (set_local $result (call $compactor_bytes_))))
 		(get_local $result)
 	)
 	
@@ -118,10 +116,6 @@
 	)
 	
 	(func $void_bytes_ (result i32)
-		(i32.const 0)
-	)
-	
-	(func $compactor_bytes_ (result i32)
 		(i32.const 0)
 	)
 )

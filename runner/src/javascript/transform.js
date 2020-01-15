@@ -22,7 +22,7 @@ function transform(tree, system) {
 		require('./macros/exports.js'),
 		require('./macros/typeof.js'),
 		require('./macros/funcref.js')(system)
-    ]
+	]
 	walk({ root: tree[0], visit: function(node, index, parents) {
 		if (node.type == 'expression') {
 			macros.forEach(function(macro) {

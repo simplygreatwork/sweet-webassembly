@@ -13,7 +13,7 @@ class System {
 		this.imports = options.imports
 		this.documents = {}
 		this.table = new Table(this)
-    }
+	}
 	
 	start(path_) {
 		

@@ -19,17 +19,15 @@ class Table {
 		
 		let key = module_ + '/' + function_
 		if (this.elements[key] === undefined) {
-			this.elements[key] = this.counter;
-			this.counter = this.counter + 1
 			let document = process.find_document(this.system, module_)
 			if (document) {
 				let func = process.find_function(document, function_)
 				if (func) {
+					this.elements[key] = this.counter++;
 					let id = this.elements[key]
 					let code = `\n\t(elem (i32.const ${id}) ${function_})`
 					let tree = parse(code)
 					query.append(document.tree[0], tree[0])
-					return this.elements[key]
 				}
 			}
 		}

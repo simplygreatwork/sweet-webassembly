@@ -4,7 +4,6 @@
 	(import "../lib/array.watm")
 	(import "../lib/legend.watm")
 	(import "../lib/memory.watm")
-	(import "../lib/compactor.watm")
 	(import "../lib/string.watm")
 	(import "../lib/boolean.watm")
 	(import "../lib/number.watm")

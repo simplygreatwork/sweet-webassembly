@@ -231,7 +231,6 @@ function find_function(document, name) {
 	return result
 }
 
-
 module.exports = {
 	
 	process_md: process_md,
