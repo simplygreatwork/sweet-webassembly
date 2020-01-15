@@ -2,16 +2,18 @@
 const fs = require('fs')
 const path = require('path')
 const Document = require('./document')
+const Table = require('./table')
 const process = require('./process')
 const logger = require('./logger')()
 
-class Loader {
+class System {
 	
 	constructor(options) {
 		
 		this.imports = options.imports
 		this.documents = {}
-	}
+		this.table = new Table(this)
+    }
 	
 	start(path_) {
 		
@@ -79,9 +81,11 @@ class Loader {
 			logger('loader').log('instantiate: ' + path.basename(document.path) + ' (' + document.path + ')')
 			let name = path.basename(document.path)
 			let key = name.split('.')[0]
-			this.imports[key] = process.instantiate(document, this.imports)
+			let imports = this.imports
+			let system = this
+			this.imports[key] = process.instantiate(document, imports, system)
 		}
-	}
+	 }
 }
 
-module.exports = Loader
+module.exports = System

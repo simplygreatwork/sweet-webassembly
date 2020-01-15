@@ -38,7 +38,7 @@
 	(func $allocator_frame_allocate_indice_set (param $indice i32) 
 		(i32.store16 (i32.const 22) (get_local $indice))
 	)
-
+    
 	(func $allocator_frame_allocate_pointer (result i32)
 		(i32.load16_u (i32.const 24))
 	)

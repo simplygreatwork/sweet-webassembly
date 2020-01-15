@@ -45,20 +45,11 @@ function process_watm(document) {
 function find_line(document, position) {
 	
 	let result = {}
-	console.log('document.source.length: ' + document.source.length);
-	console.log('line length: ' + document.source.split('\n').length);
-	console.log('position: ' + position);
-	console.log('first newline: ' + document.source.indexOf('\n'));
 	let a = document.source.indexOf('\n', position)
-	console.log('a: ' + a);
 	let b = document.source.lastIndexOf('\n', a - 1)
-	console.log('b: ' + b);
 	result.text = document.source.substring(b + 1, a)
-	console.log('result.text: ' + result.text);
 	result.line = document.source.substring(0, b).split('\n').length
-	console.log('result.line: ' + result.line);
 	result.char = position - b
-	console.log('result.char: ' + result.char);
 	return result
 }
 
@@ -72,9 +63,9 @@ function noop() {
 	return
 }
 
-function instantiate(document, imports) {
+function instantiate(document, imports, system) {
 	
-	let code = transform(document.tree)
+	let code = transform(document.tree, system)
 	let module_ = require('wabt')().parseWat(document.path, code, this.flags = {
 		exceptions : false,
 		mutable_globals : true,
@@ -217,14 +208,29 @@ function find_function_signature(func) {
 	return result
 }
 
-function render_function_elements(document) {
+function find_document(system, name) {
 	
-	document.module_imports.forEach(function(document_) {
-		document_.functions.forEach(function(func) {
-			
-		}.bind(this))
-	}.bind(this))
+	let result = null
+	for (let document of system.set.values()) {
+		if (document.name == name) {
+			result = document
+		}
+	}
+	return result
 }
+
+function find_function(document, name) {
+	
+	let result = null
+	document.functions.forEach(function(each) {
+		let name_ = each.value[1].value
+		if (name_ == name) {
+			result = each
+		} 
+	})
+	return result
+}
+
 
 module.exports = {
 	
@@ -239,5 +245,7 @@ module.exports = {
 	render_function_imports: render_function_imports,
 	has_function_import: has_function_import,
 	find_function_signature: find_function_signature,
+	find_document: find_document,
+	find_function: find_function,
 	instantiate: instantiate
 }

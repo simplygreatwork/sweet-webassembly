@@ -19,7 +19,7 @@
 	(import "../lib/allocator.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
-   (global $global (import "host" "global") (mut i32))
+	(global $global (import "host" "global") (mut i32))
 	(global $legend (import "host" "legend") (mut i32))
 	(elem (i32.const 200) $deallocate_iterate_each)
 	(elem (i32.const 201) $display_iterate_each)

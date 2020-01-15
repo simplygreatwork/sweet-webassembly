@@ -5,18 +5,59 @@
 	(import "../lib/string.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
+	(type $void_to_void (func))
 	
 	(function $main
+		
+		(call $setup)
 		(call $test_string_macro)
+		(call $test_func_ref_macro)
+  		(call $test_call_macro)
 	)
 	
+	(func $setup
+		
+		(call $memory_bootstrap)
+	)
+
 	(func $test_string_macro
 		
-		(local $string i32)
-		(set_local $string (string "Hello from a string macro!"))
-		(call $print_string (i32.const 50))
-		(call $print_string (get_local $string))
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test string macro"))
+		(call $print_string (string "------------------------------"))
+	)
+
+	(func $test_func_ref_macro
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test function reference macro!"))
+		(call $print_string (string "------------------------------"))
+		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_a" "macros"))
+		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_a" "macros"))
+		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_b" "macros"))
+		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_b" "macros"))
 	)
 	
+	(func $test_call_macro
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Test call macro!"))
+		(call $print_string (string "------------------------------"))
+	)
+	
+	(func $test_function_first_class_a
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "First class function A has been called using a funcref macro!"))
+		(call $print_string (string "------------------------------"))
+	)
+
+	(func $test_function_first_class_b
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "First class function B has been called using a funcref macro!"))
+		(call $print_string (string "------------------------------"))
+	)
+
 	(export "main" (func $main))
 )

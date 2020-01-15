@@ -1,25 +1,28 @@
 
 const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
-let counter = 1;
-let types = {}
+
+let system = null
 
 function transform(node, index, parents) {
 	
 	let first = node.value[0]
 	if (first.type == 'symbol') {
-		if (first.value == 'typeof') {
+		if (first.value == 'funcref') {
 			let second = node.value[1]
-			if (types[second.value] === undefined) {
-				types[second.value] = counter;
-				if (false) console.log('type ' + second.value + ' = ' + counter);
-				counter++
-			}
+			let third = node.value[2]
+			let id = system.table.find_function_id(second.value, third.value)
+			first.type = 'symbol'
 			first.value = 'i32.const'
 			second.type = 'number'
-			second.value = types[second.value]
+			second.value = id
+			node.value.pop()
 		}
 	}
 }
 
-module.exports = transform
+module.exports = function(system_) {
+    
+    system = system_
+    return transform
+}

@@ -18,8 +18,8 @@
 	(import "../lib/types.watm")
 	(import "host" "table" (table 1 anyfunc))
 	(memory (import "host" "memory") 1)
-   (global $global (import "host" "global") (mut i32))
-   (global $legend (import "host" "legend") (mut i32))
+	(global $global (import "host" "global") (mut i32))
+	(global $legend (import "host" "legend") (mut i32))
 	(elem (i32.const 0) $test_list_iterate_each)
 	(elem (i32.const 3) $test_map_iterate_each)
 	(elem (i32.const 4) $test_tree_iterate_each)
@@ -143,16 +143,13 @@
 		(local $string_b i32)
 		(local $string_result i32)
 		(local $string_expected i32)
-		
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Appending a string"))
 		(call $print_string (string "------------------------------"))
 		(set_local $string_a (string "abcd"))
 		(call $print_string (get_local $string_a))
-		
 		(set_local $string_b (string "efghi"))
 		(call $print_string (get_local $string_b))
-		
 		(set_local $string_result (call $string_append (get_local $string_a) (get_local $string_b)))
 		(set_local $string_expected (string "abcdefghi"))
 		(call $print_string (get_local $string_expected))
@@ -312,12 +309,26 @@
 
 	(func $test_arguments_dynamic
 		
+		(local $arguments i32)
+		(set_local $arguments (call $tree_new))
+		(call $tree_set (get_local $arguments) (string "key:one") (string "value:one"))
+		(call $tree_set (get_local $arguments) (string "key:two") (string "value:two"))
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Testing dynamic arguments"))
 		(call $print_string (string "(requires map implementation)"))
 		(call $print_string (string "------------------------------"))
+		(call $test_arguments_dynamic_callee (get_local $arguments))
 	)
 
+	(func $test_arguments_dynamic_callee (param $arguments i32)
+		
+		(call $print_string (string "------------------------------"))
+		(call $print_string (string "Dynamic arguments callee"))
+		(call $print_string (string "------------------------------"))
+		(call $print_string (call $tree_get (get_local $arguments) (string "key:one")))
+		(call $print_string (call $tree_get (get_local $arguments) (string "key:two")))
+	)
+	
 	(func $test_stream
 		
 		(local $stream i32)
@@ -375,36 +386,38 @@
 
 		(local $legend i32)
 		(local $i i32)
+		(local $max i32)
 		(call $print_string (string "------------------------------"))
 		(call $print_string (string "Test legend"))
 		(call $print_string (string "------------------------------"))
 		(set_local $legend (call $legend_new))
 		(set_local $i (i32.const 0))
+		(set_local $max (i32.const 81))
 		(block (loop
 			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $i))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $max)))
 			(br 0)
 		))
 		(set_local $i (i32.const 0))
 		(block (loop
-			(call $legend_value_set (get_local $legend) (get_local $i) (i32.const 1025))
+			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $max))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $max)))
 			(br 0)
 		))
 		(set_local $i (i32.const 0))
 		(block (loop
 			(call $legend_value_set (get_local $legend) (get_local $i) (get_local $i))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $max)))
 			(br 0)
 		))
-		(set_local $i (i32.const 300))
+		(set_local $i (i32.const 0))
 		(block (loop
 			(call $print_integer (call $legend_value_get (get_local $legend) (get_local $i)))
 			(set_local $i (i32.add (get_local $i) (i32.const 1)))
-			(br_if 1 (i32.eq (get_local $i) (i32.const 1024)))
+			(br_if 1 (i32.eq (get_local $i) (get_local $max)))
 			(br 0)
 		))
 	)

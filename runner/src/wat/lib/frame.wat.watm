@@ -276,7 +276,7 @@
 	(func $legend_array_parent (param $array i32) (result i32)
 		(call_indirect (type $i32_to_i32) (get_local $array) (i32.const 407))
 	)
-
+    
 	(func $types_strings_get (param $type i32) (result i32)
 		(call_indirect (type $i32_to_i32) (get_local $type) (i32.const 300))
 	)
