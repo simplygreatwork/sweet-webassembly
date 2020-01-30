@@ -3,16 +3,16 @@ const print = require('./print.js')
 const walk = require('./walk.js')
 const logger = require('./logger')()
 
-module.exports = function(tree, system) {
+module.exports = function(document, system) {
 	
-	tree = transform(tree, system)
+	let tree = transform(document, system)
 	code = print(tree)
 	logger('transform').log('tree: ' + JSON.stringify(tree, null, 2))
 	logger('transform').log('tree transformed: ' + code)
 	return code
 }
 
-function transform(tree, system) {
+function transform(document, system) {
 	
 	let macros = [
 		require('./macros/function.js'),
@@ -21,14 +21,15 @@ function transform(tree, system) {
 		require('./macros/imports.js'),
 		require('./macros/exports.js'),
 		require('./macros/typeof.js'),
-		require('./macros/funcref.js')(system)
+		require('./macros/funcref.js')(system),
+		require('./macros/callable.js')(system, document)
 	]
-	walk({ root: tree[0], visit: function(node, index, parents) {
+	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		if (node.type == 'expression') {
 			macros.forEach(function(macro) {
 				macro(node, index, parents)
 			})
 		}
 	}, reverse: true })
-	return tree
+	return document.tree
 }

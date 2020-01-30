@@ -25,7 +25,7 @@ function test_one() {
 	`
 	let ast = parse(code)
 	if (false) console.log('ast: ' + JSON.stringify(ast, null, 2))
-	code = print2(ast)
+	code = print(ast)
 	console.log('code: ' + code)
 }
 
@@ -36,9 +36,9 @@ function test_two() {
 		(import "utility" "print_string" (func $print_string (param i32)))
 	)`
 	let ast = parse(code)
-	walk_orig(ast[0], function(node, index, parents) {
+	walk({ root: ast[0], visit: function(node, index, parents) {
 		console.log('node: ' + JSON.stringify(node, null, 2))
-	}, []) 
+	}})
 }
 
 function test_three() {
@@ -49,7 +49,7 @@ function test_three() {
 			(set_local $string (string "Hello from a string macro!"))
 		)	
 	)`
-	let root = path.join(process.cwd(), '/src/wat/examples/index')
+	let root = path.join(process.cwd(), '/src/wat/examples/index.wat.watm')
 	code = fs.readFileSync(root) + ''
 	let ast = parse(code)
 	code = require('./transform')(ast)
@@ -79,3 +79,8 @@ module.exports = {
 	test_three : test_three,
 	test_markdown : test_markdown
 }
+
+test_one()
+test_two()
+test_three()
+test_markdown()

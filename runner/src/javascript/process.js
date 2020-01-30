@@ -65,7 +65,7 @@ function noop() {
 
 function instantiate(document, imports, system) {
 	
-	let code = transform(document.tree, system)
+	let code = transform(document, system)
 	let module_ = require('wabt')().parseWat(document.path, code, this.flags = {
 		exceptions : false,
 		mutable_globals : true,
@@ -177,6 +177,11 @@ function render_function_imports(document) {
 					tree[0].value[3].value.push(node)
 				})
 				query.insert(document.tree[0], tree[0], 1)
+				let module_ = document_.id
+				let func_ = name
+				let function_imports = document.function_imports
+				function_imports[module_] = function_imports[module_] || {}
+				function_imports[module_][func_] = tree[0]
 			}
 		}.bind(this))
 	}.bind(this))
@@ -210,25 +215,20 @@ function find_function_signature(func) {
 
 function find_document(system, name) {
 	
-	let result = null
 	for (let document of system.set.values()) {
 		if (document.name == name) {
-			result = document
+			return document
 		}
 	}
-	return result
 }
 
 function find_function(document, name) {
 	
-	let result = null
-	document.functions.forEach(function(each) {
-		let name_ = each.value[1].value
-		if (name_ == name) {
-			result = each
-		} 
-	})
-	return result
+	for (let each of document.functions) {
+		if (each.value[1].value == name) {
+			return each
+		}
+	}
 }
 
 module.exports = {

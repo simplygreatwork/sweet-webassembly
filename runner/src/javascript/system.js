@@ -27,8 +27,7 @@ class System {
 	load_document(path_) {
 		
 		if (! this.documents[path_]) {
-			let message = 'loading: ' + path.basename(path_) + ' (' + path_ + ')'
-			logger('loader-load').log(message)
+			logger('loader-load').log('loading: ' + path.basename(path_) + ' (' + path_ + ')')
 			let document = new Document(path_)
 			document.load()
 			document.module_imports.forEach(function(each) {
@@ -51,7 +50,7 @@ class System {
 	sort_documents() {
 		
 		let documents = Object.values(this.documents)
-		let document
+		let document = null
 		this.set = new Set()
 		while (document = documents.shift()) {
 			let satisfied = true

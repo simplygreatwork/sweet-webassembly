@@ -20,7 +20,7 @@ class Document {
 	}
 	
 	trim_path(path_) {
-
+		
 		let array = path_.split('.')
 		if (array.length > 0) {
 			return array[0]

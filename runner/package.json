@@ -3,15 +3,21 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"bin": {
+		"sweet": "./src/javascript/cli.js"
+	},
 	"scripts": {
-		"start": "node ./src/javascript/index.js",
-		"example": "/usr/local/n/versions/node/12.14.0/bin/node ./src/javascript/index.js",
+		"start": "/usr/local/n/versions/node/12.14.0/bin/node ./src/javascript/main.js",
+		"trial": "/usr/local/n/versions/node/12.14.0/bin/node ./src/javascript/trial.js",
+		"prompts": "/usr/local/n/versions/node/12.14.0/bin/node ./src/javascript/prompt.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Philip Weaver",
 	"license": "MIT",
 	"dependencies": {
 		"fs-jetpack": "^2.2.2",
+		"minimist": "^1.2.0",
+		"prompts": "^2.3.0",
 		"remark": "^10.0.1",
 		"remark-parse": "^6.0.3",
 		"unist-util-visit": "^1.4.0",
