@@ -32,6 +32,7 @@ function process_watm(document) {
 		process.exit(-1)
 		return false
 	} else {
+		console.log('document.id: ' + document.id)
 		document.tree = result
 		document.functions = find_functions(document)
 		document.function_exports = find_function_exports(document)

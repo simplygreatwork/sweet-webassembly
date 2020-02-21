@@ -118,6 +118,7 @@ function opt(parser, transform) {
 	
 	transform = transform || none
 	return function (parseState) {
+		var lastState = parseState
 		var parsed = parser(parseState)
 		return (
 			parsed ?
@@ -148,6 +149,21 @@ function ref(context, name) {
 	}
 }
 
+function ref_(context, name, value) {
+	
+	return function (parseState) {
+		let context_ = context[name](value)
+		return context_(parseState)
+	}
+}
+
+function defer(handler) {
+	
+	return function (parseState) {
+		return handler(parseState)
+	}
+}
+
 function invalid(parseState) {
 	
 	max = Math.max(max, parseState.offset)
@@ -162,3 +178,4 @@ exports.rep = rep
 exports.opt = opt
 exports.alt = alt
 exports.ref = ref
+exports.ref_ = ref_
