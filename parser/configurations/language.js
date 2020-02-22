@@ -13,6 +13,11 @@ const symbol = require('../src/parsers/symbol')
 
 let refs = {}
 
+function main() {
+	
+	return statements()
+}
+
 function statements() {
 	
 	return split (
@@ -36,7 +41,7 @@ function options() {
 			list(),
 			boolean(),
 			number(),
-			whitespace(),
+			whitespace('\t\r '),
 			string(),
 			symbol(),
 			other()
@@ -81,51 +86,10 @@ function other() {
 
 refs.statements = statements()
 
-let array = []
-for (i = 0; i < 100; i++) {
-	array.push(
-`
-
-	list = Object clone
-	list push true
-	1 2 3 true false "stringy" symbolic let x = 5
-
-	while (x = true;
-		print
-	)
-
-	list push false
-	method = method (
-		list = Object clone
-		list push 1
-		list push 2
-		print
-		method = method (
-
-
-			list = Object clone
-			list push 1
-			list push 2
-			print
-		)
-
-
-	)
-`
-	)
-}
-
-console.log('begin');
-let result = p.parse(
-	statements(),
-	array.join('')
-);
-console.log('end');
-
-if (array.length < 100) {
-	console.log(
-		JSON.stringify(
-			result, null, 2
-		)
+module.exports = function(code) {
+	
+	return p.parse (
+		main(),
+		code
 	)
 }

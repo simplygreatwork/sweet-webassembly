@@ -9,6 +9,7 @@ const number = require('../src/parsers/number')
 const boolean = require('../src/parsers/boolean')
 const string = require('../src/parsers/string')
 const symbol = require('../src/parsers/symbol')
+const comment = require('../src/parsers/comment')
 
 let refs = {}
 
@@ -32,28 +33,6 @@ function expression(level) {
 	)
 }
 
-function fold_lines(value) {
-	
-	let result = []
-	value.forEach(function(each, index) {
-		if (each.type == 'line') {
-			if (each.value.length > 0 && each.value[0].type != 'symbol') {
-				result.push(...each.value)
-			} else {
-				if (index === 0) {
-					result.push(...each.value)
-				} else {
-					each.type = 'expression'
-					result.push(each)
-				}
-			}
-		} else {
-			result.push(each)
-		}
-	})
-	return result
-}
-
 function expression_contents(level) {
 	
 	return p.rep (
@@ -61,9 +40,8 @@ function expression_contents(level) {
 			line_blank(),
 			expression(level),
 			lines(level),
-			comment(),
-			whitespace(),
-			boolean(),
+			comment(';;'),
+			whitespace('\t\r '),
 			number(),
 			string(),
 			symbol(),
@@ -73,7 +51,7 @@ function expression_contents(level) {
 		}),
 		0,
 		function(value) {
-			return fold_whitespace(value)
+			return fold_whitespace(value.rep)
 		}
 	)
 }
@@ -126,7 +104,7 @@ function line(level) {
 }
 
 function line_children(level) {
-
+	
 	return p.opt (
 		p.rep (
 			p.ref_(refs, 'lines', level + 1), 0, function(value) {
@@ -144,19 +122,17 @@ function line_contents(level) {
 	return p.rep (
 		p.alt ([
 			expression(level + 1),
-			whitespace(),
-			boolean(),
+			whitespace('\t\r '),
 			number(),
 			string(),
 			symbol(),
-			comment()
+			comment(';;')
 		], function(value) {
 			return value.alt
 		}),
 		1,
 		function(value) {
-			return fold_whitespace(value)
-			// return value.rep
+			return fold_whitespace(value.rep)
 		}
 	)
 }
@@ -165,7 +141,7 @@ function indentation(level) {
 	
 	let sequence = [];
 	for (var i = 0; i < level; i++) {
-		sequence.push(
+		sequence.push (
 			indent()
 		)
 	}
@@ -182,37 +158,32 @@ function indent() {
 	])
 }
 
-function comment() {
+function fold_lines(value) {
 	
-	let result = [];
-	return p.seq ([
-		p.str (';', function(value) {
-			return value.str
-		}),
-		p.str (';', function(value) {
-			return value.str
-		}),
-		p.rep (
-			p.char ('^\n', function(value) {
-				return value.char;
-			}),
-			0,
-			function(value) {
-				return value.rep
+	let result = []
+	value.forEach(function(each, index) {
+		if (each.type == 'line') {
+			if (each.value.length > 0 && each.value[0].type != 'symbol') {
+				result.push(...each.value)
+			} else {
+				if (index === 0) {
+					result.push(...each.value)
+				} else {
+					each.type = 'expression'
+					result.push(each)
+				}
 			}
-		),
-	], function(value) {
-		return {
-			type: 'comment',
-			value: value.seq[0] + value.seq[1] + value.seq[2].join('') + '\n'		// without newline, WASM parser can fail
+		} else {
+			result.push(each)
 		}
 	})
+	return result
 }
 
 function fold_whitespace(value) {
 	
 	let whitespace = []
-	value.rep.map(function(each) {
+	value.map(function(each) {
 		if (each.type == 'whitespace') {
 			whitespace.push(each.value)
 		} else if (each.type == 'newline') {
@@ -222,7 +193,7 @@ function fold_whitespace(value) {
 			whitespace.splice(0, whitespace.length)
 		}
 	})
-	return value.rep.filter(function(each) {
+	return value.filter(function(each) {
 		if (each.type == 'whitespace') {
 			return false
 		} else if (each.type == 'newline') {
@@ -242,5 +213,5 @@ module.exports = function(code) {
 	return p.parse (
 		main(),
 		code
-	);
+	)
 }

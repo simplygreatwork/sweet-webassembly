@@ -1,12 +1,11 @@
 
-	
 	value = 1 + 2
 	value print
 
 	list = Object clone
 	list push true
 	1 2 3 true false "stringy" symbolic let x = 5
-
+	
 	while (x = true;
 		print
 	)

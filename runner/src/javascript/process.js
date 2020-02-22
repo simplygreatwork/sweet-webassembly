@@ -60,7 +60,7 @@ function process_wat(document, imports) {
 }
 
 function noop() {
-
+	
 	return
 }
 

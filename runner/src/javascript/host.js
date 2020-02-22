@@ -8,7 +8,7 @@ function Host() {
 		}),
 		table: new WebAssembly.Table({
 			initial: 65336,
-            element: 'anyfunc'
+			element: 'anyfunc'
 		}),
 		global: new WebAssembly.Global({
 			value: 'i32',

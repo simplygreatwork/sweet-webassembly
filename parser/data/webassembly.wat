@@ -1,4 +1,5 @@
 (module
+
 	(import "host" "table" (table 2 anyfunc))
 	(import "utility" "print_string" (func $print_string (param i32)))
 	(import "utility" "print_integer" (func $print_integer (param i32)))
@@ -51,7 +52,7 @@
 	
 	(func $main
 		
-		(call $setup)
+		(call $setup)						;; comment
 		(call $test_hello_world)
 		(call $test_string_alphanum)
 		(call $test_string_clone)

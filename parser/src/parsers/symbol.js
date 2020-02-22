@@ -6,7 +6,7 @@ module.exports = function() {
 	return p.seq([
 		p.alt([
 			p.char('=$_.a-zA-Z0-9', function(value) {
-				return value.char;
+				return value.char
 			}),
 		], function(value) {
 			return value.alt
@@ -14,14 +14,14 @@ module.exports = function() {
 		p.rep (
 			p.alt([
 				p.char('=$_.a-zA-Z0-9', function(value) {
-					return value.char;
+					return value.char
 				}),
 			], function(value) {
 				return value.alt
 			}),
 			0,
 			function(value) {
-				return value.rep;
+				return value.rep
 			}
 		)
 	], function(value) {

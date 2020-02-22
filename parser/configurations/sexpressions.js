@@ -17,8 +17,8 @@ function main() {
 	return p.rep (
 		p.alt ([
 			expression(),
-			comment(),
-			whitespace(),
+			comment(';;'),
+			whitespace('\t\r '),
 			boolean(),
 			number(),
 			string(),
