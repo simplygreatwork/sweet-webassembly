@@ -63,7 +63,7 @@ function char(chars, transform) {
 }
 
 function seq(parsers, transform) {
-
+	
 	transform = transform || none
 	return function (parseState) {
 		var result = parsers.reduce(function(accumulator, parser) {
@@ -132,7 +132,7 @@ function alt(parsers, transform) {
 	transform = transform || none
 	return function (parseState) {
 		var result
-		for (var i = 0, len = parsers.length; i < len; i += 1) {
+		for (var i = 0, length = parsers.length; i < length; i += 1) {
 			result = parsers[i](parseState)
 			if (result) {
 				return [transform({ alt: result[0] }), result[1]]

@@ -46,7 +46,7 @@ function options() {
 			symbol(),
 			other()
 		], function(value) {
-			return value.alt		// todo: emit the atom here
+			return value.alt
 		}),
 		1,
 		function(value) {
