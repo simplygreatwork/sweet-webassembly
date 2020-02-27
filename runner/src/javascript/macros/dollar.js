@@ -9,17 +9,21 @@ let document = null
 function transform(node, index, parents) {
 	
 	let first = node.value[0]
-	if (query.is_type(first, 'symbol')) {
-      if (shared.is_callable(document, first.value)) {
-         node.value.unshift({
-            type: 'whitespace',
-            value: ' '
-         })
-         node.value.unshift({
-            type: 'symbol',
-            value: 'call'
-         })
-      }
+	if (query.is_type_value(first, 'symbol', 'call')) {
+		let second = node.value[1]
+		rewrite(second)
+	} else if (query.is_type_value(first, 'symbol', 'funcref')) {
+		let second = node.value[1]
+		rewrite(second)
+	} else {
+		rewrite(first)
+	}
+}
+
+function rewrite(node) {
+	
+	if (shared.is_callable(document, '$' + node.value)) {
+		node.value = '$' + node.value
 	}
 }
 

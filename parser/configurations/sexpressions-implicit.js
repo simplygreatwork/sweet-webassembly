@@ -91,7 +91,7 @@ function line(level) {
 	
 	return between (
 		indentation(level),
-		p.ref_(refs, 'line_contents', level),
+		p.ref_ (refs, 'line_contents', level),
 		newline(),
 		function(value) {
 			return {
@@ -106,7 +106,7 @@ function line_children(level) {
 	
 	return p.opt (
 		p.rep (
-			p.ref_(refs, 'lines', level + 1), 0, function(value) {
+			p.ref_ (refs, 'lines', level + 1), 0, function(value) {
 				return value.rep
 			}
 		),
@@ -151,7 +151,7 @@ function indentation(level) {
 
 function indent() {
 	
-	return p.alt([
+	return p.alt ([
 		p.char ('\t'),
 		p.str ('   ')
 	])

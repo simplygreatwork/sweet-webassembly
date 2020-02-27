@@ -1,16 +1,35 @@
 
 const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
+const shared = require('./shared.js')
+
+let system = null
+let document = null
 let string_counter = 0
 
 function transform(node, index, parents) {
 	
 	let first = node.value[0]
-	if (first.type == 'symbol') {
-		if (first.value == 'string') {
-			let string = node.value[1].value
-			let func_name = function_new(parents[0], string)
-			string_call(node, index, parents, func_name)
+	if (query.is_type_value(first, 'symbol', 'string')) {
+		let string = node.value[1].value
+		let func_name = function_new(parents[0], string)
+		string_call(node, index, parents, func_name)
+	} else {
+		if (shared.is_inside_function(parents)) {
+			if (! query.is_type_value(first, 'symbol', 'typeof')) {
+				if (! query.is_type_value(first, 'symbol', 'funcref')) {
+					node.value.forEach(function(each, index) {
+						if (query.is_type(each, 'string')) {
+							let ast = parse(`(string "${each.value}")`)
+							node.value[index] = ast[0]
+							// parents.push(ast[0])
+							// console.log('circ')
+							// transform(node.value[index], index, parents)
+							// parents.pop()
+						}
+					})
+				}
+			}
 		}
 	}
 }
@@ -45,4 +64,9 @@ function string_set_chars(string) {
 	return result.join('\n')
 }
 
-module.exports = transform
+module.exports = function(system_, document_) {
+    
+    system = system_
+    document = document_
+	 return transform
+}

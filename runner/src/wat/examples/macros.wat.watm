@@ -1,63 +1,78 @@
 (module
 	
-	(import "../lib/utility.watm")
-	(import "../lib/memory.watm")
-	(import "../lib/string.watm")
-	(import "host" "table" (table 1 anyfunc))
-	(memory (import "host" "memory") 1)
-	(type $void_to_void (func))
+	import "../lib/utility.watm"
+	import "../lib/memory.watm"
+	import "../lib/string.watm"
+	import "host" "table" (table 1 anyfunc)
+	memory (import "host" "memory") 1
+	type $void_to_void (func)
 	
-	(function $main
+	func main
 		
-		(call $setup)
-		(call $test_string_macro)
-		(call $test_func_ref_macro)
-  		(call $test_call_macro)
-	)
+		setup
+		test_call_macro
+		test_string_macro_expansion
+		test_integer_macro_expansion
+		test_func_ref_macro
+		test_set_get_macros
+		test_flow_macros
 	
-	(func $setup
+	func setup
 		
-		(call $memory_bootstrap)
-	)
+		memory_bootstrap
 
-	(func $test_string_macro
+	func test_call_macro
 		
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "Test string macro"))
-		(call $print_string (string "------------------------------"))
-	)
-
-	(func $test_func_ref_macro
-		
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "Test function reference macro!"))
-		(call $print_string (string "------------------------------"))
-		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_a" "macros"))
-		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_a" "macros"))
-		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_b" "macros"))
-		(call_indirect (type $void_to_void) (funcref "$test_function_first_class_b" "macros"))
-	)
+		print_string "------------------------------"
+		print_string "Test call macro!"
+		print_string "------------------------------"
+		(call print_string (string "with call keyword, with string keyword"))
+		print_string "without call keyword, without string keyword"
 	
-	(func $test_call_macro
+	func test_string_macro_expansion
 		
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "Test call macro!"))
-		(call $print_string (string "------------------------------"))
-	)
+		print_string "------------------------------"
+		print_string "Test string macro"
+		print_string "------------------------------"
+   
+	func test_integer_macro_expansion
+		
+		print_string "------------------------------"
+		print_string "Test integer macro expansion"
+		print_string "------------------------------"
+		print_integer 100
 	
-	(func $test_function_first_class_a
+	func test_func_ref_macro
 		
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "First class function A has been called using a funcref macro!"))
-		(call $print_string (string "------------------------------"))
-	)
+		print_string "------------------------------"
+		print_string "Test function reference macro!"
+		print_string "------------------------------"
+		call_indirect (type $void_to_void) (funcref "test_function_first_class_a" "macros")
+		call_indirect (type $void_to_void) (funcref "test_function_first_class_b" "macros")
 
-	(func $test_function_first_class_b
+	func test_function_first_class_a
 		
-		(call $print_string (string "------------------------------"))
-		(call $print_string (string "First class function B has been called using a funcref macro!"))
-		(call $print_string (string "------------------------------"))
-	)
+		print_string "------------------------------"
+		print_string "First class function A has been called using a funcref macro!"
+		print_string "------------------------------"
 
-	(export "main" (func $main))
+	func test_function_first_class_b
+		
+		print_string "------------------------------"
+		print_string "First class function B has been called using a funcref macro!"
+		print_string "------------------------------"
+	
+	func test_set_get_macros
+		
+		print_string "------------------------------"
+		print_string "Test local variable get and set! (not implemented)"
+		print_string "------------------------------"
+
+	func test_flow_macros
+		
+		print_string "------------------------------"
+		print_string "Test flow macros! (not implemented)"
+		print_string "------------------------------"
+
+	export "main" (func $main)
 )

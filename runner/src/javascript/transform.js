@@ -16,8 +16,10 @@ function transform(document, system) {
 	
 	let macros = [
 		require('./macros/function.js'),
-		require('./macros/string.js'),
-		require('./macros/swap.js'),
+		require('./macros/dollar.js')(system, document),
+		require('./macros/string.js')(system, document),
+		require('./macros/integer.js')(system, document),
+      require('./macros/swap.js'),
 		require('./macros/imports.js'),
 		require('./macros/exports.js'),
 		require('./macros/typeof.js'),

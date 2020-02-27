@@ -3,7 +3,7 @@ const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
 
 function transform(node, index, parents) {
-
+	
 	if (node.value.length === 2) {
 		let first = node.value[0]
 		if (first.type == 'symbol') {
