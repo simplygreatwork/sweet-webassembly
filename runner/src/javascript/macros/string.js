@@ -22,10 +22,6 @@ function transform(node, index, parents) {
 						if (query.is_type(each, 'string')) {
 							let ast = parse(`(string "${each.value}")`)
 							node.value[index] = ast[0]
-							// parents.push(ast[0])
-							// console.log('circ')
-							// transform(node.value[index], index, parents)
-							// parents.pop()
 						}
 					})
 				}
