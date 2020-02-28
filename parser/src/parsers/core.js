@@ -1,3 +1,5 @@
+// from https://github.com/jimf/uparse/blob/master/index.js
+// with some tweaks for error position reporting and p.ref with arguments
 
 function none(value) {
 	return value
