@@ -3,6 +3,7 @@ const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
 
 let system = null
+let document = null
 
 function transform(node, index, parents) {
 	
@@ -21,8 +22,9 @@ function transform(node, index, parents) {
 	}
 }
 
-module.exports = function(system_) {
+module.exports = function(system_, document_) {
     
     system = system_
-    return transform
+    document = document_
+	 return transform
 }

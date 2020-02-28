@@ -7,6 +7,14 @@ function is_type(node, type) {
 	return false
 }
 
+function is_value(node, value) {
+	
+	if (node.value == value) {
+		return true
+	}
+	return false
+}
+
 function is_type_value(node, type, value) {
 	
 	if (node.type == type) {

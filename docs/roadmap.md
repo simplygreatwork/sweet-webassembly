@@ -1,5 +1,6 @@
 
 ### Roadmap
+- allow parsing of the expression for mdoule
 - Optimize compilation process (bottlenecks)
 - Cache compilations
 - expose macro configuration to end users

@@ -16,7 +16,9 @@ class Runner {
 				host: new Host()
 			}
 		})
+		let date = new Date()
 		system.start(root)
+		console.log('Compiled in ' + ((new Date().getTime() - date.getTime()) / 1000) + ' seconds.')
 		system.documents[root].instance.exports.main()
 	}
 }

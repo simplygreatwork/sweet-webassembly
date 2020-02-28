@@ -14,7 +14,7 @@
 		test_string_macro_expansion
 		test_integer_macro_expansion
 		test_func_ref_macro
-		test_set_get_macros
+		test_set_get_macros (i32.const 0)
 		test_flow_macros
 	
 	func setup
@@ -62,12 +62,22 @@
 		print_string "First class function B has been called using a funcref macro!"
 		print_string "------------------------------"
 	
-	func test_set_get_macros
+	func test_set_get_macros (param $a i32)
 		
+		local $c i32
 		print_string "------------------------------"
 		print_string "Test local variable get and set! (not implemented)"
 		print_string "------------------------------"
-
+		print_string "Set values which have not been declared"
+		set_local $b (i32.const 2)
+		set_local $d (i32.const 4)
+		;; let a as i32 be 1
+		;; set a to 1
+		;; set b to 2
+		;; set c to 3
+		;; set d to 4
+		;; set e to 5
+		
 	func test_flow_macros
 		
 		print_string "------------------------------"

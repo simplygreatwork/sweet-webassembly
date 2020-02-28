@@ -16,7 +16,8 @@ function walking(node, index, parents, iterate, visit, enter, exit) {
 		parents.push(node)
 		enter(node)
 		iterate(node.value, function(each, index) {
-			visit(each, index, parents)
+			let result = visit(each, index, parents)
+			if (result == 'invalidate') return result
 			walking(each, index, parents, iterate, visit, enter, exit)
 		})
 		exit(node)
@@ -28,7 +29,10 @@ function iterate_forward(array, handler) {
 	
 	let length = array.length
 	for (let index = 0; index < length; index++) {
-		handler(array[index], index)
+		if (handler(array[index], index) == 'invalidate') {
+			iterate_forward(array, handler)
+			break
+		}
 	}
 }
 
@@ -36,7 +40,10 @@ function iterate_backward(array, handler) {
 	
 	let length = array.length
 	for (let index = length - 1; index >= 0; index--) {
-		handler(array[index], index)
+		if (handler(array[index], index) == 'invalidate') {
+			iterate_backward(array, handler)
+			break
+		}
 	}
 }
 

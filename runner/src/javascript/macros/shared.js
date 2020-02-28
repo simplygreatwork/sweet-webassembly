@@ -1,10 +1,15 @@
 
 function is_inside_function(parents) {
 	
-	let result = false
+	return get_parent_function(parents) ? true : false
+}
+
+function get_parent_function(parents) {
+	
+	let result = null
 	parents.forEach(function(each) {
 		if (each.value[0].value == 'func') {
-			result = true
+			result = each
 		}
 	})
 	return result
@@ -36,6 +41,7 @@ function is_callable(document, symbol) {
 }
 
 module.exports = {
+	get_parent_function: get_parent_function,
 	is_inside_function: is_inside_function,
 	is_callable: is_callable
 }

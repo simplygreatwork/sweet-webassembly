@@ -7,7 +7,7 @@ let system = null
 let document = null
 
 function transform(node, index, parents) {
-
+	
 	if (shared.is_inside_function(parents)) {
 		if (query.is_type(node, 'expression')) {
 			let first = node.value[0]

@@ -16,6 +16,7 @@ function transform(document, system) {
 	
 	let macros = [
 		require('./macros/function.js'),
+		require('./macros/set_local.js')(system, document),
 		require('./macros/dollar.js')(system, document),
 		require('./macros/string.js')(system, document),
 		require('./macros/integer.js')(system, document),
@@ -23,15 +24,18 @@ function transform(document, system) {
 		require('./macros/imports.js'),
 		require('./macros/exports.js'),
 		require('./macros/typeof.js'),
-		require('./macros/funcref.js')(system),
-		require('./macros/callable.js')(system, document)
+		require('./macros/funcref.js')(system, document),
+		require('./macros/callable.js')(system, document),
 	]
 	walk({ root: document.tree[0], visit: function(node, index, parents) {
+		let result = null
 		if (node.type == 'expression') {
-			macros.forEach(function(macro) {
-				macro(node, index, parents)
+			macros.every(function(macro) {
+				result = macro(node, index, parents)
+				return (result == 'invalidate') ? false : true
 			})
 		}
+		return result
 	}, reverse: true })
 	return document.tree
 }
