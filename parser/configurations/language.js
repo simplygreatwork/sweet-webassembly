@@ -84,7 +84,7 @@ function other() {
 	})
 }
 
-refs.statements = statements()
+refs.statements = statements
 
 module.exports = function(code) {
 	

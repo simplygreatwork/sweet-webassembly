@@ -15,15 +15,14 @@ module.exports = function(document, system) {
 function transform(document, system) {
 	
 	let macros = [
-		require('./macros/function.js'),
-		require('./macros/set_local.js')(system, document),
+		require('./macros/function.js')(system, document),
+		require('./macros/assign.js')(system, document),
 		require('./macros/dollar.js')(system, document),
 		require('./macros/string.js')(system, document),
 		require('./macros/integer.js')(system, document),
-      require('./macros/swap.js'),
-		require('./macros/imports.js'),
-		require('./macros/exports.js'),
-		require('./macros/typeof.js'),
+		require('./macros/imports.js')(system, document),
+		require('./macros/exports.js')(system, document),
+		require('./macros/typeof.js')(system, document),
 		require('./macros/funcref.js')(system, document),
 		require('./macros/callable.js')(system, document),
 	]

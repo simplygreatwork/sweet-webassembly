@@ -10,10 +10,19 @@ function transform(node, index, parents) {
 	
 	let result = null
 	let first = node.value[0]
+	if (query.is_type_value(first, 'symbol', 'set')) {
+		first.value = 'set_local'
+	}
 	if (query.is_type_value(first, 'symbol', 'set_local')) {
 		let second = node.value[1]
 		if (second.value.charAt(0) != '$') {
 			second.value = '$' + second.value
+		}
+		if (node.value.length > 2) {
+			let third = node.value[2]
+			if (query.is_type_value(third, 'symbol', 'to')) {
+				query.remove(node, third)
+			}
 		}
 		result = declare_if_missing(second.value, parents)
 	}

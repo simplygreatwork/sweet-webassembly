@@ -100,7 +100,7 @@ function fold_whitespace(value) {
 	});
 }
 
-refs.main = main()
+refs.main = main
 
 module.exports = function(code) {
 	

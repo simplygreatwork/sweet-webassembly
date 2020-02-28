@@ -69,14 +69,9 @@
 		print_string "Test local variable get and set! (not implemented)"
 		print_string "------------------------------"
 		print_string "Set values which have not been declared"
-		set_local $b (i32.const 2)
-		set_local $d (i32.const 4)
+		set b to 2
+		set string to "string"
 		;; let a as i32 be 1
-		;; set a to 1
-		;; set b to 2
-		;; set c to 3
-		;; set d to 4
-		;; set e to 5
 		
 	func test_flow_macros
 		

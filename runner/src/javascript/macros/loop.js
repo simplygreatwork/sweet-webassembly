@@ -1,20 +1,14 @@
 
 const parse = require('../../../../parser/configurations/sexpressions.js')
 const query = require('../query.js')
+const shared = require('./shared.js')
 
 let system = null
 let document = null
 
 function transform(node, index, parents) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'export')) {
-		let second = node.value[1]
-		if (query.is_type_value(first, 'symbol', 'all')) {
-			let second = node.value[1]
-			query.remove(parents[0], node)
-		}
-	}
+	return null
 }
 
 module.exports = function(system_, document_) {

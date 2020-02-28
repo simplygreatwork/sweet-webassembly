@@ -144,16 +144,9 @@ function alt(parsers, transform) {
 
 function ref(context, name) {
 	
+	let values = Array.from(arguments).slice(2)
 	return function (parseState) {
-		return context[name](parseState)
-	}
-}
-
-function ref_(context, name, value) {
-	
-	return function (parseState) {
-		let context_ = context[name](value)
-		return context_(parseState)
+		return context[name](...values)(parseState)
 	}
 }
 
@@ -178,4 +171,3 @@ exports.rep = rep
 exports.opt = opt
 exports.alt = alt
 exports.ref = ref
-exports.ref_ = ref_
