@@ -1,5 +1,4 @@
 
-const parse = require('../parse')
 const query = require('../query')
 const shared = require('./shared')
 

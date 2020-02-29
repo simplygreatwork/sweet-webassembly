@@ -1,5 +1,6 @@
 
 const path = require('path')
+const jetpack = require('fs-jetpack')
 const logger = require('./logger')([
 	'runner', 'system', 'document-off', 'process', 'transform-off', 'stager-off', 'loading', 'parsing-off', 'transforming'
 ])
@@ -19,7 +20,8 @@ class Runner {
 			},
 			macros: [
 				require('./macros/function.js'),
-				require('./macros/assign.js'),
+				require('./macros/set.js'),
+				require('./macros/get.js'),
 				require('./macros/dollar.js'),
 				require('./macros/string.js'),
 				require('./macros/integer.js'),
@@ -28,6 +30,7 @@ class Runner {
 				require('./macros/typeof.js'),
 				require('./macros/funcref.js'),
 				require('./macros/callable.js'),
+				require('./macros/loop.js'),
 			]
 		})
 		let date = new Date()
@@ -44,8 +47,13 @@ class Runner {
 		broadcast.on('loaded', function(data) {
 			logger('loading').log('loaded: ' + data)
 		})
-		broadcast.on('transformed', function(data) {
-			logger('transforming').log('transformed: ' + data)
+		broadcast.on('transformed', function(document) {
+			logger('transforming').log('transformed: ' + document.id)
+			logger('transforming').log('transformed path: ' + document.path)
+			logger('transforming').log('transformed length: ' + document.source.length)
+			let path_ = path.join(process.cwd(), 'work', document.path) 
+			logger('transforming').log('transformed work path: ' + path_)
+			jetpack.write(path_, document.source)
 		})
 	}
 }

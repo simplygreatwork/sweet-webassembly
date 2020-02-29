@@ -84,10 +84,10 @@ class System {
 		
 		for (let document of this.set.values()) {
 			document.source = transform(document, this)
-			broadcast.emit('transformed', document.id)
+			broadcast.emit('transformed', document)
 		}
 	}
-
+	
 	instantiate_documents() {
 		
 		for (let document of this.set.values()) {

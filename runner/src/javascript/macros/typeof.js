@@ -1,5 +1,4 @@
 
-const parse = require('../parse')
 const query = require('../query')
 
 let system = null

@@ -24,7 +24,7 @@ function process_md(document) {
 
 function process_watm(document) {
 	
-	let result = parse(document.source)
+	let result = parse(document.source, 'implicit')
 	if (result.error) {
 		let line_result = find_line(document, result.position)
 		console.error('Error parsing line ' + line_result.line + ' at character ' + line_result.char + ':')

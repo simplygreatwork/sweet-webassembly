@@ -10,7 +10,7 @@
 	(import "../lib/function.watm")
 	(import "../lib/list.watm")
 	(import "../lib/assertion.watm")
-	(import "../lib/tree.watm")
+	import "../lib/tree.watm"
 	(import "../lib/map.watm")
 	(import "../lib/stream.watm")
 	(import "../lib/table.watm")

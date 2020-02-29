@@ -1,5 +1,4 @@
 
-const fs = require('fs')
 const path = require('path')
 const parse = require('./parse')
 const walk = require('./walk')

@@ -15,7 +15,8 @@
 		test_integer_macro_expansion
 		test_func_ref_macro
 		test_set_get_macros (i32.const 0)
-		test_flow_macros
+		test_flow_macros_basis
+		test_flow_macros_implementation
 	
 	func setup
 		
@@ -72,12 +73,37 @@
 		set b to 2
 		set string to "string"
 		;; let a as i32 be 1
+	
+	(func test_flow_macros_basis
 		
-	func test_flow_macros
+		(local $i i32)
+		(print_string "------------------------------")
+		(print_string "Test flow macros! (not implemented)")
+		(print_string "------------------------------")
+		(set_local $i (i32.const 0))
+		(block
+			(loop
+				(call $print_integer (get_local $i))
+				(if (i32.eq (get_local $i) (i32.const 5)) (then
+					(br 2)
+				))
+				(set_local $i (i32.add (get_local $i) (i32.const 1)))
+				(br 0)
+			)
+		)
+	)
+
+	func test_flow_macros_goal
+
+		;;	repeat
+		;;		print i
+		;;		if (i equals 10)
+		;;			exit repeat
+
+	(func test_flow_macros_implementation
 		
-		print_string "------------------------------"
-		print_string "Test flow macros! (not implemented)"
-		print_string "------------------------------"
+		
+	)
 
 	export "main" (func $main)
 )
