@@ -1,3 +1,4 @@
+
 // from https://github.com/jimf/uparse/blob/master/index.js
 // with some tweaks for error position reporting and p.ref with arguments
 
@@ -165,11 +166,6 @@ function invalid(parseState) {
 	return null
 }
 
-exports.parse = parse
-exports.str = str
-exports.char = char
-exports.seq = seq
-exports.rep = rep
-exports.opt = opt
-exports.alt = alt
-exports.ref = ref
+module.exports = {
+	parse, str, char, seq, rep, opt, alt, ref
+}

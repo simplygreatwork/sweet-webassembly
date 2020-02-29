@@ -10,7 +10,7 @@ class System {
 	
 	constructor(options) {
 		
-		this.imports = options.imports
+		Object.assign(this, options)
 		this.documents = {}
 		this.table = new Table(this)
 	}

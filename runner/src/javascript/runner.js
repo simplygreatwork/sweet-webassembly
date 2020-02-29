@@ -14,11 +14,23 @@ class Runner {
 		let system = new System({
 			imports: {
 				host: new Host()
-			}
+			},
+			macros: [
+				require('./macros/function.js'),
+				require('./macros/assign.js'),
+				require('./macros/dollar.js'),
+				require('./macros/string.js'),
+				require('./macros/integer.js'),
+				require('./macros/imports.js'),
+				require('./macros/exports.js'),
+				require('./macros/typeof.js'),
+				require('./macros/funcref.js'),
+				require('./macros/callable.js'),
+			]
 		})
 		let date = new Date()
 		system.start(root)
-		console.log('Compiled in ' + ((new Date().getTime() - date.getTime()) / 1000) + ' seconds.')
+		logger('index').log('Compiled in ' + ((new Date().getTime() - date.getTime()) / 1000) + ' seconds.')
 		system.documents[root].instance.exports.main()
 	}
 }

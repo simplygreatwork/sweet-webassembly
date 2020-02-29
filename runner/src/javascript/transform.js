@@ -14,18 +14,9 @@ module.exports = function(document, system) {
 
 function transform(document, system) {
 	
-	let macros = [
-		require('./macros/function.js')(system, document),
-		require('./macros/assign.js')(system, document),
-		require('./macros/dollar.js')(system, document),
-		require('./macros/string.js')(system, document),
-		require('./macros/integer.js')(system, document),
-		require('./macros/imports.js')(system, document),
-		require('./macros/exports.js')(system, document),
-		require('./macros/typeof.js')(system, document),
-		require('./macros/funcref.js')(system, document),
-		require('./macros/callable.js')(system, document),
-	]
+	let macros =  system.macros.map(function(each) {
+		return each(system, document)
+	})
 	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		let result = null
 		if (node.type == 'expression') {

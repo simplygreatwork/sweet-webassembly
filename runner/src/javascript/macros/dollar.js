@@ -1,7 +1,7 @@
 
-const parse = require('../../../../parser/configurations/sexpressions.js')
-const query = require('../query.js')
-const shared = require('./shared.js')
+const parse = require('../parse')
+const query = require('../query')
+const shared = require('./shared')
 
 let system = null
 let document = null

@@ -1,7 +1,7 @@
 
-const query = require('../query.js')
-const parse = require('../parse.js')
-const shared = require('./shared.js')
+const query = require('../query')
+const parse = require('../parse')
+const shared = require('./shared')
 
 let system = null
 let document = null

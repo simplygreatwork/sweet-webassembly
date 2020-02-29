@@ -1,6 +1,6 @@
 
-const parse = require('../../../../parser/configurations/sexpressions.js')
-const query = require('../query.js')
+const parse = require('../parse')
+const query = require('../query')
 
 let system = null
 let document = null
