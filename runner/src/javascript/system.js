@@ -30,9 +30,9 @@ class System {
 	load_document(path_) {
 		
 		if (! this.documents[path_]) {
-			logger('loader-load').log('loading: ' + path.basename(path_) + ' (' + path_ + ')')
 			let document = new Document(path_)
 			document.load()
+			broadcast.emit('loaded', path.basename(path_) + ' (' + path_ + ')')
 			document.module_imports.forEach(function(each) {
 				this.load_document(each)
 			}.bind(this))
@@ -41,8 +41,8 @@ class System {
 	}
 	
 	resolve_documents() {
-		
-		console.log('resolve_documents')
+
+		logger('system').log('resolve_documents')
 		Object.keys(this.documents).forEach(function(key) {
 			let document = this.documents[key]
 			document.module_imports.forEach(function(each, index) {
@@ -52,8 +52,8 @@ class System {
 	}
 	
 	sort_documents() {
-
-		console.log('sort_documents')
+		
+		logger('system').log('sort_documents')
 		let documents = Object.values(this.documents)
 		let document = null
 		this.set = new Set()
@@ -73,8 +73,8 @@ class System {
 	}
 	
 	render_function_imports() {
-		
-		console.log('render_function_imports')
+
+		logger('system').log('render_function_imports')
 		for (let document of this.set.values()) {
 			process.render_function_imports(document)
 		}
@@ -91,14 +91,14 @@ class System {
 	instantiate_documents() {
 		
 		for (let document of this.set.values()) {
-			logger('loader').log('instantiate: ' + path.basename(document.path) + ' (' + document.path + ')')
+			logger('system').log('instantiate: ' + path.basename(document.path) + ' (' + document.path + ')')
 			let name = path.basename(document.path)
 			let key = name.split('.')[0]
 			let imports = this.imports
 			let system = this
 			this.imports[key] = process.instantiate(document, imports)
 		}
-	 }
+	}
 }
 
 module.exports = System

@@ -1,7 +1,7 @@
 
 const path = require('path')
 const logger = require('./logger')([
-	'index', 'loader', 'document-off', 'process', 'transform-off', 'stager-off', 'parsing', 'transforming'
+	'runner', 'system', 'document-off', 'process', 'transform-off', 'stager-off', 'loading', 'parsing-off', 'transforming'
 ])
 const broadcast = require('./broadcast')
 const System = require('./system')
@@ -11,7 +11,7 @@ class Runner {
 	
 	run(root) {
 		
-		logger('index').log('root module: ' + root)
+		logger('runner').log('root module: ' + root)
 		this.listen()
 		this.system = new System({
 			imports: {
@@ -32,7 +32,7 @@ class Runner {
 		})
 		let date = new Date()
 		this.system.start(root)
-		logger('index').log('Compiled in ' + ((new Date().getTime() - date.getTime()) / 1000) + ' seconds.')
+		logger('runner').log('Compiled in ' + ((new Date().getTime() - date.getTime()) / 1000) + ' seconds.')
 		this.system.documents[root].instance.exports.main()
 	}
 	
@@ -40,6 +40,9 @@ class Runner {
 		
 		broadcast.on('parsed', function(data) {
 			logger('parsing').log('parsed: ' + data)
+		})
+		broadcast.on('loaded', function(data) {
+			logger('loading').log('loaded: ' + data)
 		})
 		broadcast.on('transformed', function(data) {
 			logger('transforming').log('transformed: ' + data)
