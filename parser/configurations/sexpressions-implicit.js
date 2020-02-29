@@ -80,9 +80,9 @@ function lines(level) {
 	],
 	function(value) {
 		let line = value.seq[0]
-		let lines_blank = value.seq[1].opt
+		let line_blank = value.seq[1].opt
 		let lines = value.seq[2]
-		if (lines_blank) line.value.push(lines_blank)
+		if (line_blank) line.value.push(line_blank)
 		line.value.push(...lines)
 		line.value = fold_lines(line.value)
 		return line
