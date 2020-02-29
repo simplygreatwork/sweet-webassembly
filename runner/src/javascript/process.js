@@ -6,7 +6,8 @@ const visit = require('unist-util-visit')
 const parse = require('./parse')
 const walk = require('./walk')
 const query = require('./query')
-const transform = require('./transform')
+const logger = require('./logger')()
+const broadcast = require('./broadcast')
 
 function process_md(document) {
 	
@@ -32,7 +33,7 @@ function process_watm(document) {
 		process.exit(-1)
 		return false
 	} else {
-		console.log('parsed: ' + document.id)
+		broadcast.emit('parsed', document.id)
 		document.tree = result
 		document.functions = find_functions(document)
 		document.function_exports = find_function_exports(document)
@@ -64,10 +65,9 @@ function noop() {
 	return
 }
 
-function instantiate(document, imports, system) {
+function instantiate(document, imports) {
 	
-	let code = transform(document, system)
-	let module_ = require('wabt')().parseWat(document.path, code, this.flags = {
+	let module_ = require('wabt')().parseWat(document.path, document.source, this.flags = {
 		exceptions : false,
 		mutable_globals : true,
 		sat_float_to_int : false,
@@ -80,8 +80,8 @@ function instantiate(document, imports, system) {
 	module_.resolveNames()
 	module_.validate(this.flags)
 	let binary = module_.toBinary({
-		log: true,
-		write_debug_names: true
+		log: false,
+		write_debug_names: false
 	})
 	let wasm = new WebAssembly.Module(binary.buffer)
 	document.instance = new WebAssembly.Instance(wasm, imports)
@@ -234,18 +234,18 @@ function find_function(document, name) {
 
 module.exports = {
 	
-	process_md: process_md,
-	process_watm: process_watm,
-	process_wat: process_wat,
-	find_module_imports: find_module_imports,
-	find_function_imports: find_function_imports,
-	find_functions: find_functions,
-	find_function_exports: find_function_exports,
-	render_function_exports: render_function_exports,
-	render_function_imports: render_function_imports,
-	has_function_import: has_function_import,
-	find_function_signature: find_function_signature,
-	find_document: find_document,
-	find_function: find_function,
-	instantiate: instantiate
+	process_md,
+	process_watm,
+	process_wat,
+	find_module_imports,
+	find_function_imports,
+	find_functions,
+	find_function_exports,
+	render_function_exports,
+	render_function_imports,
+	has_function_import,
+	find_function_signature,
+	find_document,
+	find_function,
+	instantiate
 }

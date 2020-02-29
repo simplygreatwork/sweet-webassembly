@@ -61,12 +61,12 @@
 		print_string "------------------------------"
 		print_string "First class function B has been called using a funcref macro!"
 		print_string "------------------------------"
-	
+		
 	func test_set_get_macros (param $a i32)
 		
 		local $c i32
 		print_string "------------------------------"
-		print_string "Test local variable get and set! (not implemented)"
+		print_string "Test local variable get and set! (partially implemented)"
 		print_string "------------------------------"
 		print_string "Set values which have not been declared"
 		set b to 2

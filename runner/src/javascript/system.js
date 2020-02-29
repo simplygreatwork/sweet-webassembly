@@ -4,7 +4,9 @@ const path = require('path')
 const Document = require('./document')
 const Table = require('./table')
 const process = require('./process')
+const transform = require('./transform')
 const logger = require('./logger')()
+const broadcast = require('./broadcast')
 
 class System {
 	
@@ -21,6 +23,7 @@ class System {
 		this.resolve_documents()
 		this.sort_documents()
 		this.render_function_imports()
+		this.transform_documents()
 		this.instantiate_documents()
 	}
 	
@@ -39,6 +42,7 @@ class System {
 	
 	resolve_documents() {
 		
+		console.log('resolve_documents')
 		Object.keys(this.documents).forEach(function(key) {
 			let document = this.documents[key]
 			document.module_imports.forEach(function(each, index) {
@@ -48,7 +52,8 @@ class System {
 	}
 	
 	sort_documents() {
-		
+
+		console.log('sort_documents')
 		let documents = Object.values(this.documents)
 		let document = null
 		this.set = new Set()
@@ -69,11 +74,20 @@ class System {
 	
 	render_function_imports() {
 		
+		console.log('render_function_imports')
 		for (let document of this.set.values()) {
 			process.render_function_imports(document)
 		}
 	}
 	
+	transform_documents() {
+		
+		for (let document of this.set.values()) {
+			document.source = transform(document, this)
+			broadcast.emit('transformed', document.id)
+		}
+	}
+
 	instantiate_documents() {
 		
 		for (let document of this.set.values()) {
@@ -82,7 +96,7 @@ class System {
 			let key = name.split('.')[0]
 			let imports = this.imports
 			let system = this
-			this.imports[key] = process.instantiate(document, imports, system)
+			this.imports[key] = process.instantiate(document, imports)
 		}
 	 }
 }
