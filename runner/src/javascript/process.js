@@ -158,6 +158,7 @@ function render_function_exports(document) {
 	document.functions.forEach(function(each) {
 		let name = each.value[1].value
 		if (! document.function_exports[name]) {
+			if (name.charAt(0) != '$') name = '$' + name		// revisit: why this is needed? hack?
 			let code = `\n\t(export "${name.substring(1)}" (func ${name}))`
 			let tree = parse(code)
 			query.append(document.tree[0], tree[0])

@@ -49,10 +49,7 @@ class Runner {
 		})
 		broadcast.on('transformed', function(document) {
 			logger('transforming').log('transformed: ' + document.id)
-			logger('transforming').log('transformed path: ' + document.path)
-			logger('transforming').log('transformed length: ' + document.source.length)
 			let path_ = path.join(process.cwd(), 'work', document.path) 
-			logger('transforming').log('transformed work path: ' + path_)
 			jetpack.write(path_, document.source)
 		})
 	}

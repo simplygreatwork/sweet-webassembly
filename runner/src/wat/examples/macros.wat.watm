@@ -104,6 +104,4 @@
 		
 		
 	)
-
-	export "main" (func $main)
 )
