@@ -58,20 +58,20 @@ function expression_contents(level) {
 function line_blank() {
 	
 	return p.seq ([
-		p.rep (indent(), 0, function(value) {
-			return value.rep
-		}),
+		p.rep (
+			indent(), 0, function(value) { return value.rep }
+		),
 		newline()
 	],
 	function(value) {
 		return {
-			type: 'whitespace',
-			value: '\n'
+			type: 'newline',
+			value: 'apple'
 		}
 	})
 }
 
-function lines(level) {
+function lines(level) {													// fixme: include whitespace in result
 	
 	return p.seq ([
 		line(level),
@@ -81,9 +81,6 @@ function lines(level) {
 	function(value) {
 		let line = value.seq[0]
 		let lines = value.seq[2]
-		if (value.seq[1].opt != null) {
-			line.value.push(value.seq[1].opt)
-		}
 		line.value.push(...lines)
 		line.value = fold_lines(line.value)
 		return line
@@ -97,10 +94,11 @@ function line(level) {
 		p.ref (refs, 'line_contents', level),
 		newline(),
 	], function(value) {
+		// value.seq[1].unshift(value.seq[0])
+		// value.seq[1].push(value.seq[2])
 		return {
 			type: 'line',
-			value: value.seq[1],
-			whitespace_: value.seq[2].value + value.seq[0].value
+			value: value.seq[1]
 		}
 	})
 }
@@ -148,10 +146,7 @@ function indentation(level) {
 		)
 	}
 	return p.seq (sequence, function(value) {
-		return {
-			type: 'whitespace',
-			value: value.seq.join('')
-		}
+		return value.seq.join('')
 	})
 }
 
@@ -175,15 +170,12 @@ function fold_lines(value) {
 	value.forEach(function(each, index) {
 		if (each.type == 'line') {
 			if (each.value.length > 0 && each.value[0].type != 'symbol') {
-				each.value[0].whitespace = each.whitespace_
 				result.push(...each.value)
 			} else {
 				if (index === 0) {
-					each.value[0].whitespace = each.whitespace_
 					result.push(...each.value)
 				} else {
 					each.type = 'expression'
-					if (each.whitespace_) each.whitespace = each.whitespace_
 					result.push(each)
 				}
 			}
@@ -199,8 +191,10 @@ function fold_whitespace(value) {
 	let whitespace = []
 	value.map(function(each) {
 		if (each.type == 'whitespace') {
+			console.log('whitespace')
 			whitespace.push(each.value)
 		} else if (each.type == 'newline') {
+			console.log('newline: ' + each.value)
 			whitespace.push(each.value)
 		} else {
 			each.whitespace = whitespace.join('')

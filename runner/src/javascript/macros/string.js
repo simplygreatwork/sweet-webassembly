@@ -32,7 +32,7 @@ function transform(node, index, parents) {
 
 function string_call(node, index, parents, func_name) {
 	
-	let ast = parse(`(call ${func_name})`)
+	let ast = parse(` (call ${func_name})`)
 	query.replace(query.last(parents), node, ast[0])
 }
 
