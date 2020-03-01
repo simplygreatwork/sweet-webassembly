@@ -6,6 +6,8 @@ const shared = require('./shared')
 let system = null
 let document = null
 
+// idea: use emitter and change events
+
 function transform(node, index, parents) {
 	
 	let result = null
@@ -50,7 +52,7 @@ function declare_if_missing(value, parents) {
 				if (each.value[1].value == value) found = true
 			}
 			if ((candidate == false) && (found === false)) {
-				let ast = parse(`(local ${value} i32)`)
+				let ast = parse(`\n(local ${value} i32)`)
 				query.insert(node_func, ast[0], index)
 			}
 			return candidate

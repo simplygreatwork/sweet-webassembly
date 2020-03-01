@@ -25,6 +25,15 @@ function is_type_value(node, type, value) {
 	return false
 }
 
+function get_value(node, index) {
+	
+	if (index === undefined) {
+		return node.value
+	} else {
+		return node.value[index]
+	}
+}
+
 function is_expression_length(node, length) {
 	
 	if (node.type == 'expression') {

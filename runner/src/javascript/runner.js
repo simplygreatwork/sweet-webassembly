@@ -20,6 +20,7 @@ class Runner {
 			},
 			macros: [
 				require('./macros/function.js'),
+				require('./macros/loop.js'),
 				require('./macros/set.js'),
 				require('./macros/get.js'),
 				require('./macros/dollar.js'),
@@ -30,7 +31,6 @@ class Runner {
 				require('./macros/typeof.js'),
 				require('./macros/funcref.js'),
 				require('./macros/callable.js'),
-				require('./macros/loop.js'),
 			]
 		})
 		let date = new Date()
