@@ -82,8 +82,8 @@
 		repeat with k from 0 to 20 every 2	;; every other
 			print_string "iteration"
 			print_integer (get_local $k)
-			if (i32.gt_u (get_local $k) 13)
-				break
-			if (i32.gt_u (get_local $k) 17)
-				(then (break))
+			if (i32.gt_u (get_local $k) 13)	;; comment
+				break									;; comment
+			if (i32.gt_u (get_local $k) 17)	;; comment
+				(then (break))						;; comment
 )

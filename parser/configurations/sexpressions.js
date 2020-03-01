@@ -29,7 +29,7 @@ function main() {
 		}),
 		0,
 		function(value) {
-			return fold_whitespace(value)
+			return fold_whitespace(value.rep)
 		}
 	)
 }
@@ -79,25 +79,29 @@ function comment() {
 function fold_whitespace(value) {
 	
 	let whitespace = []
-	value.rep.map(function(each) {
+	value.map(function(each) {
 		if (each.type == 'whitespace') {
 			whitespace.push(each.value)
 		} else if (each.type == 'newline') {
+			whitespace.push(each.value)
+		} else if (each.type == 'comment') {
 			whitespace.push(each.value)
 		} else {
 			each.whitespace = whitespace.join('')
 			whitespace.splice(0, whitespace.length)
 		}
-	});
-	return value.rep.filter(function(each) {
+	})
+	return value.filter(function(each) {
 		if (each.type == 'whitespace') {
 			return false
 		} else if (each.type == 'newline') {
 			return false
+		} else if (each.type == 'comment') {
+			return false
 		} else {
 			return true
 		}
-	});
+	})
 }
 
 refs.main = main

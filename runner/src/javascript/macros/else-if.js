@@ -8,6 +8,7 @@ let document = null
 
 // goal: no keyword "then": all expressions inside of "if" but after (if (cond)) are shifted into (if (then))
 // goal: keyword "else" is a sibling of "if" - else contents are moved into (if (else))
+// note: "else if" could probably be part of else.js not a separate else-if.js
 
 function transform(node, index, parents) {
 	

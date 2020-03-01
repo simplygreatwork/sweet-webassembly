@@ -7,6 +7,7 @@ const process = require('./process')
 const transform = require('./transform')
 const logger = require('./logger')()
 const broadcast = require('./broadcast')
+const bus = require('./bus')
 
 class System {
 	
@@ -98,6 +99,11 @@ class System {
 			let system = this
 			this.imports[key] = process.instantiate(document, imports)
 		}
+	}
+
+	fire(message, data) {
+
+
 	}
 }
 

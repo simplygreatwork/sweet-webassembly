@@ -201,6 +201,8 @@ function fold_whitespace(value) {
 			whitespace.push(each.value)
 		} else if (each.type == 'newline') {
 			whitespace.push(each.value)
+		} else if (each.type == 'comment') {
+			whitespace.push(each.value)
 		} else {
 			each.whitespace = whitespace.join('')
 			whitespace.splice(0, whitespace.length)
@@ -210,6 +212,8 @@ function fold_whitespace(value) {
 		if (each.type == 'whitespace') {
 			return false
 		} else if (each.type == 'newline') {
+			return false
+		} else if (each.type == 'comment') {
 			return false
 		} else {
 			return true

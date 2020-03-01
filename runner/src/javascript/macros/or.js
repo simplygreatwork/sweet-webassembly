@@ -1,5 +1,6 @@
 
 const query = require('../query')
+const parse = require('../parse')
 const shared = require('./shared')
 
 let system = null
@@ -7,15 +8,8 @@ let document = null
 
 function transform(node, index, parents) {
 	
-	let first = node.value[0]
-	if (query.is_type(first, 'symbol')) {
-		if (shared.is_callable(document, first.value)) {
-			node.value[0].whitespace = node.value[0].whitespace + ' '
-			node.value.unshift({
-				type: 'symbol',
-				value: 'call'
-			})
-		}
+	if (query.is_type_value(node.value[0], 'symbol', 'or')) {
+		return
 	}
 }
 

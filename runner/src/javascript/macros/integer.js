@@ -16,7 +16,7 @@ function transform(node, index, parents) {
 					if (! query.is_type_value(first, 'symbol', 'br_if')) {
 						node.value.forEach(function(each, index) {
 							if (each.type == 'number') {
-								let ast = parse(`(i32.const ${each.value})`)
+								let ast = parse(` (i32.const ${each.value})`)
 								node.value[index] = ast[0]
 							}
 						})
