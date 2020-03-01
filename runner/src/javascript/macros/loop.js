@@ -6,7 +6,8 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-// todo: use change events (added/removed) instead of invalidate
+// idea: use change events (added/removed) instead of returning "invalidate"
+// e.g. system.fire('added')
 
 function transform(node, index, parents) {
 	
@@ -15,12 +16,11 @@ function transform(node, index, parents) {
 		let tree = parse (`
 		(block (loop
 			(if (i32.gt_u (get_local ${config.with}) (i32.const ${config.to})) (then (br 2)))
-			(set_local ${config.with} (i32.add (get_local ${config.with}) (i32.const ${config.skip})))
+			(set_local ${config.with} (i32.add (get_local ${config.with}) (i32.const ${config.every})))
 			(br 0)
 		))
 		`)
-		node.value
-		.filter(function(each) {
+		node.value.filter(function(each) {
 			return (each.type == 'expression')
 		})
 		.forEach(function(each, index) {
@@ -29,18 +29,18 @@ function transform(node, index, parents) {
 		query.replace(query.last(parents), node, tree[0])
 		tree = parse (`(set_local ${config.with} (i32.const ${config.from}))`)
 		query.insert(query.last(parents), tree[0], index)
-		return 'invalidate'					// to trigger set macro declaration
+		return 'invalidate'					// invalidate to trigger set.js macro to declare iterator local
 	}
 }
 
 function get_config(node) {
 	
-	let config = { from: 0, to: 10, skip: 1, with: '$i', 'in': null }
+	let config = { with: '$i', from: 0, to: 10, every: 1, 'in': null }
 	node.value.forEach(function(each, index) {
+		if (each.value == 'with') config.with = node.value[index + 1].value
 		if (each.value == 'from') config.from = node.value[index + 1].value
 		if (each.value == 'to') config.to = node.value[index + 1].value
-		if (each.value == 'skip') config.skip = node.value[index + 1].value
-		if (each.value == 'with') config.with = node.value[index + 1].value
+		if (each.value == 'every') config.every = node.value[index + 1].value
 		config.with = (config.with.charAt(0) == '$') ? config.with : '$' + config.with
 	})
 	if (false) console.log('config: ' + JSON.stringify(config, null, 2))

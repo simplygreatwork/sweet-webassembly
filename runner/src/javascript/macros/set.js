@@ -6,7 +6,8 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-// idea: use change events (added/removed) instead of "invalidate"
+// idea: use change events (added/removed) instead of returning "invalidate"
+// e.g. system.fire('added')
 
 function transform(node, index, parents) {
 	

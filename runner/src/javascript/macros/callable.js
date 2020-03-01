@@ -10,13 +10,11 @@ function transform(node, index, parents) {
 	let first = node.value[0]
 	if (query.is_type(first, 'symbol')) {
 		if (shared.is_callable(document, first.value)) {
-			node.value.unshift({
-				type: 'whitespace',
-				value: ' '
-			})
+			node.value[0].whitespace = node.value[0].whitespace + ' '
 			node.value.unshift({
 				type: 'symbol',
-				value: 'call'
+				value: 'call',
+				whitespace: ' '
 			})
 		}
 	}

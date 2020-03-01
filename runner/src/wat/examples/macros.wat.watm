@@ -79,10 +79,11 @@
 		(print_string "Test flow macros!")
 		(print_string "------------------------------")
 		
-		repeat from 0 to 20 skip 2 with k
+		repeat with k from 0 to 20 every 2	;; every other
 			print_string "iteration"
 			print_integer (get_local $k)
-			if (i32.gt_u (get_local $k) (i32.const 13))
-				then
-					break		;; prefer "exit repeat"
+			if (i32.gt_u (get_local $k) 13)
+				break
+			if (i32.gt_u (get_local $k) 17)
+				(then (break))
 )

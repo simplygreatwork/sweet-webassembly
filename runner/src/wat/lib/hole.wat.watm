@@ -21,7 +21,7 @@
 		(call $hole_length_set (get_local $hole) (get_local $length))
 		(get_local $hole)
 	)
-
+	
 	(func $hole_type (param $hole i32) (result i32)
 		(i32.load16_u (i32.add (get_local $hole) (i32.const 0)))
 	)

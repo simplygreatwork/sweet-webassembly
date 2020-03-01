@@ -8,7 +8,7 @@ function transform(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'function')) {
-		first.value = 'func'					// todo: this conversion would need to occur before the transformation phase
+		first.value = 'func'				// review: this conversion would need to occur before the linking phase anyway
 	}
 	if (query.is_type_value(first, 'symbol', 'func')) {
 		let second = node.value[1]
