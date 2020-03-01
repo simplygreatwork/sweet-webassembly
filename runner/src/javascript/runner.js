@@ -21,6 +21,7 @@ class Runner {
 			macros: [
 				require('./macros/function.js'),
 				require('./macros/loop.js'),
+				require('./macros/break.js'),
 				require('./macros/set.js'),
 				require('./macros/get.js'),
 				require('./macros/dollar.js'),

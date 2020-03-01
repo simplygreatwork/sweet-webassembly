@@ -9,7 +9,12 @@ let document = null
 function transform(node, index, parents) {
 	
 	if (query.is_type_value(node.value[0], 'symbol', 'break')) {
-		return
+		node.value[0].value = 'br'
+		node.value.splice(1, 0, {
+			type: 'symbol',
+			value: '2',
+			whitespace: ' '
+		})
 	}
 }
 
