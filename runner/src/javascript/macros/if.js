@@ -56,12 +56,8 @@ function get_then(node, index, parents) {
 	let result
 	let expressions
 	if (query.is_type(node.value[1], 'expression')) {
-		console.log('have expression at cond place')
-		console.log('node.value[2]: ' + JSON.stringify(node.value[2], null, 2))
 		if (query.is_type(node.value[2], 'expression')) {
-			console.log('have expression at then place')
 			if (query.is_type_value(node.value[2].value[0], 'symbol', 'then')) {
-				console.log('then clause exists')
 				return node.value[2]			// "then" clause exists already
 			}
 		}
