@@ -8,6 +8,7 @@ let document = null
 
 function transform(node, index, parents) {
 	
+	if (! query.is_type(node, 'expression')) return
 	let func_node = shared.get_parent_function(parents)
 	if (! func_node) return
 	let locals = shared.get_locals(func_node)
