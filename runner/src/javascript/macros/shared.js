@@ -1,3 +1,4 @@
+const query = require('../query')
 
 function is_inside_function(parents) {
 	
@@ -40,8 +41,35 @@ function is_callable(document, symbol) {
 	return result
 }
 
+function get_locals(func_node) {
+	
+	let elements = []
+	let offset = 0
+	func_node.value.every(function(each, index) {
+		if (index <= 1) return true								// e.g. func $name
+		let first = each.value[0]
+		if (query.is_type_value(first, 'symbol', 'param')) {
+			elements.push(each)
+			return true
+		} else if (query.is_type_value(first, 'symbol', 'result')) {
+			return true
+		} else if (query.is_type_value(first, 'symbol', 'local')) {
+			elements.push(each)
+			return true
+		} else {
+			offset = index
+			return false
+		}
+	})
+	return {
+		elements,
+		offset
+	}
+}
+
 module.exports = {
-	get_parent_function: get_parent_function,
-	is_inside_function: is_inside_function,
-	is_callable: is_callable
+	get_parent_function,
+	is_inside_function,
+	is_callable,
+	get_locals
 }

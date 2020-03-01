@@ -6,9 +6,6 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-// idea: use change events (added/removed) instead of returning "invalidate"
-// e.g. system.fire('added')
-
 function transform(node, index, parents) {
 	
 	let result = null
@@ -34,29 +31,24 @@ function transform(node, index, parents) {
 
 function declare_if_missing(value, parents) {
 	
-	let found = false
-	let node_func = shared.get_parent_function(parents)
-	node_func.value.every(function(each, index) {
-		if (index <= 1) return true								// e.g. func $name
-		let candidate = false
-		let first = each.value[0]
-		if (first.value === undefined) return true			// review: what would cause this?
-		if (query.is_type_value(first, 'symbol', 'param')) {
-			candidate = true
-			if (each.value[1].value == value) found = true
-		} else if (query.is_type_value(first, 'symbol', 'result')) {
-			candidate = true
-		} else if (query.is_type_value(first, 'symbol', 'local')) {
-			candidate = true
-			if (each.value[1].value == value) found = true
+	let found = null
+	let func_node = shared.get_parent_function(parents)
+	let locals = shared.get_locals(func_node)
+	locals.elements.every(function(each, index) {
+		if (each.value[1].value == value) {
+			found = each
+			return false
+		} else {
+			return true
 		}
-		if ((candidate == false) && (found === false)) {
-			let tree = parse (`\n(local ${value} i32)`)
-			query.insert(node_func, tree[0], index)
-		}
-		return candidate
 	})
-	return (found === false) ? 'invalidate' : null		// todo: use change events (added/removed) instead
+	if (! found) {
+		let tree = parse (`
+		(local ${value} i32)`)
+		query.insert(func_node, tree[0], locals.offset)
+		system.fire('add', tree[0])
+	}
+	return (! found) ? 'invalidate' : null
 }
 
 module.exports = function(system_, document_) {
