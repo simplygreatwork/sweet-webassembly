@@ -11,20 +11,7 @@ Emitter = {
 			this.channels[key].splice(index, 1)
 		}.bind(this)
 	},
-	
-	off(key) {
 		
-		if (this.channels[key]) {
-			this.channels[key].splice(0, this.channels[key].length)
-		}
-	},
-	
-	replace(key, func) {
-		
-		this.off(key)
-		this.on(key, func)
-	},
-	
 	emit(key) {
 		
 		this.channels = this.channels || {}

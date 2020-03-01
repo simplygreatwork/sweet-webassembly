@@ -181,9 +181,24 @@ function fold_lines(value) {
 					each.value[0].whitespace = each.whitespace_
 					result.push(...each.value)
 				} else {
-					each.type = 'expression'
-					if (each.whitespace_) each.whitespace = each.whitespace_
-					result.push(each)
+					let significant = each.value.filter(function(each) {
+						if (each.type == 'whitespace') {
+							return false
+						} else if (each.type == 'newline') {
+							return false
+						} else if (each.type == 'comment') {
+							return false
+						} else {
+							return true
+						}
+					})
+					if (significant.length > 0) {		// line contains significant elements
+						each.type = 'expression'
+						if (each.whitespace_) each.whitespace = each.whitespace_
+						result.push(each)
+					} else {
+						result.push(...each.value)
+					}
 				}
 			}
 		} else {

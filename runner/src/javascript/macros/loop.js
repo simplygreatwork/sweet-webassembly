@@ -29,6 +29,7 @@ function transform(node, index, parents) {
 		query.replace(query.last(parents), node, tree[0])
 		tree = parse (`(set_local ${config.with} (i32.const ${config.from}))`)
 		query.insert(query.last(parents), tree[0], index)
+		system.fire('add', tree[0])
 		return 'invalidate'					// invalidate to trigger set.js macro to declare iterator local
 	}
 }

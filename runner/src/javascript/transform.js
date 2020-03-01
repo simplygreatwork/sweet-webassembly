@@ -17,6 +17,9 @@ function transform(document, system) {
 	let macros =  system.macros.map(function(each) {
 		return each(system, document)
 	})
+	let off = system.bus.on('add', function(data) {
+		if (false) logger('transform').log(console.log('add: ' + data))
+	})
 	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		let result = null
 		if (node.type == 'expression') {
@@ -27,5 +30,6 @@ function transform(document, system) {
 		}
 		return result
 	}, reverse: true })
+	off()
 	return document.tree
 }

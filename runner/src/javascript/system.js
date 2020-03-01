@@ -3,11 +3,11 @@ const fs = require('fs')
 const path = require('path')
 const Document = require('./document')
 const Table = require('./table')
+const Bus = require('./bus')
 const process = require('./process')
 const transform = require('./transform')
 const logger = require('./logger')()
 const broadcast = require('./broadcast')
-const bus = require('./bus')
 
 class System {
 	
@@ -16,6 +16,7 @@ class System {
 		Object.assign(this, options)
 		this.documents = {}
 		this.table = new Table(this)
+		this.bus = new Bus()
 	}
 	
 	start(path_) {
@@ -100,10 +101,9 @@ class System {
 			this.imports[key] = process.instantiate(document, imports)
 		}
 	}
-
+	
 	fire(message, data) {
-
-
+		this.bus.emit(message, data)
 	}
 }
 
