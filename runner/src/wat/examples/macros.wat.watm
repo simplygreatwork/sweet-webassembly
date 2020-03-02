@@ -85,6 +85,6 @@
 				break
 			if (k equals 6)
 				break
-			if (i32.gt_u (get_local k) 17)	;; comment
+			if (k greater 17)	;; comment
 				(then (break))						;; comment
 )

@@ -23,6 +23,8 @@ class Runner {
 				require('./macros/loop.js'),
 				require('./macros/break.js'),
 				require('./macros/equals.js'),
+				require('./macros/greater.js'),
+				require('./macros/less.js'),
 				require('./macros/if.js'),
 				require('./macros/set.js'),
 				require('./macros/get.js'),

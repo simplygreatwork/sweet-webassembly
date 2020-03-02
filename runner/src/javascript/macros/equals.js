@@ -8,10 +8,14 @@ let document = null
 
 function transform(node, index, parents) {
 	
-	if (node.value.length > 2) {
-		if (query.is_type_value(node.value[1], 'symbol', 'equals')) {
-			node.value[1].value = node.value[0].value
-			node.value[0].value = 'i32.eq'
+	if (shared.is_inside_function(parents)) {
+		if (query.is_type(node, 'expression')) {
+			if (query.is_expression_longer(node, 2)) {
+				if (query.is_type_value(node.value[1], 'symbol', 'equals')) {
+					node.value[1].value = node.value[0].value
+					node.value[0].value = 'i32.eq'
+				}
+			}
 		}
 	}
 }

@@ -36,8 +36,8 @@ function transform(node, index, parents) {
 }
 
 module.exports = function(system_, document_) {
-    
-    system = system_
-    document = document_
-	 return transform
+	
+	system = system_
+	document = document_
+	return transform
 }
