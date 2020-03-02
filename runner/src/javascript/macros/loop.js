@@ -6,9 +6,6 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-// idea: use change events (added/removed) instead of returning "invalidate"
-// e.g. system.fire('added')
-
 function transform(node, index, parents) {
 	
 	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
@@ -29,7 +26,7 @@ function transform(node, index, parents) {
 		query.replace(query.last(parents), node, tree[0])
 		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)
 		query.insert(query.last(parents), tree[0], index)
-		system.fire('add', tree[0])
+		system.fire('insert', tree[0])
 		return 'invalidate'					// invalidate to trigger set.js macro to declare iterator local
 	}
 }
@@ -42,7 +39,7 @@ function get_config(node) {
 		if (each.value == 'from') config.from = node.value[index + 1].value
 		if (each.value == 'to') config.to = node.value[index + 1].value
 		if (each.value == 'every') config.every = node.value[index + 1].value
-		config.with = (config.with.charAt(0) == '$') ? config.with : '$' + config.with
+		config.with = shared.dollarify(config.with)
 	})
 	if (false) console.log('config: ' + JSON.stringify(config, null, 2))
 	return config

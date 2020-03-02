@@ -8,8 +8,11 @@ let document = null
 
 function transform(node, index, parents) {
 	
-	if (query.is_type_value(node.value[0], 'symbol', 'equals')) {
-		return
+	if (node.value.length > 2) {
+		if (query.is_type_value(node.value[1], 'symbol', 'equals')) {
+			node.value[1].value = node.value[0].value
+			node.value[0].value = 'i32.eq'
+		}
 	}
 }
 

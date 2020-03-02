@@ -67,9 +67,30 @@ function get_locals(func_node) {
 	}
 }
 
+function is_local(locals, value) {
+
+	let result = false
+	locals.elements.every(function(each) {
+		if (each.value[1].value == value) {
+			result = true
+			return false
+		} else {
+			return true
+		}
+	})
+	return result
+}
+
+function dollarify(symbol) {
+	
+	return (symbol.charAt(0) == '$') ? symbol : '$' + symbol
+}
+
 module.exports = {
 	get_parent_function,
 	is_inside_function,
+	get_locals,
+	is_local,
 	is_callable,
-	get_locals
+	dollarify
 }

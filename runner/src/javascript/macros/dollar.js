@@ -10,19 +10,29 @@ function transform(node, index, parents) {
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'call')) {
 		let second = node.value[1]
-		rewrite(second)
+		rewrite(second, index, parents)
 	} else if (query.is_type_value(first, 'symbol', 'funcref')) {
 		let second = node.value[1]
-		rewrite(second)
+		rewrite(second, index, parents)
 	} else {
-		rewrite(first)
+		rewrite(first, index, parents)
 	}
 }
 
-function rewrite(node) {
+function rewrite(node, index, parents) {
 	
 	if (shared.is_callable(document, '$' + node.value)) {
-		node.value = '$' + node.value
+		node.value = shared.dollarify(node.value)
+	} else {
+		let func_node = shared.get_parent_function(parents)
+		if (! func_node) return
+		let locals = shared.get_locals(func_node)
+		if (! locals) return
+		if (shared.is_local(locals, node.value)) {
+			if (index > 0) {
+				node.value = shared.dollarify(node.value)
+			}
+		}
 	}
 }
 

@@ -15,9 +15,7 @@ function transform(node, index, parents) {
 	}
 	if (query.is_type_value(first, 'symbol', 'set_local')) {
 		let second = node.value[1]
-		if (second.value.charAt(0) != '$') {
-			second.value = '$' + second.value
-		}
+		second.value = shared.dollarify(second.value)
 		if (node.value.length > 2) {
 			let third = node.value[2]
 			if (query.is_type_value(third, 'symbol', 'to')) {
@@ -46,7 +44,7 @@ function declare_if_missing(value, parents) {
 		let tree = parse (`
 		(local ${value} i32)`)
 		query.insert(func_node, tree[0], locals.offset)
-		system.fire('add', tree[0])
+		system.fire('insert', tree[0])
 	}
 	return (! found) ? 'invalidate' : null
 }

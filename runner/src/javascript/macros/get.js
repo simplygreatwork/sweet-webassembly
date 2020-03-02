@@ -15,8 +15,9 @@ function transform(node, index, parents) {
 	if (! locals) return
 	node.value.forEach(function(each, index) {
 		if (! query.is_type(each, 'symbol')) return
-		if (! is_local(each.value, locals)) return 
-		if (! index > 0) return 
+		let value = shared.dollarify(each.value)
+		if (! shared.is_local(locals, value)) return
+		if (! index > 0) return
 		let previous = node.value[index - 1]
 		let substitute = true
 		substitute = (query.is_type_value(previous, 'symbol', 'param')) ? false : substitute
@@ -26,24 +27,12 @@ function transform(node, index, parents) {
 		substitute = (query.is_type_value(previous, 'symbol', 'set_local')) ? false : substitute
 		substitute = (query.is_type_value(previous, 'symbol', 'call')) ? false : substitute
 		if (substitute) {
-			let tree = parse(`(get_local ${each.value})`)
+			let tree = parse(` (get_local ${value})`)
 			query.replace(node, each, tree[0])
-		}
-	})
-}
-
-function is_local(value, locals) {
-
-	let result = false
-	locals.elements.every(function(each) {
-		if (each.value[1].value == value) {
-			result = true
-			return false
 		} else {
-			return true
+			each.value = value
 		}
 	})
-	return result
 }
 
 module.exports = function(system_, document_) {

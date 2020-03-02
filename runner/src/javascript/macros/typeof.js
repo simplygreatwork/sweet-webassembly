@@ -9,18 +9,16 @@ let types = {}
 function transform(node, index, parents) {
 	
 	let first = node.value[0]
-	if (first.type == 'symbol') {
-		if (first.value == 'typeof') {
-			let second = node.value[1]
-			if (types[second.value] === undefined) {
-				types[second.value] = counter;
-				if (false) console.log('type ' + second.value + ' = ' + counter);
-				counter++
-			}
-			first.value = 'i32.const'
-			second.type = 'number'
-			second.value = types[second.value]
+	if (query.is_type_value(first, 'symbol', 'typeof')) {
+		let second = node.value[1]
+		if (types[second.value] === undefined) {
+			types[second.value] = counter;
+			if (false) console.log('type ' + second.value + ' = ' + counter);
+			counter++
 		}
+		first.value = 'i32.const'
+		second.type = 'number'
+		second.value = types[second.value]
 	}
 }
 

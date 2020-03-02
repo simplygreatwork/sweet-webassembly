@@ -56,7 +56,7 @@ function get_then(node, index, parents) {
 	if (query.is_type(node.value[1], 'expression')) {
 		if (query.is_type(node.value[2], 'expression')) {
 			if (query.is_type_value(node.value[2].value[0], 'symbol', 'then')) {
-				return node.value[2]			// "then" clause exists already
+				return node.value[2]			// "then" clause exists already, do not create
 			}
 		}
 		expressions = node.value.filter(function(each, index) {

@@ -20,8 +20,8 @@ function transform(node, index, parents) {
 				if (! query.is_type_value(first, 'symbol', 'funcref')) {
 					node.value.forEach(function(each, index) {
 						if (query.is_type(each, 'string')) {
-							let ast = parse(`(string "${each.value}")`)
-							node.value[index] = ast[0]
+							let tree = parse(`(string "${each.value}")`)
+							node.value[index] = tree[0]
 						}
 					})
 				}
@@ -32,8 +32,8 @@ function transform(node, index, parents) {
 
 function string_call(node, index, parents, func_name) {
 	
-	let ast = parse(` (call ${func_name})`)
-	query.replace(query.last(parents), node, ast[0])
+	let tree = parse(` (call ${func_name})`)
+	query.replace(query.last(parents), node, tree[0])
 }
 
 function function_new(node, string) {

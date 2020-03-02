@@ -1,5 +1,6 @@
 
 const query = require('../query.js')
+const shared = require('./shared.js')
 
 let system = null
 let document = null
@@ -13,9 +14,7 @@ function transform(node, index, parents) {
 	if (query.is_type_value(first, 'symbol', 'func')) {
 		let second = node.value[1]
 		if ((second) && (second.value) && (typeof second.value === 'string')) {
-			if (second.value.charAt(0) != '$') {
-				second.value = '$' + second.value
-			}
+			second.value = shared.dollarify(second.value)
 		}
 	}
 }

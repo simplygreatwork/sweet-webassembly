@@ -34,7 +34,7 @@
 		print_string "------------------------------"
 		print_string "Test string macro"
 		print_string "------------------------------"
-   
+		
 	func test_integer_macro_expansion
 		
 		print_string "------------------------------"
@@ -75,15 +75,16 @@
 		
 	func test_flow_macros
 		
-		(print_string "------------------------------")
-		(print_string "Test flow macros!")
-		(print_string "------------------------------")
-		
+		print_string "------------------------------"
+		print_string "Test flow macros!"
+		print_string "------------------------------"
 		repeat with k from 0 to 20 every 2	;; every other
-			print_string "iteration"
-			print_integer $k
-			if (i32.gt_u (get_local $k) 13)	;; comment
-				break									;; comment
-			if (i32.gt_u (get_local $k) 17)	;; comment
+			print "iteration"
+			print_integer k
+			if (i32.gt_u (get_local k) 13)
+				break
+			if (k equals 6)
+				break
+			if (i32.gt_u (get_local k) 17)	;; comment
 				(then (break))						;; comment
 )

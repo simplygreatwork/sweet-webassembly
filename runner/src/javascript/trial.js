@@ -35,8 +35,8 @@ function test_two() {
 	(module
 		(import "utility" "print_string" (func $print_string (param i32)))
 	)`
-	let ast = parse(code)
-	walk({ root: ast[0], visit: function(node, index, parents) {
+	let tree = parse(code)
+	walk({ root: tree[0], visit: function(node, index, parents) {
 		console.log('node: ' + JSON.stringify(node, null, 2))
 	}})
 }

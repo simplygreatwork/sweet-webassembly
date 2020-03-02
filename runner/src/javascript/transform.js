@@ -17,8 +17,8 @@ function transform(document, system) {
 	let macros =  system.macros.map(function(each) {
 		return each(system, document)
 	})
-	let off = system.bus.on('add', function(data) {
-		if (false) logger('transform').log(console.log('add: ' + data))
+	let off = system.bus.on('insert', function(data) {
+		if (false) logger('transform').log(console.log('inserted: ' + data))
 	})
 	walk({ root: document.tree[0], visit: function(node, index, parents) {
 		let result = null

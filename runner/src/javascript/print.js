@@ -1,11 +1,11 @@
 
 const walk = require('./walk.js')
 
-function print(ast) {
+function print(tree) {
 	
 	let result = []
 	walk({
-		root: ast[0],
+		root: tree[0],
 		visit: function(node, index, parents) {
 			if (node.whitespace) result.push(node.whitespace)
 			if (node.type == 'expression') {
