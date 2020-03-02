@@ -14,77 +14,78 @@
 		test_string_macro_expansion
 		test_integer_macro_expansion
 		test_func_ref_macro
-		test_set_get_macros (i32.const 0)
+		test_set_get_macros 42
 		test_flow_macros
-
+		
 	func setup
 		
 		memory_bootstrap
 
 	func test_call_macro
 		
-		print_string "------------------------------"
-		print_string "Test call macro!"
-		print_string "------------------------------"
-		(call print_string (string "with call keyword, with string keyword"))
-		print_string "without call keyword, without string keyword"
-	
+		print "------------------------------"
+		print "Test call macro!"
+		print "------------------------------"
+		(call print (string "with call keyword, with string keyword"))
+		print "without call keyword, without string keyword"
+		
 	func test_string_macro_expansion
 		
-		print_string "------------------------------"
-		print_string "Test string macro"
-		print_string "------------------------------"
+		print "------------------------------"
+		print "Test string macro"
+		print "------------------------------"
 		
 	func test_integer_macro_expansion
 		
-		print_string "------------------------------"
-		print_string "Test integer macro expansion"
-		print_string "------------------------------"
+		print "------------------------------"
+		print "Test integer macro expansion"
+		print "------------------------------"
 		print_integer 100
 	
 	func test_func_ref_macro
 		
-		print_string "------------------------------"
-		print_string "Test function reference macro!"
-		print_string "------------------------------"
+		print "------------------------------"
+		print "Test function reference macro!"
+		print "------------------------------"
 		call_indirect (type $void_to_void) (funcref "test_function_first_class_a" "macros")
 		call_indirect (type $void_to_void) (funcref "test_function_first_class_b" "macros")
 
 	func test_function_first_class_a
 		
-		print_string "------------------------------"
-		print_string "First class function A has been called using a funcref macro!"
-		print_string "------------------------------"
+		print "------------------------------"
+		print "First class function A has been called using a funcref macro!"
+		print "------------------------------"
 
 	func test_function_first_class_b
 		
-		print_string "------------------------------"
-		print_string "First class function B has been called using a funcref macro!"
-		print_string "------------------------------"
+		print "------------------------------"
+		print "First class function B has been called using a funcref macro!"
+		print "------------------------------"
 		
 	func test_set_get_macros (param $a i32)
 		
 		local $c i32
-		print_string "------------------------------"
-		print_string "Test local variable get and set! (partially implemented)"
-		print_string "------------------------------"
-		print_string "Set values which have not been declared"
-		set b to 2
+		print "------------------------------"
+		print "Test local variable get and set! (partially implemented)"
+		print "------------------------------"
+		print_integer a
+		print "Set values which have not been declared"
+		set b to 88
+		print_integer b
 		set string to "string"
 		;; let a as i32 be 1
 		
 	func test_flow_macros
 		
-		print_string "------------------------------"
-		print_string "Test flow macros!"
-		print_string "------------------------------"
-		repeat with k from 0 to 20 every 2	;; every other
-			print "iteration"
+		print "------------------------------"
+		print "Test flow macros!"
+		print "------------------------------"
+		
+		repeat with k from 0 to 20 every 2		;; every other
+			
 			print_integer k
-			if (i32.gt_u (get_local k) 13)
+			if k greater 13
 				break
-			if (k equals 6)
+			if k equals 8
 				break
-			if (k greater 17)	;; comment
-				(then (break))						;; comment
 )

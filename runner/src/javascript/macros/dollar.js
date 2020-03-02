@@ -5,6 +5,8 @@ const shared = require('./shared')
 let system = null
 let document = null
 
+// todo: cache locals but invalidate the cache when adding loop iterators
+
 function transform(node, index, parents) {
 	
 	let first = node.value[0]
@@ -37,8 +39,8 @@ function rewrite(node, index, parents) {
 }
 
 module.exports = function(system_, document_) {
-    
-    system = system_
-    document = document_
-	 return transform
+	
+	system = system_
+	document = document_
+	return transform
 }

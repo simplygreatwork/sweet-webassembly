@@ -30,12 +30,13 @@ function transform(node, index, parents) {
 }
 
 function get_condition(node, index, parents) {
-
+	
 	let result
 	if (query.is_type(node.value[1], 'expression')) {
 		result = node.value[1]
 	} else {
-		let symbols = node.value.filter(function(each) {
+		result = parse(` ()`)[0]
+		node.value.filter(function(each) {
 			if (query.is_type(each, 'expression')) {
 				return false
 			} else if (query.is_type_value(each, 'symbol', 'if')) {
@@ -44,7 +45,9 @@ function get_condition(node, index, parents) {
 				return true
 			}
 		})
-		result = parse(`(${symbols.join(' ')})`)
+		.forEach(function(each) {
+			result.value.push(each)
+		})
 	}
 	return result
 }

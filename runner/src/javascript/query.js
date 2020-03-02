@@ -15,7 +15,7 @@ function is_expression_length(node, length) {
 	return (node.type == 'expression') && (node.value.length === length)
 }
 
-function is_expression_longer(node, length) {	
+function is_expression_longer(node, length) {
 	return (node.type == 'expression') && (node.value.length > length)
 }
 
@@ -72,8 +72,18 @@ function insert(parent, node, index) {
 	parent.value.splice(index, 0, node)
 }
 
-function find() {
-	return
+function find_type_value(node, type, value) {
+	
+	let index = -1
+	node.value.every(function(each, index_) {
+		if (is_type_value(each, type, value)) {
+			index = index_
+			return false
+		} else {
+			return true
+		}
+	})
+	return index
 }
 
 function closest() {
@@ -96,6 +106,6 @@ module.exports = {
 	insert,
 	append,
 	prepend,
-	find,
+	find_type_value,
 	closest
 }

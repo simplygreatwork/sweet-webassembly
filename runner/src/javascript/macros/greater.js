@@ -11,9 +11,15 @@ function transform(node, index, parents) {
 	if (shared.is_inside_function(parents)) {
 		if (query.is_type(node, 'expression')) {
 			if (query.is_expression_longer(node, 2)) {
-				if (query.is_type_value(node.value[1], 'symbol', 'greater')) {
-					node.value[1].value = node.value[0].value
-					node.value[0].value = 'i32.gt_u'
+				let index = query.find_type_value(node, 'symbol', 'greater')
+				if (index > -1) {
+					node.value[index].value = node.value[index - 1].value
+					node.value[index - 1].value = 'i32.gt_u'
+					if (query.is_expression_longer(node, 3)) {
+						let expression = parse(` ()`)[0]
+						expression.value.push(...node.value.splice(index - 1, 3))
+						node.value.splice(index - 1, 0, expression)
+					}
 				}
 			}
 		}

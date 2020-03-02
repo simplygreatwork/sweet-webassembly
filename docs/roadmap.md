@@ -1,4 +1,5 @@
 
+
 ### Roadmap
 - allow parsing of the expression for mdoule
 - Optimize compilation process (bottlenecks)
@@ -13,6 +14,8 @@
 - looping (for)
 	- exit
 	- break
+- implement and.js
+- repeat in list
 - loop with value in values
 - return statement
 - basic OO / method dispatch
