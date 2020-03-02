@@ -57,7 +57,6 @@ function remove(parent, node) {
 }
 
 function remove_at(parent, index) {
-	
 	if (index > -1) parent.value.splice(index, 1)
 }
 
