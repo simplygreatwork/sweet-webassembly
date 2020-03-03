@@ -16,17 +16,17 @@ function enter(node, index, parents) {
 			(set_local ${config.with} (i32.add (get_local ${config.with}) (i32.const ${config.every})))
 			(br 0)
 		))
-		`)
+		`)[0]
 		node.value.filter(function(each) {
 			return (each.type == 'expression')
 		})
 		.forEach(function(each, index) {
-			query.insert(tree[0].value[1], each, 2 + index)
+			query.insert(tree.value[1], each, 2 + index)
 		})
-		query.replace(query.last(parents), node, tree[0])
-		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)
-		query.insert(query.last(parents), tree[0], index)
-		system.fire('insert', tree[0])
+		query.replace(query.last(parents), node, tree)
+		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)[0]
+		query.insert(query.last(parents), tree, index)
+		system.fire('insert', tree)
 		return false					// invalidate to trigger set.js macro to declare iterator local
 	}
 }

@@ -21,10 +21,11 @@ function enter(node, index, parents) {
 		}
 		let condition = get_condition(node, index, parents)
 		let then = get_then(node, index, parents)
-		let tree = parse(`(if)`)
-		tree[0].value.push(condition)
-		tree[0].value.push(then)
-		query.replace(query.last(parents), node, tree[0])
+		let tree = {type: 'expression', value: [{ type: 'symbol', value: 'if'}]}
+		tree.value.push(condition)
+		tree.value.push(then)
+		query.replace(query.last(parents), node, tree)
+		system.fire('insert', tree)
 		return false
 	}
 }
@@ -35,7 +36,7 @@ function get_condition(node, index, parents) {
 	if (query.is_type(node.value[1], 'expression')) {
 		result = node.value[1]
 	} else {
-		result = parse(` ()`)[0]
+		result = {type: 'expression', value: []}
 		node.value.filter(function(each) {
 			if (query.is_type(each, 'expression')) {
 				return false
@@ -76,7 +77,7 @@ function get_then(node, index, parents) {
 			return (query.is_type(each, 'expression'))
 		})
 	}
-	result = parse(` (then)`)[0]
+	result = {type: 'expression', value: [{ type: 'symbol', value: 'then'}]}
 	expressions.forEach(function(each) {
 		result.value.push(each)
 	})

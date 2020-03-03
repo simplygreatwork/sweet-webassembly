@@ -6,7 +6,7 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
 	
 	let result = null
 	let first = node.value[0]
@@ -22,29 +22,21 @@ function enter(node, index, parents) {
 				query.remove(node, third)
 			}
 		}
-		result = declare_if_missing(second.value, parents)
+		result = declare_if_missing(second.value, parents, state)
 	}
 	return result
 }
 
-function declare_if_missing(value, parents) {
+function declare_if_missing(value, parents, state) {
 	
-	let found = null
-	let func_node = shared.get_parent_function(parents)
-	let locals = shared.get_locals(func_node)
-	locals.elements.every(function(each, index) {
-		if (each.value[1].value == value) {
-			found = each
-			return false
-		} else {
-			return true
-		}
-	})
+	let found = shared.is_local(state, value)
 	if (! found) {
 		let tree = parse (`
-		(local ${value} i32)`)
-		query.insert(func_node, tree[0], locals.offset)
-		system.fire('insert', tree[0])
+		(local ${value} i32)
+		`)[0]
+		query.insert(state.func, tree, state.locals.offset)
+		system.fire('insert', tree)
+		state.locals = shared.find_locals(state)
 	}
 	return (! found) ? false : undefined
 }

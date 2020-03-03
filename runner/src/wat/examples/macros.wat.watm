@@ -82,7 +82,7 @@
 		print "------------------------------"
 		
 		repeat with k from 0 to 20 every 2		;; every other
-
+			
 			print_integer k
 			if k greater 5 and k less 15
 				print "5 < k < 15"

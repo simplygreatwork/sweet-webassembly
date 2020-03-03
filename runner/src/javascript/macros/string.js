@@ -7,7 +7,7 @@ let system = null
 let document = null
 let string_counter = 0
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'string')) {
@@ -15,7 +15,7 @@ function enter(node, index, parents) {
 		let func_name = function_new(parents[0], string)
 		string_call(node, index, parents, func_name)
 	} else {
-		if (shared.is_inside_function(parents)) {
+		if (shared.is_inside_function(state)) {
 			if (! query.is_type_value(first, 'symbol', 'typeof')) {
 				if (! query.is_type_value(first, 'symbol', 'funcref')) {
 					node.value.forEach(function(each, index) {

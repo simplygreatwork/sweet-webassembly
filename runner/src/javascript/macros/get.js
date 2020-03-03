@@ -6,17 +6,13 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
-	let func_node = shared.get_parent_function(parents)
-	if (! func_node) return
-	let locals = shared.get_locals(func_node)
-	if (! locals) return
 	node.value.forEach(function(each, index) {
 		if (! query.is_type(each, 'symbol')) return
 		let value = shared.dollarify(each.value)
-		if (! shared.is_local(locals, value)) return
+		if (! shared.is_local(state, value)) return
 		if (! index > 0) return
 		let previous = node.value[index - 1]
 		let substitute = true

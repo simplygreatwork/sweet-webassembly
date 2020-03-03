@@ -7,30 +7,27 @@ let document = null
 
 // todo: cache locals but invalidate the cache when adding loop iterators
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'call')) {
 		let second = node.value[1]
-		rewrite(second, index, parents)
+		rewrite(second, index, parents, state)
 	} else if (query.is_type_value(first, 'symbol', 'funcref')) {
 		let second = node.value[1]
-		rewrite(second, index, parents)
+		rewrite(second, index, parents, state)
 	} else {
-		rewrite(first, index, parents)
+		rewrite(first, index, parents, state)
 	}
 }
 
-function rewrite(node, index, parents) {
+function rewrite(node, index, parents, state) {
 	
 	if (shared.is_callable(document, '$' + node.value)) {
 		node.value = shared.dollarify(node.value)
 	} else {
-		let func_node = shared.get_parent_function(parents)
-		if (! func_node) return
-		let locals = shared.get_locals(func_node)
-		if (! locals) return
-		if (shared.is_local(locals, node.value)) {
+		if (! shared.is_inside_function(state)) return
+		if (shared.is_local(state, node.value)) {
 			if (index > 0) {
 				node.value = shared.dollarify(node.value)
 			}

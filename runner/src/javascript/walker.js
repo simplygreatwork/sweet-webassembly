@@ -21,7 +21,7 @@ module.exports = class Walker {
 	walk(node) {
 		this.node(node, 0, [], {}, iterate_backward)
 	}
-
+	
 	node(node, index, parents, state, iterate) {
 		
 		if (query.is_type(node, 'expression')) {
