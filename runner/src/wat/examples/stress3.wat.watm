@@ -1,0 +1,127 @@
+(module
+	
+	import "../lib/utility.watm"
+	import "../lib/memory.watm"
+	import "../lib/string.watm"
+	import "host" "table" (table 1 anyfunc)
+	memory (import "host" "memory") 1
+	type $void_to_void (func)
+	
+	func main
+		
+		setup
+		stress
+		
+	func setup
+		
+		memory_bootstrap
+		
+	func stress
+		
+		print "------------------------------"
+		print "Test stress!"
+		print "------------------------------"
+		
+		set a to 1
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+		if (a equals 1)
+			print_integer a
+
+)

@@ -9,8 +9,19 @@ let document = null
 // goal: no keyword "then": all expressions inside of "if" but after (if (cond)) are shifted into (if (then))
 // goal: keyword "else" is a sibling of "if" - else contents are moved into (if (else))
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
+
+	if (! query.is_type(node, 'expression')) return
+	if (! shared.is_inside_function(state)) return
+	if (query.is_type_value(node.value[0], 'symbol', 'if')) {
+		return
+	}
+}
+
+function exit(node, index, parents, state) {
 	
+	if (! query.is_type(node, 'expression')) return
+	if (! shared.is_inside_function(state)) return
 	if (query.is_type_value(node.value[0], 'symbol', 'if')) {
 		if (query.is_type(node.value[1], 'expression')) {
 			if (query.is_type(node.value[2], 'expression')) {
@@ -25,32 +36,24 @@ function enter(node, index, parents) {
 		tree.value.push(condition)
 		tree.value.push(then)
 		query.replace(query.last(parents), node, tree)
-		system.fire('insert', tree)
-		return false
 	}
 }
 
 function get_condition(node, index, parents) {
 	
-	let result
 	if (query.is_type(node.value[1], 'expression')) {
-		result = node.value[1]
+		return node.value[1]
 	} else {
-		result = {type: 'expression', value: []}
-		node.value.filter(function(each) {
-			if (query.is_type(each, 'expression')) {
+		return {type: 'expression', value: node.value.filter(function(each) {
+			if (query.is_type_value(each, 'symbol', 'if')) {
 				return false
-			} else if (query.is_type_value(each, 'symbol', 'if')) {
+			} else if (query.is_type(each, 'expression')) {
 				return false
 			} else {
 				return true
 			}
-		})
-		.forEach(function(each) {
-			result.value.push(each)
-		})
+		})}
 	}
-	return result
 }
 
 function get_then(node, index, parents) {
@@ -77,11 +80,8 @@ function get_then(node, index, parents) {
 			return (query.is_type(each, 'expression'))
 		})
 	}
-	result = {type: 'expression', value: [{ type: 'symbol', value: 'then'}]}
-	expressions.forEach(function(each) {
-		result.value.push(each)
-	})
-	return result
+	expressions.unshift({type: 'symbol', value: 'then'})
+	return {type: 'expression', value: expressions}
 }
 
 module.exports = function(system_, document_) {
@@ -89,6 +89,6 @@ module.exports = function(system_, document_) {
 	system = system_
 	document = document_
 	return {
-		enter
+		exit
 	}
 }

@@ -75,7 +75,7 @@ class System {
 	}
 	
 	render_function_imports() {
-
+		
 		logger('system').log('render_function_imports')
 		for (let document of this.set.values()) {
 			process.render_function_imports(document)

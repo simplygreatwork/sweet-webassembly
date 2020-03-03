@@ -16,10 +16,10 @@ function enter(node, index, parents, state) {
 			if (query.is_type_value(first, 'symbol', 'br_if')) return
 			node.value.forEach(function(each, index) {
 				if (each.type == 'number') {
-					node.value[index] = { type: 'expression', value: [
-						{ type: 'symbol', value: 'i32.const' },
-						{ type: 'number', value: each.value, whitespace: ' ' }
-					]}
+					node.value[index] = {type: 'expression', value: [
+						{type: 'symbol', value: 'i32.const'},
+						{type: 'number', value: each.value, whitespace: ' '}
+					], whitespace: ' '}
 				}
 			})
 		}

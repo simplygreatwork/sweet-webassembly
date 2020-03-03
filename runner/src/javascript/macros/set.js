@@ -8,7 +8,8 @@ let document = null
 
 function enter(node, index, parents, state) {
 	
-	let result = null
+	if (! query.is_type(node, 'expression')) return
+	if (! shared.is_inside_function(state)) return
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'set')) {
 		first.value = 'set_local'
@@ -16,18 +17,17 @@ function enter(node, index, parents, state) {
 	if (query.is_type_value(first, 'symbol', 'set_local')) {
 		let second = node.value[1]
 		second.value = shared.dollarify(second.value)
-		if (node.value.length > 2) {
+		if (query.is_expression_longer(node, 2)) {
 			let third = node.value[2]
 			if (query.is_type_value(third, 'symbol', 'to')) {
 				query.remove(node, third)
 			}
 		}
-		result = declare_if_missing(second.value, parents, state)
+		return declare(second.value, parents, state)
 	}
-	return result
 }
 
-function declare_if_missing(value, parents, state) {
+function declare(value, parents, state) {
 	
 	let found = shared.is_local(state, value)
 	if (! found) {
@@ -42,7 +42,7 @@ function declare_if_missing(value, parents, state) {
 }
 
 module.exports = function(system_, document_) {
-
+	
 	system = system_
 	document = document_
 	return {

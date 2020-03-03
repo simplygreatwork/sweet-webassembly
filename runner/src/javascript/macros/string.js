@@ -61,7 +61,7 @@ function string_set_chars(string) {
 }
 
 module.exports = function(system_, document_) {
-
+	
 	system = system_
 	document = document_
 	return {

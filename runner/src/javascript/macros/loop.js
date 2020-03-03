@@ -5,11 +5,21 @@ const shared = require('./shared')
 
 let system = null
 let document = null
+let config = null
 
-function enter(node, index, parents) {
+function enter(node, index, parents, state) {
 	
+	if (! query.is_type(node, 'expression')) return
 	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
-		let config = get_config(node)
+		config = get_config(node)
+		if (false) print_config()
+	}
+}
+
+function exit(node, index, parents, state) {
+	
+	if (! query.is_type(node, 'expression')) return
+	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
 		let tree = parse (`
 		(block (loop
 			(if (i32.gt_u (get_local ${config.with}) (i32.const ${config.to})) (then (br 2)))
@@ -26,14 +36,13 @@ function enter(node, index, parents) {
 		query.replace(query.last(parents), node, tree)
 		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)[0]
 		query.insert(query.last(parents), tree, index)
-		system.fire('insert', tree)
-		return false					// invalidate to trigger set.js macro to declare iterator local
+		return false
 	}
 }
 
 function get_config(node) {
 	
-	let config = { with: '$i', from: 0, to: 10, every: 1, 'in': null }
+	let config = {with: '$i', from: 0, to: 10, every: 1, 'in': null}
 	node.value.forEach(function(each, index) {
 		if (each.value == 'with') config.with = node.value[index + 1].value
 		if (each.value == 'from') config.from = node.value[index + 1].value
@@ -41,8 +50,11 @@ function get_config(node) {
 		if (each.value == 'every') config.every = node.value[index + 1].value
 		config.with = shared.dollarify(config.with)
 	})
-	if (false) console.log('config: ' + JSON.stringify(config, null, 2))
 	return config
+}
+
+function print_config() {
+	console.log('config: ' + JSON.stringify(config, null, 2))
 }
 
 module.exports = function(system_, document_) {
@@ -50,6 +62,7 @@ module.exports = function(system_, document_) {
 	system = system_
 	document = document_
 	return {
-		enter
+		enter,
+		exit
 	}
 }

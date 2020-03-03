@@ -17,7 +17,7 @@ module.exports = function(document, system) {
 function transform(document, system) {
 	
 	let off = system.bus.on('insert', function() {
-		console.log('insert: ' + counter++)
+		counter++
 	})
 	let walker = new Walker()
 	system.macros.forEach(function(each) {
@@ -27,5 +27,6 @@ function transform(document, system) {
 	})
 	walker.walk(document.tree[0])
 	off()
+	if (counter > 0) console.log('invalidations: ' + counter)
 	return document.tree
 }

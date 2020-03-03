@@ -8,10 +8,10 @@ let document = null
 
 function enter(node, index, parents, state) {
 	
-	if (shared.is_inside_function(state)) {
-		if (query.is_type(node, 'expression')) {
-			if (query.is_expression_longer(node, 2)) {
-				let indices = query.find_type_value(node, 'symbol', 'and').reverse()
+	if (query.is_type(node, 'expression')) {
+		if (query.is_expression_longer(node, 2)) {
+			if (shared.is_inside_function(state)) {
+				let indices = query.find_type_value(node, 'symbol', 'and')
 				indices.forEach(function(index) {
 					node.value.splice(index - 1, 0, node.value.splice(index, 1))
 					node.value[index - 1].type = 'symbol'
