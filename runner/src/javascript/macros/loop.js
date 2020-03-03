@@ -6,7 +6,7 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
 		let config = get_config(node)
@@ -27,7 +27,7 @@ function transform(node, index, parents) {
 		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)
 		query.insert(query.last(parents), tree[0], index)
 		system.fire('insert', tree[0])
-		return 'invalidate'					// invalidate to trigger set.js macro to declare iterator local
+		return false					// invalidate to trigger set.js macro to declare iterator local
 	}
 }
 
@@ -49,5 +49,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

@@ -7,7 +7,7 @@ let system = null
 let document = null
 let string_counter = 0
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'string')) {
@@ -61,8 +61,10 @@ function string_set_chars(string) {
 }
 
 module.exports = function(system_, document_) {
-    
-    system = system_
-    document = document_
-	 return transform
+
+	system = system_
+	document = document_
+	return {
+		enter
+	}
 }

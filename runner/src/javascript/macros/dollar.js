@@ -7,7 +7,7 @@ let document = null
 
 // todo: cache locals but invalidate the cache when adding loop iterators
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'call')) {
@@ -42,5 +42,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

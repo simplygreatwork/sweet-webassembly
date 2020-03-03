@@ -6,7 +6,7 @@ let document = null
 let counter = 1;
 let types = {}
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'typeof')) {
@@ -26,5 +26,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

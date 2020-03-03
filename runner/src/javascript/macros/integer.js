@@ -6,7 +6,7 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	if (shared.is_inside_function(parents)) {
 		if (query.is_type(node, 'expression')) {
@@ -29,7 +29,9 @@ function transform(node, index, parents) {
 
 module.exports = function(system_, document_) {
     
-    system = system_
-    document = document_
-	 return transform
+	system = system_
+	document = document_
+	return {
+		enter
+	}
 }

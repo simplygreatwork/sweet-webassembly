@@ -83,7 +83,7 @@ function is_local(locals, value) {
 
 function dollarify(symbol) {
 	
-	return (symbol.charAt(0) == '$') ? symbol : '$' + symbol
+	return (symbol.charAt && symbol.charAt(0) == '$') ? symbol : '$' + symbol
 }
 
 module.exports = {

@@ -5,7 +5,7 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type(first, 'symbol')) {
@@ -23,5 +23,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

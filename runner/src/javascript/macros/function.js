@@ -5,7 +5,7 @@ const shared = require('./shared.js')
 let system = null
 let document = null
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let first = node.value[0]
 	if (query.is_type_value(first, 'symbol', 'function')) {
@@ -20,8 +20,10 @@ function transform(node, index, parents) {
 }
 
 module.exports = function(system_, document_) {
-    
-    system = system_
-    document = document_
-	 return transform
+
+	system = system_
+	document = document_
+	return {
+		enter
+	}
 }

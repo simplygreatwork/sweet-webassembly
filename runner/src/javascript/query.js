@@ -74,16 +74,16 @@ function insert(parent, node, index) {
 
 function find_type_value(node, type, value) {
 	
-	let index = -1
-	node.value.every(function(each, index_) {
+	let result = []
+	node.value.every(function(each, index) {
 		if (is_type_value(each, type, value)) {
-			index = index_
+			result.push(index)
 			return false
 		} else {
 			return true
 		}
 	})
-	return index
+	return result
 }
 
 function closest() {

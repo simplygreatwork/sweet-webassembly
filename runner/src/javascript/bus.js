@@ -11,16 +11,17 @@ Emitter = {
 			this.channels[key].splice(index, 1)
 		}.bind(this)
 	},
-		
+	
 	emit(key) {
 		
 		this.channels = this.channels || {}
 		if (this.channels[key]) {
-			var index = this.channels[key].length
-			while (index--) {
-				this.channels[key][index].apply(this, Array.from(arguments).splice(1))
+			for (let i = 0, length = this.channels[key].length; i < length; i++) {
+				result = this.channels[key][i].apply(this, Array.from(arguments).splice(1))
+				if (result == false) return false
 			}
 		}
+		return true
 	}
 }
 

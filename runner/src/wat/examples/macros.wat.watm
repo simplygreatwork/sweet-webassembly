@@ -49,7 +49,7 @@
 		print "------------------------------"
 		call_indirect (type $void_to_void) (funcref "test_function_first_class_a" "macros")
 		call_indirect (type $void_to_void) (funcref "test_function_first_class_b" "macros")
-
+		
 	func test_function_first_class_a
 		
 		print "------------------------------"
@@ -82,10 +82,12 @@
 		print "------------------------------"
 		
 		repeat with k from 0 to 20 every 2		;; every other
-			
+
 			print_integer k
-			if k greater 13
-				break
-			if k equals 8
+			if k greater 5 and k less 15
+				print "5 < k < 15"
+			if k equals 10
+				print "k = 10"
+			if k greater 15
 				break
 )

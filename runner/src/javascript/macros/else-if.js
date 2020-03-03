@@ -10,7 +10,7 @@ let document = null
 // goal: keyword "else" is a sibling of "if" - else contents are moved into (if (else))
 // note: "else if" could probably be part of else.js not a separate else-if.js
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	if (query.is_type_value(node.value[0], 'symbol', 'else')) {
 		if (query.is_type_value(node.value[1], 'symbol', 'if')) {
@@ -23,5 +23,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

@@ -1,7 +1,7 @@
 
 const print = require('./print.js')
-const walk = require('./walk.js')
 const logger = require('./logger')()
+const Walker = require('./walker.js')
 
 module.exports = function(document, system) {
 	
@@ -14,22 +14,12 @@ module.exports = function(document, system) {
 
 function transform(document, system) {
 	
-	let macros =  system.macros.map(function(each) {
-		return each(system, document)
+	let walker = new Walker()
+	system.macros.forEach(function(each) {
+		let macro = each(system, document)
+		if (macro.enter) walker.on('enter', macro.enter)
+		if (macro.exit) walker.on('exit', macro.exit)
 	})
-	let off = system.bus.on('insert', function(data) {
-		if (false) logger('transform').log(console.log('inserted: ' + data))
-	})
-	walk({ root: document.tree[0], visit: function(node, index, parents) {
-		let result = null
-		if (node.type == 'expression') {
-			macros.every(function(macro) {
-				result = macro(node, index, parents)
-				return (result == 'invalidate') ? false : true
-			})
-		}
-		return result
-	}, reverse: true })
-	off()
+	walker.walk(document.tree[0])
 	return document.tree
 }

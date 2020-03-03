@@ -9,7 +9,7 @@ let document = null
 // goal: no keyword "then": all expressions inside of "if" but after (if (cond)) are shifted into (if (then))
 // goal: keyword "else" is a sibling of "if" - else contents are moved into (if (else))
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	if (query.is_type_value(node.value[0], 'symbol', 'if')) {
 		if (query.is_type(node.value[1], 'expression')) {
@@ -25,7 +25,7 @@ function transform(node, index, parents) {
 		tree[0].value.push(condition)
 		tree[0].value.push(then)
 		query.replace(query.last(parents), node, tree[0])
-		return 'invalidate'
+		return false
 	}
 }
 
@@ -87,5 +87,7 @@ module.exports = function(system_, document_) {
 	
 	system = system_
 	document = document_
-	return transform
+	return {
+		enter
+	}
 }

@@ -6,7 +6,7 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-function transform(node, index, parents) {
+function enter(node, index, parents) {
 	
 	let result = null
 	let first = node.value[0]
@@ -46,12 +46,14 @@ function declare_if_missing(value, parents) {
 		query.insert(func_node, tree[0], locals.offset)
 		system.fire('insert', tree[0])
 	}
-	return (! found) ? 'invalidate' : null
+	return (! found) ? false : undefined
 }
 
 module.exports = function(system_, document_) {
-    
-    system = system_
-    document = document_
-	 return transform
+
+	system = system_
+	document = document_
+	return {
+		enter
+	}
 }
