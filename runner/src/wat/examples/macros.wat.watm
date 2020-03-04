@@ -16,6 +16,9 @@
 		test_func_ref_macro
 		test_set_get_macros 42
 		test_flow_macros
+		test_negation
+		test_arithmetic
+		test_parameters "one" "two" "three"
 		
 	func setup
 		
@@ -55,7 +58,7 @@
 		print "------------------------------"
 		print "First class function A has been called using a funcref macro!"
 		print "------------------------------"
-
+		
 	func test_function_first_class_b
 		
 		print "------------------------------"
@@ -86,8 +89,45 @@
 			print_integer k
 			if k greater 5 and k less 15
 				print "5 < k < 15"
+			if not k equals 6
+				print "k != 6"
 			if k equals 10
 				print "k = 10"
 			if k greater 15
 				break
+	
+	func test_negation
+		
+		print "------------------------------"
+		print "Test negation!"
+		print "------------------------------"
+		
+		set value to 1
+		set result to not value equals 2
+		print_integer result
+		set value to 2
+		set result to not value equals 2
+		print_integer result
+		print_integer not value equals 3
+
+	func test_arithmetic
+		
+		print "------------------------------"
+		print "Test arithmetic!"
+		print "------------------------------"
+
+		set value to 1 plus 1
+		print_integer value
+		set value to value minus 2
+		print_integer value
+		
+	func test_parameters accepts one two three
+		
+		print "------------------------------"
+		print "Test parameters!"
+		print "------------------------------"
+		
+		print one
+		print two
+		print three
 )

@@ -1,3 +1,4 @@
+
 const query = require('../query')
 
 function is_inside_function(state) {

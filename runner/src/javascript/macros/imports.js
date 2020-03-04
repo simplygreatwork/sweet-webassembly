@@ -6,13 +6,11 @@ let document = null
 
 function enter(node, index, parents) {
 	
-	if (node.value.length === 2) {
-		let first = node.value[0]
-		if (query.is_type_value(first, 'symbol', 'import')) {
-			let second = node.value[1]
-			if (second.type == 'string') {
-				query.remove(parents[0], node)
-			}
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_expression_length(node, 2)) return
+	if (query.is_type_value(node.value[0], 'symbol', 'import')) {
+		if (node.value[1].type == 'string') {
+			query.remove(parents[0], node)
 		}
 	}
 }

@@ -5,8 +5,6 @@ const shared = require('./shared')
 let system = null
 let document = null
 
-// todo: cache locals but invalidate the cache when adding loop iterators
-
 function enter(node, index, parents, state) {
 	
 	let first = node.value[0]

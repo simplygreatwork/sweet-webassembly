@@ -10,7 +10,7 @@ let document = null
 // goal: keyword "else" is a sibling of "if" - else contents are moved into (if (else))
 
 function enter(node, index, parents, state) {
-
+	
 	if (! query.is_type(node, 'expression')) return
 	if (! shared.is_inside_function(state)) return
 	if (query.is_type_value(node.value[0], 'symbol', 'if')) {

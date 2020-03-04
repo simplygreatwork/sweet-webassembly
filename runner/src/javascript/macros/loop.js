@@ -5,14 +5,15 @@ const shared = require('./shared')
 
 let system = null
 let document = null
-let config = null
+let configs = []
 
 function enter(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
 	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
-		config = get_config(node)
+		let config = get_config(node)
 		if (false) print_config()
+		configs.push(config)
 	}
 }
 
@@ -20,6 +21,7 @@ function exit(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
 	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
+		let config = query.last(configs)
 		let tree = parse (`
 		(block (loop
 			(if (i32.gt_u (get_local ${config.with}) (i32.const ${config.to})) (then (br 2)))
@@ -36,6 +38,7 @@ function exit(node, index, parents, state) {
 		query.replace(query.last(parents), node, tree)
 		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)[0]
 		query.insert(query.last(parents), tree, index)
+		configs.pop()
 		return false
 	}
 }

@@ -20,14 +20,18 @@ class Runner {
 				host: new Host()
 			},
 			macros: [
+				require('./macros/accepts.js'),
 				require('./macros/function.js'),
 				require('./macros/loop.js'),
 				require('./macros/break.js'),
 				require('./macros/if.js'),
 				require('./macros/equals.js'),
+				require('./macros/not.js'),
 				require('./macros/greater.js'),
 				require('./macros/less.js'),
 				require('./macros/and.js'),
+				require('./macros/plus.js'),
+				require('./macros/minus.js'),
 				require('./macros/set.js'),
 				require('./macros/get.js'),
 				require('./macros/dollar.js'),

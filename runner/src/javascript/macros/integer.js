@@ -27,7 +27,7 @@ function enter(node, index, parents, state) {
 }
 
 module.exports = function(system_, document_) {
-    
+   
 	system = system_
 	document = document_
 	return {
