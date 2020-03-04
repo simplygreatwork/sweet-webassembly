@@ -23,8 +23,8 @@ function enter(node, index, parents, state) {
 		substitute = (query.is_type_value(previous, 'symbol', 'set_local')) ? false : substitute
 		substitute = (query.is_type_value(previous, 'symbol', 'call')) ? false : substitute
 		if (substitute) {
-			let tree = parse(` (get_local ${value})`)
-			query.replace(node, each, tree[0])
+			let tree = parse(` (get_local ${value})`)[0]
+			query.replace(node, each, tree)
 		} else {
 			each.value = value
 		}

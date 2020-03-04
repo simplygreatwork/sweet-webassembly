@@ -16,8 +16,8 @@ function enter(node, index, parents, state) {
 		if (index > 2) {
 			if (query.is_type(each, 'expression')) {
 				return false
-			} else if (query.is_type(each, 'whitespace')) {			// whitespace should always be folded already
-				return true														// but encountered anyway
+			} else if (query.is_type(each, 'whitespace')) {			// whitespace ought to be folded already
+				return true														// but encountered an issue anyway
 			} else {
 				let value = shared.dollarify(each.value)
 				node.value[index] = parse(` (param ${value} i32)`)[0]
@@ -31,7 +31,7 @@ function enter(node, index, parents, state) {
 }
 
 function exit(node, index, parents, state) {
-	
+	return
 }
 
 module.exports = function(system_, document_) {

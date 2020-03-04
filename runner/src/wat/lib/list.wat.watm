@@ -50,7 +50,7 @@
 		))
 		(call $number_new (get_local $result))
 	)
-
+	
 	(func $list_iterate (param $list i32) (param $function i32) (param $context i32)
 		
 		(local $index i32)

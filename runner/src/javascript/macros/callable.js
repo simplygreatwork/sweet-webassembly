@@ -7,16 +7,14 @@ let document = null
 
 function enter(node, index, parents) {
 	
-	let first = node.value[0]
-	if (query.is_type(first, 'symbol')) {
-		if (shared.is_callable(document, first.value)) {
-			node.value[0].whitespace = node.value[0].whitespace + ' '
-			node.value.unshift({
-				type: 'symbol',
-				value: 'call'
-			})
-		}
-	}
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_type(node.value[0], 'symbol')) return
+	if (! shared.is_callable(document, node.value[0].value)) return
+	node.value[0].whitespace = node.value[0].whitespace + ' '
+	node.value.unshift({
+		type: 'symbol',
+		value: 'call'
+	})
 }
 
 module.exports = function(system_, document_) {

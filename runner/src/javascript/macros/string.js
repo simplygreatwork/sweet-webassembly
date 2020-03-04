@@ -9,24 +9,21 @@ let string_counter = 0
 
 function enter(node, index, parents, state) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'string')) {
+	if (! query.is_type(node, 'expression')) return
+	if (query.is_type_value(node.value[0], 'symbol', 'string')) {
 		let string = node.value[1].value
 		let func_name = function_new(parents[0], string)
 		string_call(node, index, parents, func_name)
 	} else {
-		if (shared.is_inside_function(state)) {
-			if (! query.is_type_value(first, 'symbol', 'typeof')) {
-				if (! query.is_type_value(first, 'symbol', 'funcref')) {
-					node.value.forEach(function(each, index) {
-						if (query.is_type(each, 'string')) {
-							let tree = parse(`(string "${each.value}")`)
-							node.value[index] = tree[0]
-						}
-					})
-				}
+		if (! shared.is_inside_function(state)) return
+		if (query.is_type_value(node.value[0], 'symbol', 'typeof')) return 
+		if (query.is_type_value(node.value[0], 'symbol', 'funcref')) return
+		node.value.forEach(function(each, index) {
+			if (query.is_type(each, 'string')) {
+				let tree = parse(`(string "${each.value}")`)[0]
+				node.value[index] = tree
 			}
-		}
+		})
 	}
 }
 

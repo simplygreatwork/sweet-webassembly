@@ -3,7 +3,7 @@ const path = require('path')
 const jetpack = require('fs-jetpack')
 const logger = require('./logger')([
 	'runner', 'system', 'document-off', 'process', 'transform-off',
-	'stager-off', 'loading', 'parsing-off', 'transforming', 'invalidate'
+	'stager-off', 'loading', 'parsing-off', 'transforming'
 ])
 const broadcast = require('./broadcast')
 const System = require('./system')
