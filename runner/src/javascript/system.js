@@ -17,6 +17,7 @@ class System {
 		this.documents = {}
 		this.table = new Table(this)
 		this.bus = new Bus()
+		this.string_counter = 0
 	}
 	
 	start(path_) {

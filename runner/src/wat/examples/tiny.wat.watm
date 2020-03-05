@@ -1,18 +1,11 @@
 (module
 	
-	import "../lib/utility.watm"
-	import "../lib/memory.watm"
-	import "../lib/string.watm"
 	import "host" "table" (table 1 anyfunc)
 	memory (import "host" "memory") 1
 	type $void_to_void (func)
 	
 	func main
-		
-		setup
-		print_integer 5
-		
-	func setup
-		
-		memory_bootstrap
+				
+		set value to 1
+		set value to 2		
 )
