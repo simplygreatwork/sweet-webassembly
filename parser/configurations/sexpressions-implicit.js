@@ -182,17 +182,12 @@ function fold_lines(value) {
 					result.push(...each.value)
 				} else {
 					let significant = each.value.filter(function(each) {
-						if (each.type == 'whitespace') {
-							return false
-						} else if (each.type == 'newline') {
-							return false
-						} else if (each.type == 'comment') {
-							return false
-						} else {
-							return true
-						}
+						if (each.type == 'whitespace') return false
+						else if (each.type == 'newline') return false
+						else if (each.type == 'comment') return false
+						else return true
 					})
-					if (significant.length > 0) {		// line contains significant elements
+					if (significant.length > 0) {			// line contains significant elements
 						each.type = 'expression'
 						if (each.whitespace_) each.whitespace = each.whitespace_
 						result.push(each)
@@ -212,27 +207,19 @@ function fold_whitespace(value) {
 	
 	let whitespace = []
 	value.map(function(each) {
-		if (each.type == 'whitespace') {
-			whitespace.push(each.value)
-		} else if (each.type == 'newline') {
-			whitespace.push(each.value)
-		} else if (each.type == 'comment') {
-			whitespace.push(each.value)
-		} else {
+		if (each.type == 'whitespace') whitespace.push(each.value)
+		else if (each.type == 'newline') whitespace.push(each.value)
+		else if (each.type == 'comment') whitespace.push(each.value)
+		else {
 			each.whitespace = whitespace.join('')
 			whitespace.splice(0, whitespace.length)
 		}
 	})
 	return value.filter(function(each) {
-		if (each.type == 'whitespace') {
-			return false
-		} else if (each.type == 'newline') {
-			return false
-		} else if (each.type == 'comment') {
-			return false
-		} else {
-			return true
-		}
+		if (each.type == 'whitespace') return false
+		else if (each.type == 'newline') return false
+		else if (each.type == 'comment') return false
+		else return true
 	})
 }
 

@@ -1,7 +1,0 @@
-
-- 
-- allow (call) keyword to be optional
-- refer to indirect functions by name instead of by integer
-- expand raw integer refernce to (i32.const)
-- allow omitting (local) definitions - default to i32
-- 
