@@ -30,6 +30,8 @@ class Runner {
 				require('./macros/greater.js'),
 				require('./macros/less.js'),
 				require('./macros/and.js'),
+				require('./macros/or.js'),
+				require('./macros/xor.js'),
 				require('./macros/plus.js'),
 				require('./macros/minus.js'),
 				require('./macros/set.js'),

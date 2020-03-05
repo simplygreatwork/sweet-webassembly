@@ -18,6 +18,7 @@
 		test_flow_macros
 		test_negation
 		test_arithmetic
+		test_and_or
 		test_parameters "one" "two" "three"
 		
 	func setup
@@ -109,7 +110,7 @@
 		set result to not value equals 2
 		print_integer result
 		print_integer not value equals 3
-
+		
 	func test_arithmetic
 		
 		print "------------------------------"
@@ -120,7 +121,18 @@
 		print_integer value
 		set value to value minus 2
 		print_integer value
+
+	func test_and_or
 		
+		print "------------------------------"
+		print "Test and/or!"
+		print "------------------------------"
+		
+		set first to 1 equals 1 and 2 equals 2
+		print_integer first
+		set second to 1 equals 2 or 2 equals 2
+		print_integer second
+	
 	func test_parameters accepts one two three
 		
 		print "------------------------------"
