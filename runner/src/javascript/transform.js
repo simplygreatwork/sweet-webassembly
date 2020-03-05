@@ -32,6 +32,6 @@ function transform(document, system) {
 	})
 	walker.walk(document.tree[0])
 	off()
-	if (counter > 0) console.log('invalidations: ' + counter)
+	if (counter > 0) console.log('invalidation count: ' + counter)
 	return document.tree
 }

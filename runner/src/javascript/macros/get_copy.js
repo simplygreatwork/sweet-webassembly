@@ -12,9 +12,11 @@ function enter(node, index, parents, state) {
 	if (! query.is_type(node, 'symbol')) return
 	let value = shared.dollarify(node.value)
 	if (! shared.is_local(state, value)) return
-	if (! index > 0) return
 	let parent = query.last(parents)
 	let previous = parent.value[index - 1]
+	if (previous) {
+
+	}
 	let substitute = true
 	substitute = (query.is_type_value(previous, 'symbol', 'param')) ? false : substitute
 	substitute = (query.is_type_value(previous, 'symbol', 'result')) ? false : substitute
@@ -23,6 +25,7 @@ function enter(node, index, parents, state) {
 	substitute = (query.is_type_value(previous, 'symbol', 'set_local')) ? false : substitute
 	substitute = (query.is_type_value(previous, 'symbol', 'call')) ? false : substitute
 	if (substitute) {
+		console.log('substitute: ' + substitute)
 		let tree = parse(` (get_local ${value})`)[0]
 		query.replace(parent, node, tree)
 	} else {

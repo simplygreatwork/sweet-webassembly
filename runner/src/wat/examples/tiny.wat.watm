@@ -6,6 +6,6 @@
 	
 	func main
 				
-		set value to 1
-		set value to 2		
+		set a to 1
+		set b to a
 )
