@@ -19,34 +19,39 @@ class Runner {
 			imports: {
 				host: new Host()
 			},
-			macros: [
-				require('./macros/accepts.js'),
-				require('./macros/function.js'),
-				require('./macros/loop.js'),
-				require('./macros/break.js'),
-				require('./macros/if.js'),
-				require('./macros/equals.js'),
-				require('./macros/not.js'),
-				require('./macros/greater.js'),
-				require('./macros/less.js'),
-				require('./macros/and.js'),
-				require('./macros/or.js'),
-				require('./macros/xor.js'),
-				require('./macros/plus.js'),
-				require('./macros/minus.js'),
-				require('./macros/true.js'),
-				require('./macros/false.js'),
-				require('./macros/set.js'),
-				require('./macros/get.js'),
-				require('./macros/dollar.js'),
-				require('./macros/string.js'),
-				require('./macros/integer.js'),
-				require('./macros/imports.js'),
-				require('./macros/exports.js'),
-				require('./macros/typeof.js'),
-				require('./macros/funcref.js'),
-				require('./macros/callable.js'),
-			]
+			macros: {
+				expressions: [
+					require('./macros/accepts.js'),
+					require('./macros/function.js'),
+					require('./macros/loop.js'),
+					require('./macros/break.js'),
+					require('./macros/if.js'),
+					require('./macros/equals.js'),
+					require('./macros/not.js'),
+					require('./macros/greater.js'),
+					require('./macros/less.js'),
+					require('./macros/and.js'),
+					require('./macros/or.js'),
+					require('./macros/xor.js'),
+					require('./macros/plus.js'),
+					require('./macros/minus.js'),
+					require('./macros/set.js'),
+					require('./macros/get.js'),
+					require('./macros/dollar.js'),
+					require('./macros/string.js'),
+					require('./macros/imports.js'),
+					require('./macros/exports.js'),
+					require('./macros/typeof.js'),
+					require('./macros/funcref.js'),
+					require('./macros/callable.js')
+				],
+				atoms: [
+					require('./macros/true.js'),
+					require('./macros/false.js'),
+					require('./macros/integer.js'),
+					require('./macros/string-literal.js')
+				]
+			}
 		})
 		let date = new Date()
 		this.system.start(root)

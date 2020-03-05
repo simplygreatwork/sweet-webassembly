@@ -20,10 +20,15 @@ function transform(document, system) {
 		counter++
 	})
 	let walker = new Walker()
-	system.macros.forEach(function(each) {
+	system.macros.expressions.forEach(function(each) {
 		let macro = each(system, document)
-		if (macro.enter) walker.on('enter', macro.enter)
-		if (macro.exit) walker.on('exit', macro.exit)
+		if (macro.enter) walker.on('enter.expression', macro.enter)
+		if (macro.exit) walker.on('exit.expression', macro.exit)
+	})
+	system.macros.atoms.forEach(function(each) {
+		let macro = each(system, document)
+		if (macro.enter) walker.on('enter.atom', macro.enter)
+		if (macro.exit) walker.on('exit.atom', macro.exit)
 	})
 	walker.walk(document.tree[0])
 	off()

@@ -7,23 +7,13 @@ let system = null
 let document = null
 let string_counter = 0
 
-function enter(node, index, parents, state) {
+function exit(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
 	if (query.is_type_value(node.value[0], 'symbol', 'string')) {
 		let string = node.value[1].value
 		let func_name = function_new(parents[0], string)
 		string_call(node, index, parents, func_name)
-	} else {
-		if (! shared.is_inside_function(state)) return
-		if (query.is_type_value(node.value[0], 'symbol', 'typeof')) return 
-		if (query.is_type_value(node.value[0], 'symbol', 'funcref')) return
-		node.value.forEach(function(each, index) {
-			if (query.is_type(each, 'string')) {
-				let tree = parse(`(string "${each.value}")`)[0]
-				node.value[index] = tree
-			}
-		})
 	}
 }
 
@@ -62,6 +52,6 @@ module.exports = function(system_, document_) {
 	system = system_
 	document = document_
 	return {
-		enter
+		exit
 	}
 }

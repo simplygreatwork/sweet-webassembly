@@ -9,12 +9,13 @@ let document = null
 function enter(node, index, parents, state) {
 	
 	if (! shared.is_inside_function(state)) return
-	if (node.type != 'number') return
+	if (node.type != 'string') return
 	let parent = query.last(parents)
-	if (query.is_type_value(parent.value[0], 'symbol', 'i32.const')) return
-	if (query.is_type_value(parent.value[0], 'symbol', 'br')) return
-	if (query.is_type_value(parent.value[0], 'symbol', 'br_if')) return
-	parent.value[index] = parse(` (i32.const ${node.value})`)[0]
+	if (query.is_type_value(parent.value[0], 'symbol', 'string')) return 
+	if (query.is_type_value(parent.value[0], 'symbol', 'typeof')) return 
+	if (query.is_type_value(parent.value[0], 'symbol', 'funcref')) return
+	parent.value[index] = parse(` (string "${node.value}")`)[0]
+	if (parent.value[0].value != 'string') return false
 }
 
 module.exports = function(system_, document_) {

@@ -10,21 +10,17 @@ function enter(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
 	if (! shared.is_inside_function(state)) return
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'set')) {
-		first.value = 'set_local'
+	if (query.is_type_value(node.value[0], 'symbol', 'set')) {
+		node.value[0].value = 'set_local'
 	}
-	if (query.is_type_value(first, 'symbol', 'set_local')) {
-		let second = node.value[1]
-		second.value = shared.dollarify(second.value)
-		if (query.is_expression_longer(node, 2)) {
-			let third = node.value[2]
-			if (query.is_type_value(third, 'symbol', 'to')) {
-				query.remove(node, third)
-			}
+	if (! query.is_type_value(node.value[0], 'symbol', 'set_local')) return
+	node.value[1].value = shared.dollarify(node.value[1].value)
+	if (query.is_expression_longer(node, 2)) {
+		if (query.is_type_value(node.value[2], 'symbol', 'to')) {
+			query.remove(node, node.value[2])
 		}
-		return declare(second.value, parents, state)
 	}
+	return declare(node.value[1].value, parents, state)
 }
 
 function declare(value, parents, state) {
