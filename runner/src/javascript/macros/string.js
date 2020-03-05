@@ -1,18 +1,21 @@
 
-const parse = require('../parse')
 const query = require('../query')
+const parse = require('../parse')
 const shared = require('./shared')
 const shared_string = require('./string-shared')
 
 let system = null
 let document = null
-let string_counter = 0
 
-function exit(node, index, parents, state) {
+function enter(node, index, parents, state) {
 	
-	if (! query.is_type(node, 'expression')) return
-	if (! query.is_type_value(node.value[0], 'symbol', 'string')) return
-	let string = node.value[1].value
+	if (! shared.is_inside_function(state)) return
+	if (node.type != 'string') return
+	let parent = query.last(parents)
+	if (query.is_type_value(parent.value[0], 'symbol', 'string')) return 
+	if (query.is_type_value(parent.value[0], 'symbol', 'typeof')) return 
+	if (query.is_type_value(parent.value[0], 'symbol', 'funcref')) return
+	let string = node.value
 	let func_name = shared_string.function_new(parents[0], string, system)
 	shared_string.string_call(node, index, parents, func_name)
 }
@@ -22,6 +25,6 @@ module.exports = function(system_, document_) {
 	system = system_
 	document = document_
 	return {
-		exit
+		enter
 	}
 }

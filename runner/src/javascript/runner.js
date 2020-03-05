@@ -38,7 +38,7 @@ class Runner {
 					require('./macros/set.js'),
 					require('./macros/get.js'),
 					require('./macros/dollar.js'),
-					require('./macros/string.js'),
+					require('./macros/string-expression.js'),
 					require('./macros/imports.js'),
 					require('./macros/exports.js'),
 					require('./macros/typeof.js'),
@@ -49,7 +49,7 @@ class Runner {
 					require('./macros/true.js'),
 					require('./macros/false.js'),
 					require('./macros/integer.js'),
-					require('./macros/string-literal.js')
+					require('./macros/string.js')
 				]
 			}
 		})
