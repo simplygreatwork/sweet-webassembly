@@ -34,6 +34,8 @@ class Runner {
 				require('./macros/xor.js'),
 				require('./macros/plus.js'),
 				require('./macros/minus.js'),
+				require('./macros/true.js'),
+				require('./macros/false.js'),
 				require('./macros/set.js'),
 				require('./macros/get.js'),
 				require('./macros/dollar.js'),

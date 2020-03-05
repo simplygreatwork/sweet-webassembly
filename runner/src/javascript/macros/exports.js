@@ -6,14 +6,10 @@ let document = null
 
 function enter(node, index, parents) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'export')) {
-		let second = node.value[1]
-		if (query.is_type_value(first, 'symbol', 'all')) {
-			let second = node.value[1]
-			query.remove(parents[0], node)
-		}
-	}
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_type_value(node.value[0], 'symbol', 'export')) return
+	if (! query.is_type_value(node.value[1], 'symbol', 'all')) return
+	query.remove(parents[0], node)
 }
 
 module.exports = function(system_, document_) {

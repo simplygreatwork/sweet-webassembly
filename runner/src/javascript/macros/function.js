@@ -7,33 +7,26 @@ let document = null
 
 function enter(node, index, parents, state) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'function')) {
-		first.value = 'func'			// review: this conversion would need to occur before the linking phase anyway
-	}
-	if (query.is_type_value(first, 'symbol', 'func')) {
-		if (query.is_expression_longer(node, 1)) {
-			let second = node.value[1]
-			if ((second.value) && (typeof second.value === 'string')) {
-				state.func = node
-				state.locals = shared.find_locals(state)
-				second.value = shared.dollarify(second.value)
-			}
-		}
-	}
+	if (! query.is_type(node, 'expression')) return
+	// review: conversion to func would need to occur before the linking phase anyway
+	if (query.is_type_value(node.value[0], 'symbol', 'function')) node.value[0].value = 'func'
+	if (! query.is_type_value(node.value[0], 'symbol', 'func')) return
+	if (! query.is_expression_longer(node, 1)) return
+	if (! node.value[1].value) return
+	if (! (node.value[1].type == 'symbol')) return
+	state.func = node
+	state.locals = shared.find_locals(state)
+	node.value[1].value = shared.dollarify(node.value[1].value)
 }
 
 function exit(node, index, parents, state) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'func')) {
-		if (query.is_expression_longer(node, 1)) {
-			let second = node.value[1]
-			if ((second.value) && (typeof second.value === 'string')) {
-				state.func = null
-			}
-		}
-	}
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_type_value(node.value[0], 'symbol', 'func')) return
+	if (! query.is_expression_longer(node, 1)) return
+	if (! node.value[1].value) return
+	if (! (node.value[1].type == 'symbol')) return
+	state.func = null
 }
 
 module.exports = function(system_, document_) {

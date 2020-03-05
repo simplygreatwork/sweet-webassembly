@@ -8,9 +8,10 @@ let document = null
 
 function enter(node, index, parents) {
 	
-	if (query.is_type_value(node, 'symbol', 'false')) {
-		return
-	}
+	if (! query.is_type_value(node, 'symbol', 'false')) return
+	let tree = parse(` (i32.const 0)`)[0]
+	node.type = tree.type
+	node.value = tree.value
 }
 
 module.exports = function(system_, document_) {

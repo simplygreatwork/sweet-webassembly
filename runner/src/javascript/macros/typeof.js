@@ -8,18 +8,20 @@ let types = {}
 
 function enter(node, index, parents) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'typeof')) {
-		let second = node.value[1]
-		if (types[second.value] === undefined) {
-			types[second.value] = counter;
-			if (false) console.log('type ' + second.value + ' = ' + counter);
-			counter++
-		}
-		first.value = 'i32.const'
-		second.type = 'number'
-		second.value = types[second.value]
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_type_value(node.value[0], 'symbol', 'typeof')) return
+	if (types[node.value[1].value] === undefined) {
+		types[node.value[1].value] = counter;
+		if (false) print(node)
+		counter++
 	}
+	node.value[0].value = 'i32.const'
+	node.value[1].type = 'number'
+	node.value[1].value = types[node.value[1].value]
+}
+
+function print(node) {
+	console.log('type ' + node.value[1].value + ' = ' + counter)
 }
 
 module.exports = function(system_, document_) {

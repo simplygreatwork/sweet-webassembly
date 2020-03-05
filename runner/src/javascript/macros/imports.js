@@ -8,10 +8,9 @@ function enter(node, index, parents) {
 	
 	if (! query.is_type(node, 'expression')) return
 	if (! query.is_expression_length(node, 2)) return
-	if (query.is_type_value(node.value[0], 'symbol', 'import')) {
-		if (node.value[1].type == 'string') {
-			query.remove(parents[0], node)
-		}
+	if (! query.is_type_value(node.value[0], 'symbol', 'import')) return
+	if (node.value[1].type == 'string') {
+		query.remove(parents[0], node)
 	}
 }
 

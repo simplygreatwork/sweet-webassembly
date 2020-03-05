@@ -24,15 +24,15 @@ module.exports = class Walker {
 	
 	node(node, index, parents, state, iterate) {
 		
+		if (this.bus.emit('enter', node, index, parents, state) === false) return false
 		if (query.is_type(node, 'expression')) {
-			if (this.bus.emit('enter', node, index, parents, state) === false) return false
 			parents.push(node)
 			iterate(node.value, function(each, index) {
 				if (this.node(each, index, parents, state, iterate) === false) return false
 			}.bind(this))
 			parents.pop()
-			if (this.bus.emit('exit', node, index, parents, state) === false) return false
 		}
+		if (this.bus.emit('exit', node, index, parents, state) === false) return false
 	}
 }
 

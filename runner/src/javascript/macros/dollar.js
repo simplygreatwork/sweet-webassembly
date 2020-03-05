@@ -7,15 +7,13 @@ let document = null
 
 function enter(node, index, parents, state) {
 	
-	let first = node.value[0]
-	if (query.is_type_value(first, 'symbol', 'call')) {
-		let second = node.value[1]
-		rewrite(second, index, parents, state)
-	} else if (query.is_type_value(first, 'symbol', 'funcref')) {
-		let second = node.value[1]
-		rewrite(second, index, parents, state)
+	if (! query.is_type(node, 'expression')) return
+	if (query.is_type_value(node.value[0], 'symbol', 'call')) {
+		rewrite(node.value[1], index, parents, state)
+	} else if (query.is_type_value(node.value[0], 'symbol', 'funcref')) {
+		rewrite(node.value[1], index, parents, state)
 	} else {
-		rewrite(first, index, parents, state)
+		rewrite(node.value[0], index, parents, state)
 	}
 }
 
@@ -25,11 +23,8 @@ function rewrite(node, index, parents, state) {
 		node.value = shared.dollarify(node.value)
 	} else {
 		if (! shared.is_inside_function(state)) return
-		if (shared.is_local(state, node.value)) {
-			if (index > 0) {
-				node.value = shared.dollarify(node.value)
-			}
-		}
+		if (! shared.is_local(state, node.value)) return
+		node.value = shared.dollarify(node.value)
 	}
 }
 

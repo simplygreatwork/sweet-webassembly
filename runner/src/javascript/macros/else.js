@@ -11,9 +11,8 @@ let document = null
 
 function enter(node, index, parents) {
 	
-	if (query.is_type_value(node.value[0], 'symbol', 'else')) {
-		return
-	}
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_type_value(node.value[0], 'symbol', 'else')) return
 }
 
 module.exports = function(system_, document_) {
