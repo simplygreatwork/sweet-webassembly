@@ -35,9 +35,7 @@ module.exports = class Walker {
 		} else {
 			if (this.bus.emit('enter.atom', node, index, parents, state) === false) return false
 			if (this.bus.emit('exit.atom', node, index, parents, state) === false) return false
-
 		}
-		if (this.bus.emit('exit', node, index, parents, state) === false) return false
 	}
 }
 

@@ -10,37 +10,35 @@ let configs = []
 function enter(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
-	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
-		let config = get_config(node)
-		if (false) print_config()
-		configs.push(config)
-	}
+	if (! query.is_type_value(node.value[0], 'symbol', 'repeat')) return
+	let config = get_config(node)
+	if (false) print_config()
+	configs.push(config)
 }
 
 function exit(node, index, parents, state) {
 	
 	if (! query.is_type(node, 'expression')) return
-	if (query.is_type_value(node.value[0], 'symbol', 'repeat')) {
-		let config = query.last(configs)
-		let tree = parse (`
-		(block (loop
-			(if (i32.gt_u (get_local ${config.with}) (i32.const ${config.to})) (then (br 2)))
-			(set_local ${config.with} (i32.add (get_local ${config.with}) (i32.const ${config.every})))
-			(br 0)
-		))
-		`)[0]
-		node.value.filter(function(each) {
-			return (each.type == 'expression')
-		})
-		.forEach(function(each, index) {
-			query.insert(tree.value[1], each, 2 + index)
-		})
-		query.replace(query.last(parents), node, tree)
-		tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)[0]
-		query.insert(query.last(parents), tree, index)
-		configs.pop()
-		return false
-	}
+	if (! query.is_type_value(node.value[0], 'symbol', 'repeat')) return
+	let config = query.last(configs)
+	let tree = parse (`
+	(block (loop
+		(if (i32.gt_u (get_local ${config.with}) (i32.const ${config.to})) (then (br 2)))
+		(set_local ${config.with} (i32.add (get_local ${config.with}) (i32.const ${config.every})))
+		(br 0)
+	))
+	`)[0]
+	node.value.filter(function(each) {
+		return (each.type == 'expression')
+	})
+	.forEach(function(each, index) {
+		query.insert(tree.value[1], each, 2 + index)
+	})
+	query.replace(query.last(parents), node, tree)
+	tree = parse (`		(set_local ${config.with} (i32.const ${config.from}))`)[0]
+	query.insert(query.last(parents), tree, index)
+	configs.pop()
+	return false
 }
 
 function get_config(node) {
