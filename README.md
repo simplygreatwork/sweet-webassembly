@@ -60,19 +60,17 @@ macros: {
 ### Write example code using your new macros [runner/src/wat/examples/demo.js]
 
 ```wat
-macros: {
-  expressions: [
-    ...
-    require('./macros/accepts.js')
-    ...
-  ],
-  atoms: [
-    ...
-    require('./macros/integer.js')
-    ...
-  ]
-}
-```
+(module
+  import "host" "table" (table 1 anyfunc)
+  memory (import "host" "memory") 1
+  type $void_to_void (func)
+  
+  func main
+    test 42
+
+  func test accepts value
+    set input to value
+)```
 
 ### Overview
 
