@@ -97,7 +97,7 @@ macros: {
 3. linker
 4. library (wat/wasm)
 
-### Folder
+### Folders
 
 - parser/
 - compiler/
