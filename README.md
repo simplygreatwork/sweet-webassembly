@@ -19,7 +19,7 @@ function enter(node, index, parents, state) {
 }
 ```
 
-### Create a macro to configure function parameters [runner/src/javascript/macros/accepting.js]
+### Create a macro to configure function parameters [runner/src/javascript/macros/accepts.js]
 ```javascript
 
 function enter(node, index, parents, state) {
@@ -57,7 +57,7 @@ macros: {
 }
 ```
 
-### Write example code using your new macros [runner/src/wat/examples/demo.js]
+### Write example code using your new macros [runner/src/wat/examples/demo.wat.watm]
 
 ```wat
 (module
