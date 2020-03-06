@@ -2,7 +2,7 @@
 # sweet-webassembly
 
 Get started with WebAssembly text format syntax and macros.
-Create macros to construct your own programming language.
+Create and use macros to construct your own programming language features.
 
 ### Create a macro to recognize and transpile integer values [runner/src/javascript/macros/integer.js]
 ```javascript
