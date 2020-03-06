@@ -2,6 +2,77 @@
 # sweet-webassembly
 
 Get started with WebAssembly text format syntax and macros.
+Create macros to construct your own programming language.
+
+### Create a macro to recognize and transpile integer values [runner/src/javascript/macros/integer.js]
+```javascript
+
+function enter(node, index, parents, state) {
+	
+	if (! shared.is_inside_function(state)) return
+	if (node.type != 'number') return
+	let parent = query.last(parents)
+	if (query.is_type_value(parent.value[0], 'symbol', 'i32.const')) return
+	if (query.is_type_value(parent.value[0], 'symbol', 'br')) return
+	if (query.is_type_value(parent.value[0], 'symbol', 'br_if')) return
+	parent.value[index] = parse(` (i32.const ${node.value})`)[0]
+}
+```
+
+### Create a macro to recognize and transpile integer values [runner/src/javascript/macros/accepting.js]
+```javascript
+
+function enter(node, index, parents, state) {
+	
+	if (! query.is_type(node, 'expression')) return
+	if (! query.is_expression_longer(node, 2)) return
+	if (! query.is_type_value(node.value[0], 'symbol', 'func')) return
+	if (! query.is_type_value(node.value[2], 'symbol', 'accepts')) return
+	node.value.every(function(each, index) {
+		if (index <= 2) return true
+		if (query.is_type(each, 'expression')) return false
+		if (query.is_type(each, 'whitespace')) return true
+		let value = shared.dollarify(each.value)
+		node.value[index] = parse(` (param ${value} i32)`)[0]
+		return true
+	})
+	node.value.splice(2, 1)
+}
+```
+
+### Install your macros [runner/src/javascript/runner.js]
+
+```javascript
+macros: {
+	expressions: [
+		...
+		require('./macros/accepts.js')
+		...
+	],
+	atoms: [
+		...
+		require('./macros/integer.js')
+		...
+	]
+}
+```
+
+### Write example code using your new macros [runner/src/wat/examples/demo.js]
+
+```wat
+macros: {
+	expressions: [
+		...
+		require('./macros/accepts.js')
+		...
+	],
+	atoms: [
+		...
+		require('./macros/integer.js')
+		...
+	]
+}
+```
 
 ### Overview
 
@@ -20,10 +91,20 @@ Get started with WebAssembly text format syntax and macros.
 
 ### Structure
 
-1. parser
-2. compiler
-3. runner
-4. library (wat)
+1. lexer
+2. parser (for s-expressions)
+2. abstract syntax tree transformer (s-expressions)
+3. linker
+4. library (wat/wasm)
+
+### Folder
+
+- parser/
+- compiler/
+- library/
+- macros/
+- examples/
+- fixtures/
 
 ### Run
 
@@ -36,6 +117,11 @@ git clone https://github.com/simplygreatwork/sweet-webassembly.git
 cd sweet-webassembly/runner
 npm install
 npm start
+npm start memory
+npm start macros
+npm start stress
+npm start tiny
+
 ```
 
 ### Roadmap

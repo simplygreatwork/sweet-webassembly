@@ -3,7 +3,7 @@ var p = require('../parsers/core');
 
 module.exports = function() {
 	
-	let result = [];
+	let result = []
 	return p.alt ([
 		p.str ('-', function(value) {
 			result.push(value.str);
