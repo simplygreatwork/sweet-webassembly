@@ -19,7 +19,7 @@ function enter(node, index, parents, state) {
 }
 ```
 
-### Create a macro to recognize and transpile integer values [runner/src/javascript/macros/accepting.js]
+### Create a macro to configure function parameters [runner/src/javascript/macros/accepting.js]
 ```javascript
 
 function enter(node, index, parents, state) {
