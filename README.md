@@ -70,7 +70,8 @@ macros: {
 
   func test accepts value
     set input to value
-)```
+)
+```
 
 ### Overview
 
