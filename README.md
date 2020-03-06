@@ -8,14 +8,14 @@ Create and use macros to construct your own programming language features.
 ```javascript
 
 function enter(node, index, parents, state) {
-	
-	if (! shared.is_inside_function(state)) return
-	if (node.type != 'number') return
-	let parent = query.last(parents)
-	if (query.is_type_value(parent.value[0], 'symbol', 'i32.const')) return
-	if (query.is_type_value(parent.value[0], 'symbol', 'br')) return
-	if (query.is_type_value(parent.value[0], 'symbol', 'br_if')) return
-	parent.value[index] = parse(` (i32.const ${node.value})`)[0]
+  
+  if (! shared.is_inside_function(state)) return
+  if (node.type != 'number') return
+  let parent = query.last(parents)
+  if (query.is_type_value(parent.value[0], 'symbol', 'i32.const')) return
+  if (query.is_type_value(parent.value[0], 'symbol', 'br')) return
+  if (query.is_type_value(parent.value[0], 'symbol', 'br_if')) return
+  parent.value[index] = parse(` (i32.const ${node.value})`)[0]
 }
 ```
 
@@ -23,20 +23,20 @@ function enter(node, index, parents, state) {
 ```javascript
 
 function enter(node, index, parents, state) {
-	
-	if (! query.is_type(node, 'expression')) return
-	if (! query.is_expression_longer(node, 2)) return
-	if (! query.is_type_value(node.value[0], 'symbol', 'func')) return
-	if (! query.is_type_value(node.value[2], 'symbol', 'accepts')) return
-	node.value.every(function(each, index) {
-		if (index <= 2) return true
-		if (query.is_type(each, 'expression')) return false
-		if (query.is_type(each, 'whitespace')) return true
-		let value = shared.dollarify(each.value)
-		node.value[index] = parse(` (param ${value} i32)`)[0]
-		return true
-	})
-	node.value.splice(2, 1)
+  
+  if (! query.is_type(node, 'expression')) return
+  if (! query.is_expression_longer(node, 2)) return
+  if (! query.is_type_value(node.value[0], 'symbol', 'func')) return
+  if (! query.is_type_value(node.value[2], 'symbol', 'accepts')) return
+  node.value.every(function(each, index) {
+    if (index <= 2) return true
+    if (query.is_type(each, 'expression')) return false
+    if (query.is_type(each, 'whitespace')) return true
+    let value = shared.dollarify(each.value)
+    node.value[index] = parse(` (param ${value} i32)`)[0]
+    return true
+  })
+  node.value.splice(2, 1)
 }
 ```
 
@@ -44,16 +44,16 @@ function enter(node, index, parents, state) {
 
 ```javascript
 macros: {
-	expressions: [
-		...
-		require('./macros/accepts.js')
-		...
-	],
-	atoms: [
-		...
-		require('./macros/integer.js')
-		...
-	]
+  expressions: [
+    ...
+    require('./macros/accepts.js')
+    ...
+  ],
+  atoms: [
+    ...
+    require('./macros/integer.js')
+    ...
+  ]
 }
 ```
 
@@ -61,16 +61,16 @@ macros: {
 
 ```wat
 macros: {
-	expressions: [
-		...
-		require('./macros/accepts.js')
-		...
-	],
-	atoms: [
-		...
-		require('./macros/integer.js')
-		...
-	]
+  expressions: [
+    ...
+    require('./macros/accepts.js')
+    ...
+  ],
+  atoms: [
+    ...
+    require('./macros/integer.js')
+    ...
+  ]
 }
 ```
 
@@ -79,14 +79,14 @@ macros: {
 - A work in process to get up and running quickly with WebAssembly text format syntax.
 - Parses WebAssembly .wat files, transforms using macros, and launches the project's main function.
 - s-expressions in WebAssembly text syntax are parsed using a fork of the simple, tiny parser combinator library: uparse
-	- https://github.com/jimf/uparse
+  - https://github.com/jimf/uparse
 - Transformations for string building and automatic module importing and exporting are included.
 - Each module's functions are exported automatically using macros.
 - Each module's functions are imported automatically using macros.
 - Contains the beginning of a basic standard library in WebAssembly text syntax.
-	- strings, lists, booleans, numbers, assertions
+  - strings, lists, booleans, numbers, assertions
 - The parser supports documentation first.
-	- Runnable wat source code can be compiled while embedded inside markdown documentation.
+  - Runnable wat source code can be compiled while embedded inside markdown documentation.
 - Currently compiles and runs in Node.js only. Small tweaks are needed to allow running in the browser.
 
 ### Structure
